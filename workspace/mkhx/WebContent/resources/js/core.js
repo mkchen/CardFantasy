@@ -290,6 +290,8 @@ var playBossGame = function(count) {
 };
 Core.playBossGame = playBossGame;
 
+
+//莉莉丝，打贼以及所有看次数战斗模拟
 var playLilithGame = function(count) {
     var deck = $('#lilith-player-deck').val().trim();
     var heroLv = $('#lilith-player-heroLv').val();
@@ -785,6 +787,7 @@ $(document)
     $('#play-lilith-1-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(1);');
     $('#simulate-lilith-1-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(-1);');
     $('#play-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(100);');
+    $('#sort-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(100);');
     $('#lilith-config-1').hide();
     updateCustomLilithGuardsVisibility();
 })
