@@ -4159,7 +4159,7 @@
     <Card id="3652" name="盔甲战鸡" wikiId="" race="蛮荒" speed="3" star="4" cost="15" incrCost="2" at="455" hp="1415" incrAT="35" incrHP="41">
         <Skill type="燃烧铠甲" level="0" unlock="0"  />
         <Skill type="猛禽" level="0" unlock="5"  />
-        <Skill type="涅盘" level="0" unlock="10" />
+        <Skill type="涅槃" level="0" unlock="10" />
     </Card>
     <Card id="3653" name="星姬" wikiId="" race="蛮荒" speed="4" star="5" cost="16" incrCost="2" at="430" hp="1515" incrAT="42" incrHP="42">
         <Skill type="星决" level="0" unlock="0"  />
