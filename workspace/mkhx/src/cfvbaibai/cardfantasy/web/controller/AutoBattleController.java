@@ -1,8 +1,11 @@
 package cfvbaibai.cardfantasy.web.controller;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.Collator;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.DoubleToIntFunction;
+import java.io.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -444,6 +449,51 @@ public class AutoBattleController {
         }
     }
 
+    //排序的卡牌类，包含卡牌模拟名和胜率
+    public class sortCard{
+
+        private String cardname;
+    
+        private Double cnt;
+    
+        public sortCard() {}
+    
+        public sortCard(String cardname, Double cnt) {
+            this.cardname = cardname;
+            this.cnt = cnt;
+        }
+    
+        public String getName() {
+            return cardname;
+        }
+    
+        public void setName(String cardname) {
+            this.cardname = cardname;
+        }
+    
+        public Double getCnt() {
+            return cnt;
+        }
+    
+        public void setCnt(Double cnt) {
+            this.cnt = cnt;
+        }
+        
+        /*
+        @Override
+        public String toString() {
+            return "Student{" +
+                    "name='" + cardname + '\'' +
+                    ", age=" + cnt +
+                    '}';
+        }
+        */
+    }
+
+
+ 
+        
+      
     @RequestMapping(value = "/PlayLilithMassiveGame")
     public void playLilithMassiveGame(HttpServletRequest request, HttpServletResponse response,
         @RequestParam("deck") String deck, @RequestParam("ecg") boolean enableCustomGuards, @RequestParam("cg") String customGuards,
@@ -462,27 +512,362 @@ public class AutoBattleController {
             writer.append(Utils.getCurrentDateTime() + "<br />");
             writer.append("模拟场次: " + count + "<br />");
 
-            try {
+            if (count == -100 || count == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+                int selectlevel = count;
+                count = 1000;
+
+                //把中文逗号换成英文，打多了的减掉
+                String subdeck = deck.replace("，", ",");
+                subdeck = subdeck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
+                subdeck = subdeck.replace(" ", "");
+                subdeck = subdeck.replace(",,", ",");
+                subdeck = subdeck.replace(",,", ",");
+
+                
+                String cardswithcnt = "";
+                String cardsnocnt = "";
+
+                List<sortCard> sortcards = new ArrayList<>();
+                //sortcards.add(new sortCard("a", 18.1));
+
+                int firstcnt = subdeck.indexOf(',');
+                //String firstdeck = subdeck;
+                //String newdesk;
                 LilithGameResult result = null;
-                GameUI ui = new DummyGameUI();
-                if (enableCustomGuards && gameType == 0) {
-                    result = GameLauncher.playCustomLilithGame(
-                            deck, lilithName + "," + customGuards, heroLv, customGuardsAtBuff, customGuardsHpBuff,
-                            gameType, targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
-                } else {
-                    result = GameLauncher.playLilithGame(
-                            deck, lilithName, heroLv, gameType, 
-                            targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
+                while (firstcnt != -1){
+
+                    String thisdeck = subdeck.substring(0, firstcnt);  //第一个取出来的卡牌
+                    subdeck = subdeck.substring(firstcnt+1);            //剩下的卡牌组，用来接着循环取剩下的卡牌
+
+                    String newdeck = "";
+                    if(selectlevel == -100){        //当为强度排序时,每次进行去掉本张卡的模拟
+                        newdeck = deck.replaceFirst(thisdeck, "");  //去掉取出来的卡牌的卡牌组
+                    }else if(selectlevel == -101){
+                        
+                        newdeck = deck.replaceFirst(thisdeck, "");  //去掉取出来的卡牌的卡牌组
+                        if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                            thisdeck = thisdeck +"-15";
+                        }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                            thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                        } 
+                        newdeck = thisdeck +","+ newdeck;
+                    }
+
+                    firstcnt = subdeck.indexOf(',');                    //下一个卡牌在哪里结束
+
+
+                    try {
+                        result = null;
+                        GameUI ui = new DummyGameUI();
+                        result = GameLauncher.playLilithGame(
+                            newdeck, lilithName, heroLv, gameType, 
+                                    targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
+
+                        sortcards.add(new sortCard(thisdeck,result.getAvgBattleCount()));
+
+                    } catch (PvlGameTimeoutException e) {
+                        writer.append("进攻次数超过最大次数，你的卡组太弱了");
+                    }
+                    
                 }
+                    
+                //最后运行一次正常的
+                try {
+                    result = null;
+                    GameUI ui = new DummyGameUI();
+                    result = GameLauncher.playLilithGame(
+                                deck, lilithName, heroLv, gameType, 
+                                targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
+
+                } catch (PvlGameTimeoutException e) {
+                    writer.append("进攻次数超过最大次数，你的卡组太弱了");
+                }
+                    
+
+                Collections.sort(sortcards, new Comparator<sortCard>() {
+                    @Override
+                    public int compare(sortCard o2, sortCard o1) {
+                        return o1.getCnt()>o2.getCnt()? -1:(o1.getCnt()==o2.getCnt()? 0:1);
+                    }
+                });
+                for(sortCard sortcard:sortcards){
+                    //System.out.println(student.cardname);
+                    //System.out.println(student.cnt.toString());
+                    cardswithcnt = cardswithcnt + sortcard.cardname;
+                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+
+                    cardsnocnt = cardsnocnt + sortcard.cardname +", ";
+                    
+                }
+
                 writer.print("<div style='color: red'>" + result.getValidationResult() + "</div>");
                 writer.append("<table>");
                 writer.append("<tr><td>平均需要进攻次数: </td><td>" + result.getAvgBattleCount() + "</td></tr>");
                 writer.append("<tr><td>不稳定度: </td><td>" + Math.round(result.getCvBattleCount() * 100) + "%</td></tr>");
                 writer.append("<tr><td>平均每轮进攻对莉莉丝伤害: </td><td>" + Math.round(result.getAvgDamageToLilith()) + "</td></tr>");
                 writer.append("<tr><td>不稳定度: </td><td>" + Math.round(result.getCvDamageToLilith() * 100) + "%</td></tr>");
+                writer.append("<tr><td>强度排序卡组数值: </td><td>" + cardswithcnt + "</td></tr>");
+                writer.append("<tr><td>强度排序卡组: </td><td>" + cardsnocnt + "</td></tr>");
                 writer.append("</td></tr></table>");
-            } catch (PvlGameTimeoutException e) {
-                writer.append("进攻次数超过最大次数，你的卡组太弱了");
+
+                
+                //int cardcnt = olddeck;
+
+                //LilithGameResult result = null;
+                /*writer.print("<div style='color: red'>" + ttest + "</div>");
+                writer.append("<table>");
+                
+                writer.append("<tr><td>不稳定度: </td><td>" + ttest2 + "%</td></tr>");
+                
+                writer.append("</td></tr></table>");*/
+
+            } else if(count <= -110 && count >= -129){              //在已获得的卡牌中选择出对本战胜率最高的
+                int selectlevel = count;
+                count = 1000;
+                //deck = deck.replace("，", ",");
+
+                List<sortCard> sortcards = new ArrayList<>();
+                //sortcards.add(new sortCard("a", 18.1));
+                String cardswithcnt = "";
+                LilithGameResult result = null;
+                String errornote = "";
+                String bestdeck = "";
+                Double bestcnt = 999.9;
+
+                InputStream cardFWStream;
+                String txturl = "";
+
+                //设定各类别下的卡牌文件目录
+                if(selectlevel == -111 ){             //高星卡牌
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard1.txt";
+                }else if(selectlevel == -112){
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard2.txt";
+                }else if(selectlevel == -113){
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard3.txt";
+                }else if(selectlevel == -114){
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
+                }else if(selectlevel == -115){
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
+                }else if(selectlevel == -120 || selectlevel == -121){       //符文
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFW.txt";
+                }
+                //从文件中读取出卡牌列表
+                if(selectlevel == -110){            //精选345
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
+                            sortcards.add(new sortCard(line, 0.0));
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
+                            sortcards.add(new sortCard(line, 0.0));
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard3.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
+                            sortcards.add(new sortCard(line, 0.0));
+                        }
+                    }
+                    br.close();    
+
+
+                }else if(selectlevel == -116){      //45星
+                    
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            sortcards.add(new sortCard(line, 0.0));
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            sortcards.add(new sortCard(line, 0.0));
+                        }
+                    }
+                    br.close();    
+
+                }else{
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    
+                    //cardname = cardname +"aaa";
+                    
+                        //将文件中的符文读进list里
+                        BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                        String line = null;
+                        //cardname = cardname +"bbb" + br.readLine();
+                        while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                            //result.append(System.lineSeparator()+s);
+                            //cardname = cardname +"ccc"+ line;
+                            if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                                if(selectlevel != -120 || line.indexOf(',') != -1){     //当选择条件不为精选，或者卡牌本身带精选标记时才放入列表
+                                    sortcards.add(new sortCard(line, 0.0));
+                                    //ttest = ttest +"进入116循环，"+line;
+                                }
+                            }
+                        
+                        }
+                        br.close();    
+                }
+
+
+                //用list里的符文分别模拟，将获得的分数写进list里
+                for(sortCard sortcard:sortcards){
+                    String olddeck = deck;
+                    olddeck = olddeck.replace('，', ',');
+                    olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                    String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
+                    if(thiscardname.indexOf("-") == -1){
+                        if(selectlevel <= -120){     //为符文时
+                            thiscardname = thiscardname +"-4, ";
+                        }else{                      //为卡牌时
+                            thiscardname = thiscardname +"-10, ";
+                        }
+                    }
+                    //String newdeck = sortcard.cardname.replace("，",",").replace(",", "") +"-4, "+ olddeck;
+                    String newdeck = thiscardname + olddeck;
+                    //errornote = errornote + newdeck +",";
+
+                    try {
+                        result = null;
+                        GameUI ui = new DummyGameUI();
+                        result = GameLauncher.playLilithGame(
+                            newdeck, lilithName, heroLv, gameType, 
+                                    targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
+
+                        //sortcards.add(new sortCard(thisdeck,result.getAvgBattleCount()));
+                        //sortcard.cnt = result.getAvgBattleCount();
+                        Double thiscnt = result.getAvgBattleCount();
+                        sortcard.cnt = thiscnt;
+                        if(thiscnt < bestcnt){
+                            bestcnt = thiscnt;
+                            bestdeck = newdeck;
+                        }
+                        if(result.getValidationResult() != ""){
+                            errornote = errornote + sortcard.cardname +":"+ result.getValidationResult() +",";
+                        }
+                        
+
+                    } catch (PvlGameTimeoutException e) {
+                        writer.append("进攻次数超过最大次数，你的卡组太弱了");
+                    }
+
+                    //cardswithcnt = cardswithcnt + sortcard.cardname;
+                    //cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+                          
+                    
+                }
+
+                //list排序
+                Collections.sort(sortcards, new Comparator<sortCard>() {
+                    @Override
+                    public int compare(sortCard o2, sortCard o1) {
+                        return o1.getCnt()>o2.getCnt()? -1:(o1.getCnt()==o2.getCnt()? 0:1);
+                    }
+                });
+
+                //从list中将前20的卡牌和分数取出来
+                int i = 0;
+                for(sortCard sortcard:sortcards){
+                    //System.out.println(student.cardname);
+                    //System.out.println(student.cnt.toString());
+                    cardswithcnt = cardswithcnt + sortcard.cardname;
+                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+
+                    //cardsnocnt = cardsnocnt + sortcard.cardname +", ";
+                    //ttest = ttest +"读取符文循环，";
+                    i++;
+                    if(i>=20){
+                        break;
+                    }
+                    
+                }
+
+
+                //最后显示一遍原始卡组的分数
+                try {
+                    result = null;
+                    GameUI ui = new DummyGameUI();
+                    result = GameLauncher.playLilithGame(
+                                deck, lilithName, heroLv, gameType, 
+                                targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
+                } catch (PvlGameTimeoutException e) {
+                    writer.append("进攻次数超过最大次数，你的卡组太弱了");
+                }
+
+                writer.print("<div style='color: red'>" + result.getValidationResult() + "</div>");
+                writer.print("<div style='color: red'>" + errornote + "</div>");
+                writer.append("<table>");
+                writer.append("<tr><td>平均需要进攻次数: </td><td>" + result.getAvgBattleCount() + "</td></tr>");
+                writer.append("<tr><td>不稳定度: </td><td>" + Math.round(result.getCvBattleCount() * 100) + "%</td></tr>");
+                writer.append("<tr><td>平均每轮进攻对莉莉丝伤害: </td><td>" + Math.round(result.getAvgDamageToLilith()) + "</td></tr>");
+                writer.append("<tr><td>不稳定度: </td><td>" + Math.round(result.getCvDamageToLilith() * 100) + "%</td></tr>");
+                writer.append("<tr><td>强度选卡卡牌数值: </td><td>" + cardswithcnt + "</td></tr>");
+                writer.append("<tr><td>强度选卡卡组: </td><td>" + bestdeck + "</td></tr>");
+                writer.append("</td></tr></table>");
+
+
+
+                //writer.print("<div style='color: red'>" + selectlevel + cardname + "</div>");
+            } else {
+                //本卡组胜率
+                try {
+                    LilithGameResult result = null;
+                    GameUI ui = new DummyGameUI();
+                    if (enableCustomGuards && gameType == 0) {
+                        result = GameLauncher.playCustomLilithGame(
+                                deck, lilithName + "," + customGuards, heroLv, customGuardsAtBuff, customGuardsHpBuff,
+                                gameType, targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
+                    } else {
+                        result = GameLauncher.playLilithGame(
+                                deck, lilithName, heroLv, gameType, 
+                                targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
+                    }
+                    writer.print("<div style='color: red'>" + result.getValidationResult() + "</div>");
+                    writer.append("<table>");
+                    writer.append("<tr><td>平均需要进攻次数: </td><td>" + result.getAvgBattleCount() + "</td></tr>");
+                    writer.append("<tr><td>不稳定度: </td><td>" + Math.round(result.getCvBattleCount() * 100) + "%</td></tr>");
+                    writer.append("<tr><td>平均每轮进攻对莉莉丝伤害: </td><td>" + Math.round(result.getAvgDamageToLilith()) + "</td></tr>");
+                    writer.append("<tr><td>不稳定度: </td><td>" + Math.round(result.getCvDamageToLilith() * 100) + "%</td></tr>");
+                    writer.append("</td></tr></table>");
+                } catch (PvlGameTimeoutException e) {
+                    writer.append("进攻次数超过最大次数，你的卡组太弱了");
+                }
             }
         } catch (Exception e) {
             writer.print(errorHelper.handleError(e, false));

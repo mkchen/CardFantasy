@@ -293,14 +293,17 @@ Core.playBossGame = playBossGame;
 
 //莉莉丝，打贼以及所有看次数战斗模拟
 var playLilithGame = function(count) {
-    var deck = $('#lilith-player-deck').val().trim();
-    var heroLv = $('#lilith-player-heroLv').val();
-    var lilithName = $('#lilith-name').val();
-    var enableCustomGuards = $('#enable-custom-lilith-guards').prop('checked') || false;
-    var gameType = $('#lilith-game-type').val();
-    var targetRemainingGuardCount = $('#lilith-target-remaining-guard-count').val();
-    var remainingHP = $('#lilith-remaining-hp').val();
-    var eventCards = $('#lilith-event-cards').val();
+    var deck = $('#lilith-player-deck').val().trim();   //玩家阵容
+    var heroLv = $('#lilith-player-heroLv').val();      //玩家等级
+    var lilithName = $('#lilith-name').val();           //莉莉丝名字
+    var enableCustomGuards = $('#enable-custom-lilith-guards').prop('checked') || false;    //自定义小兵,似乎被关闭着的
+    var gameType = $('#lilith-game-type').val();        //模拟模式,清怪还是尾刀
+    var targetRemainingGuardCount = $('#lilith-target-remaining-guard-count').val();    //清怪模式下清至剩余多少怪, 打贼时记得设为0
+    var remainingHP = $('#lilith-remaining-hp').val();                                  //尾刀模式下莉莉丝还剩多少血
+    var eventCards = $('#lilith-event-cards').val();    //莉莉丝活动卡牌
+    if(count == -110){                                  //强度选卡时，选择范围为几星卡
+        count = $('#select-lilith-game-level').val();
+    }
     var postData = {
         deck: deck,
         hlv: heroLv,
@@ -311,13 +314,13 @@ var playLilithGame = function(count) {
         rhp: remainingHP,
         ec: eventCards,
         ecg: enableCustomGuards,
-        cg: $('#custom-lilith-guards-deck').val(),
-        cgab: $('#custom-lilith-guards-atbuff').val(),
-        cghb: $('#custom-lilith-guards-hpbuff').val()
+        cg: $('#custom-lilith-guards-deck').val(),      //莉莉丝卡组
+        cgab: $('#custom-lilith-guards-atbuff').val(),  //莉莉丝卡组攻击加成
+        cghb: $('#custom-lilith-guards-hpbuff').val()   //莉莉丝卡组生命加成
     };
 
-    $.cookie('lilith-battle', JSON.stringify(postData), { expires: 365 });
-    var isAnimation = false;
+    $.cookie('lilith-battle', JSON.stringify(postData), { expires: 365 });  //将数据存入cookie
+    var isAnimation = false;    //动画播放标志
     var url;
     if (count == 1) {
         url = 'PlayLilith1MatchGame';
@@ -787,7 +790,9 @@ $(document)
     $('#play-lilith-1-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(1);');
     $('#simulate-lilith-1-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(-1);');
     $('#play-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(100);');
-    $('#sort-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(100);');
+    $('#sort-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(-100);');
+    $('#sort15-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(-101);');
+    $('#select-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(-110);');
     $('#lilith-config-1').hide();
     updateCustomLilithGuardsVisibility();
 })

@@ -72,7 +72,22 @@
             <a id="simulate-lilith-1-game-button" class="battle-button" data-role="button" data-mini="true">动画战斗</a>
             <a id="play-lilith-massive-game-button" class="battle-button" data-role="button" data-mini="true">强度分析</a>
             <a id="sort-lilith-massive-game-button" class="battle-button" data-role="button" data-mini="true">强度排序</a>
-            <a data-role="button" data-mini="true" data-type="bug" href="#">提BUG</a>
+            <a id="sort15-lilith-massive-game-button" class="battle-button" data-role="button" data-mini="true">15级排序</a>
+            <a id="select-lilith-massive-game-button" class="battle-button" data-role="button" data-mini="true">强度选卡</a>
+            <select id="select-lilith-game-level" data-mini="true" data-native-menu="true">
+                <option value="-110" selected="selected">精选卡牌</option>
+                <option value="-111">1星</option>
+                <option value="-112">2星</option>
+                <option value="-113">3星</option>
+                <option value="-114">4星</option>
+                <option value="-115">5星</option>
+                <option value="-116">45星</option>
+                <option value="-120">精选符文</option>
+                <option value="-121">符文</option>
+            </select>
+        <a data-role="button" data-mini="true" data-type="bug" href="#">提BUG</a>
+            
+            
         </div>
         <div id="lilith-battle-div" data-mini="true" data-role="collapsible" data-collapsed="false">
             <h3>战斗记录</h3>
