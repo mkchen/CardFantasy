@@ -46,7 +46,7 @@ public final class Retrogradation {
 //                return true;
 //            }
 //            if (!player.getGrave().contains(card) && player.getField().contains(card)) {
-//                // 特殊情况：万兽之王死契召唤月蚀兽把自己复活了无法涅槃，暂时先hack一下
+//                // 特殊情况：万兽之王死契召唤月蚀兽把自己复活了无法涅盘，暂时先hack一下
 ////                if (!player.getField().removeCard(card)) {
 ////                    throw new CardFantasyRuntimeException(
 ////                            "Cannot find card " + card.getShortDesc() + " in field of " + player.getId());

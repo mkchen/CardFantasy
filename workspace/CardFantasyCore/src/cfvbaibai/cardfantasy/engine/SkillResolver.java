@@ -561,7 +561,7 @@ public class SkillResolver {
                 UnderworldCall.apply(this, skillUseInfo.getSkill(), attacker, defender, 2);
             } else if (skillUseInfo.getType() == SkillType.烈焰审判) {
                 UnderworldCall.apply(this, skillUseInfo.getSkill(), attacker, defender, 3);
-            } else if (skillUseInfo.getType() == SkillType.炼金失败 || skillUseInfo.getType() == SkillType.凤凰涅槃 || skillUseInfo.getType() == SkillType.海滨危机
+            } else if (skillUseInfo.getType() == SkillType.炼金失败 || skillUseInfo.getType() == SkillType.凤凰涅盘 || skillUseInfo.getType() == SkillType.海滨危机
                     || skillUseInfo.getType() == SkillType.战术性撤退 || skillUseInfo.getType() == SkillType.自毁 || skillUseInfo.getType() == SkillType.巧变) {
                 AlchemyFailure.apply(this, skillUseInfo, skillUseInfo.getSkill(), attacker);
             } else if (skillUseInfo.getType() == SkillType.瘟疫) {
@@ -2455,12 +2455,12 @@ public class SkillResolver {
                             deadCardSkillUseInfo.getType() == SkillType.六道轮回 ||
                             deadCardSkillUseInfo.getType() == SkillType.武形秘术 ||
                             deadCardSkillUseInfo.getType() == SkillType.武形秘法 ||
-                            deadCardSkillUseInfo.getType() == SkillType.涅槃 ||
+                            deadCardSkillUseInfo.getType() == SkillType.涅盘 ||
                             deadCardSkillUseInfo.getType() == SkillType.神性 ||
                             deadCardSkillUseInfo.getType() == SkillType.粗中有细 ||
                             deadCardSkillUseInfo.getType() == SkillType.战术性撤退 ||
                             deadCardSkillUseInfo.getType() == SkillType.巧变 ||
-                            deadCardSkillUseInfo.getType() == SkillType.凤凰涅槃 ||
+                            deadCardSkillUseInfo.getType() == SkillType.凤凰涅盘 ||
                             deadCardSkillUseInfo.getType() == SkillType.诲人不倦 ||
                             deadCardSkillUseInfo.getType() == SkillType.鞠躬尽瘁 ||
                             deadCardSkillUseInfo.getType() == SkillType.心转之术 ||

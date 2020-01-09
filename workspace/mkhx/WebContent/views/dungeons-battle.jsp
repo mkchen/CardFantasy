@@ -17,7 +17,7 @@
                                         <option value="d-14">传送叹惋关90</option>
                                         <option value="d-15">转生龙灵关90</option>
                                         <option value="d-16">免疫森主关90</option>
-                                        <option value="d-1">涅槃魅魔关</option>
+                                        <option value="d-1">涅盘魅魔关</option>
                                         <option value="d-2">洪荒青龙关</option>
                                         <option value="d-3">不动朱雀关</option>
                                         <option value="d-4">三国英魂关</option>
@@ -198,6 +198,34 @@
                 <a id="play-dungeons-1-game-button" class="battle-button" data-role="button" data-mini="true">文字战斗</a>
                 <a id="simulate-dungeons-1-game-button" class="battle-button" data-role="button" data-mini="true">动画战斗</a>
                 <a id="play-dungeons-massive-game-button" class="battle-button" data-role="button" data-mini="true">连续千场</a>
+                <a id="sort-dungeons-massive-game-button" class="battle-button" data-role="button" data-mini="true">卡组排序</a>
+                <a id="sort15-dungeons-massive-game-button" class="battle-button" data-role="button" data-mini="true">15级排序</a>
+                <select id="cnt-dungeons-game-level" data-mini="true" data-native-menu="true">
+                    <option value="1">10次</option>
+                    <option value="2" selected="selected">100次</option>
+                    <option value="3">1000次</option>
+                    <option value="4">10000次</option>
+                </select>
+                <a id="select-dungeons-massive-game-button" class="battle-button" data-role="button" data-mini="true">强度选卡</a>
+                <select id="select-dungeons-game-level" data-mini="true" data-native-menu="true">
+                    <option value="-110" selected="selected">精选卡牌</option>
+                    <option value="-111">1星</option>
+                    <option value="-112">2星</option>
+                    <option value="-113">3星</option>
+                    <option value="-114">4星</option>
+                    <option value="-115">5星</option>
+                    <option value="-116">45星</option>
+                    <option value="-131">王国</option>
+                    <option value="-132">森林</option>
+                    <option value="-133">蛮荒</option>
+                    <option value="-134">地狱</option>
+                    <option value="-120">精选符文</option>
+                    <option value="-121">水符文</option>
+                    <option value="-122">风符文</option>
+                    <option value="-123">火符文</option>
+                    <option value="-124">土符文</option>
+                    <option value="-125">全符文</option>
+                </select>
                 <a data-role="button" data-mini="true" data-type="bug" href="#">提BUG</a>
             </div>
             <div id="dungeons-battle-div" data-mini="true" data-role="collapsible" data-collapsed="false">

@@ -188,6 +188,22 @@ var playAutoGame = function(count) {
     var heroLv2 = $('#hero2Lv').val();
     var isAnimation = false;
     var url = '';
+    if(count == -110){                                  //强度选卡时，选择范围为几星卡和符文类别
+        count = $('#select-auto-game-level').val() + $('#cnt-auto-game-level').val();
+    }else if(count == -100 || count == -101){
+        count = count + $('#cnt-auto-game-level').val();
+    }else if(count == 1000){
+        count = $('#cnt-auto-game-level').val();
+        if(count == 1){
+            count = 10;
+        }else if(count == 2){
+            count = 100;
+        }else if(count == 3){
+            count = 1000;
+        }else if(count == 4){
+            count = 10000;
+        }
+    }
     var postData = {
         'deck1': deck1,
         'deck2': deck2,
@@ -301,9 +317,24 @@ var playLilithGame = function(count) {
     var targetRemainingGuardCount = $('#lilith-target-remaining-guard-count').val();    //清怪模式下清至剩余多少怪, 打贼时记得设为0
     var remainingHP = $('#lilith-remaining-hp').val();                                  //尾刀模式下莉莉丝还剩多少血
     var eventCards = $('#lilith-event-cards').val();    //莉莉丝活动卡牌
-    if(count == -110){                                  //强度选卡时，选择范围为几星卡
-        count = $('#select-lilith-game-level').val();
+
+    if(count == -110){                                  //强度选卡时，选择范围为几星卡和符文类别
+        count = $('#select-lilith-game-level').val() + $('#cnt-lilith-game-level').val();
+    }else if(count == -100 || count == -101){
+        count = count + $('#cnt-lilith-game-level').val();
+    }else if(count == 100){
+        count = $('#cnt-lilith-game-level').val();
+        if(count == 1){
+            count = 10;
+        }else if(count == 2){
+            count = 100;
+        }else if(count == 3){
+            count = 1000;
+        }else if(count == 4){
+            count = 10000;
+        }
     }
+
     var postData = {
         deck: deck,
         hlv: heroLv,
@@ -338,6 +369,22 @@ var playMapGame = function(count) {
     var deck = $('#map-deck').val().trim();
     var heroLv = $('#map-hero-lv').val();
     var map = getMap();
+    if(count == -110){                                  //强度选卡时，选择范围为几星卡和符文类别
+        count = $('#select-map-game-level').val() + $('#cnt-map-game-level').val();
+    }else if(count == -100 || count == -101){
+        count = count + $('#cnt-map-game-level').val();
+    }else if(count == 1000){
+        count = $('#cnt-map-game-level').val();
+        if(count == 1){
+            count = 10;
+        }else if(count == 2){
+            count = 100;
+        }else if(count == 3){
+            count = 1000;
+        }else if(count == 4){
+            count = 10000;
+        }
+    }
     var postData = {
         deck: deck,
         hlv: heroLv,
@@ -364,6 +411,22 @@ var playDungeonsGame = function(count) {
         var deck = $('#dungeons-deck').val().trim();
         var heroLv = $('#dungeons-hero-lv').val();
         var map = getDungeons();
+        if(count == -110){                                  //强度选卡时，选择范围为几星卡和符文类别
+            count = $('#select-dungeons-game-level').val() + $('#cnt-dungeons-game-level').val();
+        }else if(count == -100 || count == -101){
+            count = count + $('#cnt-dungeons-game-level').val();
+        }else if(count == 1000){
+            count = $('#cnt-dungeons-game-level').val();
+            if(count == 1){
+                count = 10;
+            }else if(count == 2){
+                count = 100;
+            }else if(count == 3){
+                count = 1000;
+            }else if(count == 4){
+                count = 10000;
+            }
+        }
         var postData = {
             'fa': dungeonsBattleOptions.firstAttack,
             'do': dungeonsBattleOptions.deckOrder,
@@ -643,6 +706,9 @@ $(document)
     $('#play-map-1-game-button').attr('href', 'javascript:CardFantasy.Core.playMapGame(1);');
     $('#simulate-map-1-game-button').attr('href', 'javascript:CardFantasy.Core.playMapGame(-1);');
     $('#play-map-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playMapGame(1000);');
+    $('#sort-map-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playMapGame(-100);');
+    $('#sort15-map-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playMapGame(-101);');
+    $('#select-map-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playMapGame(-110);');
 
     var showVictoryCondition = function() {
         var map = getMap();
@@ -682,7 +748,15 @@ $(document)
     $('#update-battle-options-button').attr('href', 'javascript:CardFantasy.Core.updateBattleOptions();');
     $('#play-dungeons-1-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(1);');
     $('#simulate-dungeons-1-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(-1);');
+<<<<<<< HEAD
     $('#play-dungeons-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(500);');
+=======
+    $('#play-dungeons-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(1000);');
+    $('#sort-dungeons-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(-100);');
+    $('#sort15-dungeons-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(-101);');
+    $('#select-dungeons-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(-110);');
+
+>>>>>>> 2020-01-09: a cqhaoer big version
     setBattleOptionsText(dungeonsBattleOptions, 'dungeons-battle-options-text');
 
     var showDungeonsVictoryCondition = function() {
@@ -808,6 +882,9 @@ $(document)
     $('#play-auto-1-game-button').attr('href', 'javascript:CardFantasy.Core.playAutoGame(1);');
     $('#simulate-auto-1-game-button').attr('href', 'javascript:CardFantasy.Core.playAutoGame(-1);');
     $('#play-auto-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playAutoGame(1000);');
+    $('#sort-auto-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playAutoGame(-100);');
+    $('#sort15-auto-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playAutoGame(-101);');
+    $('#select-auto-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playAutoGame(-110);');
     $('#show-arena-battle-options-button').attr('href', 'javascript:CardFantasy.Core.setBattleOptions(CardFantasy.Core.arenaBattleOptions, "arena-battle-options-text");');
     $('#update-battle-options-button').attr('href', 'javascript:CardFantasy.Core.updateBattleOptions();');
     setBattleOptionsText(arenaBattleOptions, 'arena-battle-options-text');

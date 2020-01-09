@@ -17,7 +17,7 @@ public final class AlchemyFailure {
             return;
         }
         ui.useSkill(card, card, cardSkill, true);
-        //处理炼金失败触发涅槃的问题，但是可能会导致魔族之血出问题。
+        //处理炼金失败触发涅盘的问题，但是可能会导致魔族之血出问题。
 //        if(card.containsUsableSkill(SkillType.不屈))
 //        {
 //            card.setBasicHP(0);

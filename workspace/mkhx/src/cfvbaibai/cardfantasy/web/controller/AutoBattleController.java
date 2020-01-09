@@ -244,14 +244,299 @@ public class AutoBattleController {
             this.userActionRecorder.addAction(new UserAction(new Date(), request.getRemoteAddr(), "Play Auto Massive Game", logMessage));
             VictoryCondition vc1 = VictoryCondition.parse(victoryConditionText1);
             outputBattleOptions(writer, firstAttack, deckOrder, p1HeroHpBuff, p1CardAtBuff, p1CardHpBuff, p2HeroHpBuff, p2CardAtBuff, p2CardHpBuff, vc1);
-            GameSetup setup = GameSetup.setupArenaGame(
+            
+            GameSetup setup = null;
+            ArenaGameResult result = null;
+            GameResultStat stat = null;
+
+            int selectlevel = 0;
+            if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
+                selectlevel = count/10;
+                count = count - selectlevel*10;
+                if(count == -1){
+                    count = 10;
+                }else if(count == -2){
+                    count = 100;
+                }else if(count == -3){
+                    count = 1000;
+                }else if(count == -4){
+                    count = 10000;
+                }
+            }
+            //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
+            String cardswithcnt = "";
+            String cardsnocnt = "";
+            List<sortCard> sortcards = new ArrayList<>();
+            deck2 = deck2.replace("，", ",");
+            deck2 = deck2 + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
+            deck2 = deck2.replace(" ", "");
+            deck2 = deck2.replace(",,", ",");
+            deck2 = deck2.replace(",,", ",");
+            String subdeck = deck2;
+            int firstcnt = subdeck.indexOf(',');
+            String errornote = "";
+
+
+            if (selectlevel == -100 || selectlevel == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+                while (firstcnt != -1){
+                    //取卡牌
+                    String thisdeck = subdeck.substring(0, firstcnt+1).replace(" ","");  //第一个取出来的卡牌
+                    subdeck = subdeck.substring(firstcnt+1);            //剩下的卡牌组，用来接着循环取剩下的卡牌
+
+                    
+                    if(thisdeck.replace(",", "") != ""){
+                        String newdeck = "";
+                        String thisdeck15 = "";
+                        if(selectlevel == -100){        //当为卡组排序时,每次进行去掉本张卡的模拟
+                            newdeck = deck2.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                        }else if(selectlevel == -101){
+                            
+                            newdeck = deck2.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                                thisdeck15 = thisdeck +"-15";
+                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                                thisdeck15 = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                            } 
+                            newdeck = thisdeck15 +","+ newdeck;
+                        }
+                        
+
+                        //将卡牌胜率写进列表
+                        //result = null;
+                        //ui = new DummyGameUI();
+                        //result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
+                        //sortcards.add(new sortCard(thisdeck,Double.valueOf(result.getAdvWinCount())));
+                        setup = GameSetup.setupArenaGame(
+                            deck1, newdeck, heroLv1, heroLv2,
+                            p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
+                            firstAttack, deckOrder, vc1, count, new DummyGameUI());
+                        result = GameLauncher.playArenaGame(setup);
+                        stat = result.getStat();
+                        sortcards.add(new sortCard(thisdeck,Double.valueOf(stat.getP2Win())));
+                    }
+
+                    firstcnt = subdeck.indexOf(',');                    //下一个卡牌在哪里结束
+
+                }
+                //最后运行一次正常的, 好显示数据及对比
+                setup = GameSetup.setupArenaGame(
                     deck1, deck2, heroLv1, heroLv2,
                     p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
                     firstAttack, deckOrder, vc1, count, new DummyGameUI());
-            ArenaGameResult result = GameLauncher.playArenaGame(setup);
-            GameResultStat stat = result.getStat();
+                result = GameLauncher.playArenaGame(setup);
+                stat = result.getStat();
+                //开始排序列表
+                Collections.sort(sortcards, new Comparator<sortCard>() {
+                    @Override
+                    public int compare(sortCard o1, sortCard o2) {
+                        return o2.getCnt().compareTo(o1.getCnt());
+                    }
+                });
+                //从列表中取出来
+                int i = 1;
+                for(sortCard sortcard:sortcards){
+                    cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
+                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+
+                    if(selectlevel == -100){            //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
+                        cardsnocnt = cardsnocnt + sortcard.cardname +" ";
+                    }else if(selectlevel == -101){      //当为15排序的时候, 最后显示最强卡牌15级加其它卡牌来显示卡组
+                        if(i ==1){
+                            String thisdeck = sortcard.cardname;
+                            String newdeck = deck2.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            thisdeck = thisdeck.replace(",","");
+                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                                thisdeck = thisdeck +"-15";
+                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                                thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                            } 
+                            cardsnocnt = thisdeck +", "+ newdeck;
+                        }
+                        i++;
+                    }
+                }
+            } else if(selectlevel <= -110 && selectlevel >= -139){              //在已获得的卡牌中选择出对本战胜率最高的
+                
+                String bestdeck = "";
+                Double bestcnt = 0.0;
+
+                InputStream cardFWStream;
+                //String txturl = "";
+                //List txturls;
+                List<String> txturls=new ArrayList<>();
+
+                //从文件中读取出卡牌列表
+                if(selectlevel == -110){            //精选345
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+               
+                }else if(selectlevel == -120 || selectlevel == -125){      //符文精选或全符文时
+
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+    
+                }else if(selectlevel == -111 ){             
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard1.txt");
+                }else if(selectlevel == -112){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard2.txt");
+                }else if(selectlevel == -113){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+                }else if(selectlevel == -114){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -115){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                }else if(selectlevel == -116){      //45星
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -121){       //水
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+                }else if(selectlevel == -122){       //风
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+                }else if(selectlevel == -123){       //火
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+                }else if(selectlevel == -124){       //土
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+                }else if(selectlevel == -131){       //王国
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                }else if(selectlevel == -132){       //森林
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                }else if(selectlevel == -133){       //蛮荒
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -134){       //地狱
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                }
+
+                //从mycard文件列表中取出卡牌
+                for (int i = 0; i < txturls.size(); i++) {
+                    
+                    String txturl = txturls.get(i); 
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            line = line.replace('，', ',');
+                            if(selectlevel == -110 || selectlevel == -120){      //当选择类型为精选时
+                                if(line.indexOf(',') != -1){      //当为标记卡牌时
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                                }
+                            }else{                                              //当选择类型为非精选时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close();    
+                }
+
+
+                //用list里的符文分别模拟，将获得的分数写进list里
+                for(sortCard sortcard:sortcards){
+                    String olddeck = deck2;
+                    olddeck = olddeck.replace('，', ',');
+                    olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                    String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
+                    /*if(thiscardname.indexOf("-") == -1){
+                        if(selectlevel <= -120){     //为符文时
+                            thiscardname = thiscardname +"-4, ";
+                        }else{                      //为卡牌时
+                            thiscardname = thiscardname +"-10, ";
+                        }
+                    }
+                    String newdeck = thiscardname + olddeck;*/
+                    String newdeck = thiscardname +", "+ olddeck;
+                    //进行模拟并取值
+                    setup = GameSetup.setupArenaGame(
+                        deck1, newdeck, heroLv1, heroLv2,
+                        p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
+                        firstAttack, deckOrder, vc1, count, new DummyGameUI());
+                    result = GameLauncher.playArenaGame(setup);
+                    stat = result.getStat();
+                    
+
+                    //result = null;
+                    //ui = new DummyGameUI();
+                    //result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
+                    Double thiscnt = Double.valueOf(stat.getP2Win());
+                    sortcard.cnt = thiscnt;
+                    if(thiscnt > bestcnt){
+                        bestcnt = thiscnt;
+                        bestdeck = newdeck;
+                    }
+                    if(result.getDeckValidationResult() != ""){
+                        errornote = errornote + sortcard.cardname +":"+ result.getDeckValidationResult() +",";
+                    }
+                }
+                cardsnocnt = bestdeck;
+
+                //list排序
+                Collections.sort(sortcards, new Comparator<sortCard>() {
+                    @Override
+                    public int compare(sortCard o1, sortCard o2) {
+                        return o2.getCnt().compareTo(o1.getCnt());
+                    }
+                });
+
+                //从list中将前20的卡牌和分数取出来
+                int i = 0;
+                for(sortCard sortcard:sortcards){
+                    cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
+                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+
+                    i++;
+                    if(i>=20){
+                        break;
+                    }
+                    
+                }
+
+                //最后显示一遍原始卡组的分数
+                setup = GameSetup.setupArenaGame(
+                        deck1, deck2, heroLv1, heroLv2,
+                        p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
+                        firstAttack, deckOrder, vc1, count, new DummyGameUI());
+                result = GameLauncher.playArenaGame(setup);
+                stat = result.getStat();
+
+
+            }else{
+                setup = GameSetup.setupArenaGame(
+                        deck1, deck2, heroLv1, heroLv2,
+                        p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
+                        firstAttack, deckOrder, vc1, count, new DummyGameUI());
+                result = GameLauncher.playArenaGame(setup);
+                stat = result.getStat();
+            }
+
+
             writer.append(Utils.getCurrentDateTime() + "<br />");
             writer.append(result.getDeckValidationResult());
+            writer.append(errornote);
             writer.append("<table>");
             writer.append("<tr><td>超时: </td><td>" + stat.getTimeoutCount() + "</td></tr>");
             writer.append("<tr><td>玩家1获胜: </td><td>" + stat.getP1Win() + "</td></tr>");
@@ -259,6 +544,8 @@ public class AutoBattleController {
             if (!(vc1 instanceof DummyVictoryCondition)) {
                 writer.append("<tr><td>条件符合: </td><td>" + stat.getConditionMet() + "</td></tr>");
             }
+            writer.append("<tr><td>强度卡组排序: </td><td>"+ cardswithcnt +"</td></tr>");
+            writer.append("<tr><td>卡组排序卡组: </td><td>"+ cardsnocnt +"</td></tr>");
             writer.append("</table>");
             writer.append("<input type='hidden' value='myrate" + stat.getP1Win() + "' />");
             logger.info("TO:P1:P2 = " + stat.getTimeoutCount() + ":" + stat.getP1Win() + ":" + stat.getP2Win());
@@ -512,62 +799,92 @@ public class AutoBattleController {
             writer.append(Utils.getCurrentDateTime() + "<br />");
             writer.append("模拟场次: " + count + "<br />");
 
-            if (count == -100 || count == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
-                int selectlevel = count;
-                count = 1000;
+            //-100:卡组排序, -101:15级排序, -110到-129:卡牌选择和符文选择
+            //String ttest = "";
+            int selectlevel = 0;
+            if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
+                selectlevel = count/10;
+                count = count - selectlevel*10;
+                if(count == -1){
+                    count = 10;
+                }else if(count == -2){
+                    count = 100;
+                }else if(count == -3){
+                    count = 1000;
+                }else if(count == -4){
+                    count = 10000;
+                }
+            }
+            //ttest = ttest + selectlevel +","+ count;
+            //count = 10;
+            List<sortCard> sortcards = new ArrayList<>();
+            LilithGameResult result = null;
+
+            String cardswithcnt = "";
+            String cardsnocnt = "";
+            String errornote = "";
+
+
+            if (selectlevel == -100 || selectlevel == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+                //selectlevel = count;
+                //count = 1000;
 
                 //把中文逗号换成英文，打多了的减掉
-                String subdeck = deck.replace("，", ",");
-                subdeck = subdeck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
-                subdeck = subdeck.replace(" ", "");
-                subdeck = subdeck.replace(",,", ",");
-                subdeck = subdeck.replace(",,", ",");
+                deck = deck.replace("，", ",");
+                deck = deck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
+                deck = deck.replace(" ", "");   //先去掉了空格才能接下来去掉双逗号
+                deck = deck.replace(",,", ",");
+                deck = deck.replace(",,", ",");
+                String subdeck = deck;
 
                 
-                String cardswithcnt = "";
-                String cardsnocnt = "";
+                //String cardswithcnt = "";
+                //String cardsnocnt = "";
 
-                List<sortCard> sortcards = new ArrayList<>();
+                //List<sortCard> sortcards = new ArrayList<>();
                 //sortcards.add(new sortCard("a", 18.1));
 
                 int firstcnt = subdeck.indexOf(',');
                 //String firstdeck = subdeck;
                 //String newdesk;
-                LilithGameResult result = null;
+                //LilithGameResult result = null;
                 while (firstcnt != -1){
 
-                    String thisdeck = subdeck.substring(0, firstcnt);  //第一个取出来的卡牌
+                    String thisdeck = subdeck.substring(0, firstcnt+1).replace(" ","");  //第一个取出来的卡牌
                     subdeck = subdeck.substring(firstcnt+1);            //剩下的卡牌组，用来接着循环取剩下的卡牌
 
-                    String newdeck = "";
-                    if(selectlevel == -100){        //当为强度排序时,每次进行去掉本张卡的模拟
-                        newdeck = deck.replaceFirst(thisdeck, "");  //去掉取出来的卡牌的卡牌组
-                    }else if(selectlevel == -101){
+                    if(thisdeck.replace(",", "") != ""){
+                        String newdeck = "";
+                        String thisdeck15 = "";
+                        if(selectlevel == -100){        //当为卡组排序时,每次进行去掉本张卡的模拟
+                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                        }else if(selectlevel == -101){
+                            
+                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                                thisdeck15 = thisdeck +"-15";
+                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                                thisdeck15 = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                            } 
+                            newdeck = thisdeck15 +","+ newdeck;
+                        }
+
+                        try {
+                            result = null;
+                            GameUI ui = new DummyGameUI();
+                            result = GameLauncher.playLilithGame(
+                                newdeck, lilithName, heroLv, gameType, 
+                                        targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
+
+                            sortcards.add(new sortCard(thisdeck,result.getAvgBattleCount()));
+
+                        } catch (PvlGameTimeoutException e) {
+                            writer.append("进攻次数超过最大次数，你的卡组太弱了");
+                        }
                         
-                        newdeck = deck.replaceFirst(thisdeck, "");  //去掉取出来的卡牌的卡牌组
-                        if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
-                            thisdeck = thisdeck +"-15";
-                        }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
-                            thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
-                        } 
-                        newdeck = thisdeck +","+ newdeck;
                     }
 
                     firstcnt = subdeck.indexOf(',');                    //下一个卡牌在哪里结束
-
-
-                    try {
-                        result = null;
-                        GameUI ui = new DummyGameUI();
-                        result = GameLauncher.playLilithGame(
-                            newdeck, lilithName, heroLv, gameType, 
-                                    targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
-
-                        sortcards.add(new sortCard(thisdeck,result.getAvgBattleCount()));
-
-                    } catch (PvlGameTimeoutException e) {
-                        writer.append("进攻次数超过最大次数，你的卡组太弱了");
-                    }
                     
                 }
                     
@@ -586,28 +903,46 @@ public class AutoBattleController {
 
                 Collections.sort(sortcards, new Comparator<sortCard>() {
                     @Override
-                    public int compare(sortCard o2, sortCard o1) {
-                        return o1.getCnt()>o2.getCnt()? -1:(o1.getCnt()==o2.getCnt()? 0:1);
+                    public int compare(sortCard o1, sortCard o2) {
+                        //return o1.getCnt()>o2.getCnt()? -1:(o1.getCnt()==o2.getCnt()? 0:1);
+                        return o1.getCnt().compareTo(o2.getCnt());
                     }
                 });
+                int i = 1;
                 for(sortCard sortcard:sortcards){
                     //System.out.println(student.cardname);
                     //System.out.println(student.cnt.toString());
-                    cardswithcnt = cardswithcnt + sortcard.cardname;
+                    cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
                     cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
 
-                    cardsnocnt = cardsnocnt + sortcard.cardname +", ";
+                    if(selectlevel == -100){            //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
+                        cardsnocnt = cardsnocnt + sortcard.cardname +" ";
+                    }else if(selectlevel == -101){      //当为15排序的时候, 最后显示最强卡牌15级加其它卡牌来显示卡组
+                        if(i ==1){
+                            String thisdeck = sortcard.cardname;
+                            String newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            thisdeck = thisdeck.replace(",","");
+                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                                thisdeck = thisdeck +"-15";
+                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                                thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                            } 
+                            cardsnocnt = thisdeck +","+ newdeck;
+                        }
+                        i++;
+                    }
                     
                 }
 
+                
                 writer.print("<div style='color: red'>" + result.getValidationResult() + "</div>");
                 writer.append("<table>");
                 writer.append("<tr><td>平均需要进攻次数: </td><td>" + result.getAvgBattleCount() + "</td></tr>");
                 writer.append("<tr><td>不稳定度: </td><td>" + Math.round(result.getCvBattleCount() * 100) + "%</td></tr>");
                 writer.append("<tr><td>平均每轮进攻对莉莉丝伤害: </td><td>" + Math.round(result.getAvgDamageToLilith()) + "</td></tr>");
                 writer.append("<tr><td>不稳定度: </td><td>" + Math.round(result.getCvDamageToLilith() * 100) + "%</td></tr>");
-                writer.append("<tr><td>强度排序卡组数值: </td><td>" + cardswithcnt + "</td></tr>");
-                writer.append("<tr><td>强度排序卡组: </td><td>" + cardsnocnt + "</td></tr>");
+                writer.append("<tr><td>卡组排序卡组数值: </td><td>" + cardswithcnt + "</td></tr>");
+                writer.append("<tr><td>卡组排序卡组: </td><td>" + cardsnocnt + "</td></tr>");
                 writer.append("</td></tr></table>");
 
                 
@@ -621,9 +956,107 @@ public class AutoBattleController {
                 
                 writer.append("</td></tr></table>");*/
 
-            } else if(count <= -110 && count >= -129){              //在已获得的卡牌中选择出对本战胜率最高的
-                int selectlevel = count;
-                count = 1000;
+            } else if(selectlevel <= -110 && selectlevel >= -139){              //在已获得的卡牌中选择出对本战胜率最高的
+                
+                String bestdeck = "";
+                Double bestcnt = 0.0;
+
+                InputStream cardFWStream;
+                List<String> txturls=new ArrayList<>();
+
+                //从文件中读取出卡牌列表
+                if(selectlevel == -110){            //精选345
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+               
+                }else if(selectlevel == -120 || selectlevel == -125){      //符文精选或全符文时
+
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+    
+                }else if(selectlevel == -111 ){             
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard1.txt");
+                }else if(selectlevel == -112){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard2.txt");
+                }else if(selectlevel == -113){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+                }else if(selectlevel == -114){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -115){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                }else if(selectlevel == -116){      //45星
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -121){       //水
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+                }else if(selectlevel == -122){       //风
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+                }else if(selectlevel == -123){       //火
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+                }else if(selectlevel == -124){       //土
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+                }else if(selectlevel == -131){       //王国
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                }else if(selectlevel == -132){       //森林
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                }else if(selectlevel == -133){       //蛮荒
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -134){       //地狱
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                }
+                
+                //从mycard文件列表中取出卡牌
+                for (int i = 0; i < txturls.size(); i++) {
+                    
+                    String txturl = txturls.get(i); 
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            line = line.replace('，', ',');
+                            if(selectlevel == -110 || selectlevel == -120){      //当选择类型为精选时
+                                if(line.indexOf(',') != -1){      //当为标记卡牌时
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                                }
+                            }else{                                              //当选择类型为非精选时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close();    
+                }
+
+            /*
+            } else if(selectlevel <= -110 && selectlevel >= -129){              //在已获得的卡牌中选择出对本战胜率最高的
+                //selectlevel = count;
+                //count = 1000;
                 //deck = deck.replace("，", ",");
 
                 List<sortCard> sortcards = new ArrayList<>();
@@ -638,19 +1071,7 @@ public class AutoBattleController {
                 String txturl = "";
 
                 //设定各类别下的卡牌文件目录
-                if(selectlevel == -111 ){             //高星卡牌
-                    txturl = "cfvbaibai/cardfantasy/data/MyCard1.txt";
-                }else if(selectlevel == -112){
-                    txturl = "cfvbaibai/cardfantasy/data/MyCard2.txt";
-                }else if(selectlevel == -113){
-                    txturl = "cfvbaibai/cardfantasy/data/MyCard3.txt";
-                }else if(selectlevel == -114){
-                    txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
-                }else if(selectlevel == -115){
-                    txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
-                }else if(selectlevel == -120 || selectlevel == -121){       //符文
-                    txturl = "cfvbaibai/cardfantasy/data/MyCardFW.txt";
-                }
+                
                 //从文件中读取出卡牌列表
                 if(selectlevel == -110){            //精选345
 
@@ -662,7 +1083,7 @@ public class AutoBattleController {
                     
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line, 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -675,7 +1096,7 @@ public class AutoBattleController {
                     
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line, 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -688,7 +1109,7 @@ public class AutoBattleController {
                     
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line, 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -704,7 +1125,7 @@ public class AutoBattleController {
                     
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
-                            sortcards.add(new sortCard(line, 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -717,12 +1138,94 @@ public class AutoBattleController {
                     
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
-                            sortcards.add(new sortCard(line, 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
 
-                }else{
+                }else if(selectlevel == -120 || selectlevel == -125){      //符文精选或全符文时
+                    
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWS.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWF.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWH.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWT.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close();
+    
+
+                }else{              //其它单个星级卡牌
+
+                    if(selectlevel == -111 ){             
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard1.txt";
+                    }else if(selectlevel == -112){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard2.txt";
+                    }else if(selectlevel == -113){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard3.txt";
+                    }else if(selectlevel == -114){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
+                    }else if(selectlevel == -115){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
+                    }else if(selectlevel == -121){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWS.txt";
+                    }else if(selectlevel == -122){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWF.txt";
+                    }else if(selectlevel == -123){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWH.txt";
+                    }else if(selectlevel == -124){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWT.txt";
+                    }
+
                     cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
                     
                     //cardname = cardname +"aaa";
@@ -736,14 +1239,13 @@ public class AutoBattleController {
                             //cardname = cardname +"ccc"+ line;
                             if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                                 if(selectlevel != -120 || line.indexOf(',') != -1){     //当选择条件不为精选，或者卡牌本身带精选标记时才放入列表
-                                    sortcards.add(new sortCard(line, 0.0));
-                                    //ttest = ttest +"进入116循环，"+line;
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
                                 }
                             }
                         
                         }
                         br.close();    
-                }
+                }*/
 
 
                 //用list里的符文分别模拟，将获得的分数写进list里
@@ -752,16 +1254,17 @@ public class AutoBattleController {
                     olddeck = olddeck.replace('，', ',');
                     olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
-                    if(thiscardname.indexOf("-") == -1){
+                    /*if(thiscardname.indexOf("-") == -1){
                         if(selectlevel <= -120){     //为符文时
                             thiscardname = thiscardname +"-4, ";
                         }else{                      //为卡牌时
                             thiscardname = thiscardname +"-10, ";
                         }
-                    }
+                    }*/
                     //String newdeck = sortcard.cardname.replace("，",",").replace(",", "") +"-4, "+ olddeck;
-                    String newdeck = thiscardname + olddeck;
+                    //String newdeck = thiscardname + olddeck;
                     //errornote = errornote + newdeck +",";
+                    String newdeck = thiscardname +", "+ olddeck;
 
                     try {
                         result = null;
@@ -796,8 +1299,9 @@ public class AutoBattleController {
                 //list排序
                 Collections.sort(sortcards, new Comparator<sortCard>() {
                     @Override
-                    public int compare(sortCard o2, sortCard o1) {
-                        return o1.getCnt()>o2.getCnt()? -1:(o1.getCnt()==o2.getCnt()? 0:1);
+                    public int compare(sortCard o1, sortCard o2) {
+                        //return o1.getCnt()>o2.getCnt()? -1:(o1.getCnt()==o2.getCnt()? 0:1);
+                        return o1.getCnt().compareTo(o2.getCnt());
                     }
                 });
 
@@ -806,10 +1310,10 @@ public class AutoBattleController {
                 for(sortCard sortcard:sortcards){
                     //System.out.println(student.cardname);
                     //System.out.println(student.cnt.toString());
-                    cardswithcnt = cardswithcnt + sortcard.cardname;
+                    cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
                     cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
 
-                    //cardsnocnt = cardsnocnt + sortcard.cardname +", ";
+                    //cardsnocnt = cardsnocnt + sortcard.cardname +" ";
                     //ttest = ttest +"读取符文循环，";
                     i++;
                     if(i>=20){
@@ -844,10 +1348,10 @@ public class AutoBattleController {
 
 
                 //writer.print("<div style='color: red'>" + selectlevel + cardname + "</div>");
-            } else {
+            } else {    //作者原本的强度分析
                 //本卡组胜率
                 try {
-                    LilithGameResult result = null;
+                    //LilithGameResult result = null;
                     GameUI ui = new DummyGameUI();
                     if (enableCustomGuards && gameType == 0) {
                         result = GameLauncher.playCustomLilithGame(
@@ -937,15 +1441,441 @@ public class AutoBattleController {
             if (Global.isDebugging()) {
                 ui = new WebPlainTextGameUI();
             }
-            MapGameResult result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
+
+            MapGameResult result = null;
+
+            int selectlevel = 0;
+            if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
+                selectlevel = count/10;
+                count = count - selectlevel*10;
+                if(count == -1){
+                    count = 10;
+                }else if(count == -2){
+                    count = 100;
+                }else if(count == -3){
+                    count = 1000;
+                }else if(count == -4){
+                    count = 10000;
+                }
+            }
+            //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
+            String cardswithcnt = "";
+            String cardsnocnt = "";
+            List<sortCard> sortcards = new ArrayList<>();
+            deck = deck.replace("，", ",");
+            deck = deck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
+            deck = deck.replace(" ", "");
+            deck = deck.replace(",,", ",");
+            deck = deck.replace(",,", ",");
+            String subdeck = deck;
+            int firstcnt = subdeck.indexOf(',');
+            String errornote = "";
+            String ttest = "";
+
+            if (selectlevel == -100 || selectlevel == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+                while (firstcnt != -1){
+                    //取卡牌
+                    String thisdeck = subdeck.substring(0, firstcnt+1).replace(" ","");  //第一个取出来的卡牌
+                    subdeck = subdeck.substring(firstcnt+1);            //剩下的卡牌组，用来接着循环取剩下的卡牌
+
+                    if(thisdeck.replace(",", "") != ""){
+                        String newdeck = "";
+                        String thisdeck15 = "";
+                        if(selectlevel == -100){        //当为卡组排序时,每次进行去掉本张卡的模拟
+                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            //ttest = ttest + thisdeck +"|"+ newdeck +"@\r\n";
+                        }else if(selectlevel == -101){
+                            
+                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                                thisdeck15 = thisdeck +"-15";
+                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                                thisdeck15 = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                            } 
+                            newdeck = thisdeck15 +","+ newdeck;
+                        }
+                        
+
+                        //将卡牌胜率写进列表
+                        //result = null;
+                        //ui = new DummyGameUI();
+                        result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
+                        sortcards.add(new sortCard(thisdeck,Double.valueOf(result.getAdvWinCount())));
+                    }
+                    firstcnt = subdeck.indexOf(',');                    //下一个卡牌在哪里结束
+                }
+                //最后运行一次正常的, 好显示数据及对比
+                result = null;
+                ui = new DummyGameUI();
+                result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
+                //开始排序列表
+                Collections.sort(sortcards, new Comparator<sortCard>() {
+                    @Override
+                    public int compare(sortCard o1, sortCard o2) {
+                        return o2.getCnt().compareTo(o1.getCnt());
+                    }
+                });
+                //从列表中取出来
+                int i = 1;
+                for(sortCard sortcard:sortcards){
+                    cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
+                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+
+                    if(selectlevel == -100){            //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
+                        cardsnocnt = cardsnocnt + sortcard.cardname +" ";
+                    }else if(selectlevel == -101){      //当为15排序的时候, 最后显示最强卡牌15级加其它卡牌来显示卡组
+                        if(i ==1){
+                            String thisdeck = sortcard.cardname;
+                            String newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            thisdeck = thisdeck.replace(",","");
+                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                                thisdeck = thisdeck +"-15";
+                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                                thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                            } 
+                            cardsnocnt = thisdeck +","+ newdeck;
+                        }
+                        i++;
+                    }
+                }
+            } else if(selectlevel <= -110 && selectlevel >= -139){              //在已获得的卡牌中选择出对本战胜率最高的
+                
+                String bestdeck = "";
+                Double bestcnt = 0.0;
+
+                InputStream cardFWStream;
+                List<String> txturls=new ArrayList<>();
+
+                //从文件中读取出卡牌列表
+                if(selectlevel == -110){            //精选345
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+               
+                }else if(selectlevel == -120 || selectlevel == -125){      //符文精选或全符文时
+
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+    
+                }else if(selectlevel == -111 ){             
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard1.txt");
+                }else if(selectlevel == -112){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard2.txt");
+                }else if(selectlevel == -113){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+                }else if(selectlevel == -114){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -115){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                }else if(selectlevel == -116){      //45星
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -121){       //水
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+                }else if(selectlevel == -122){       //风
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+                }else if(selectlevel == -123){       //火
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+                }else if(selectlevel == -124){       //土
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+                }else if(selectlevel == -131){       //王国
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                }else if(selectlevel == -132){       //森林
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                }else if(selectlevel == -133){       //蛮荒
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -134){       //地狱
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                }
+                
+                //从mycard文件列表中取出卡牌
+                for (int i = 0; i < txturls.size(); i++) {
+                    
+                    String txturl = txturls.get(i); 
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            line = line.replace('，', ',');
+                            if(selectlevel == -110 || selectlevel == -120){      //当选择类型为精选时
+                                if(line.indexOf(',') != -1){      //当为标记卡牌时
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                                }
+                            }else{                                              //当选择类型为非精选时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close();    
+                }
+/*
+            } else if(selectlevel <= -110 && selectlevel >= -129){              //在已获得的卡牌中选择出对本战胜率最高的
+                
+                String bestdeck = "";
+                Double bestcnt = 0.0;
+
+                InputStream cardFWStream;
+                String txturl = "";
+
+                //从文件中读取出卡牌列表
+                if(selectlevel == -110){            //精选345
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard3.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                        }
+                    }
+                    br.close();    
+
+                }else if(selectlevel == -116){      //45星
+                    
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                        }
+                    }
+                    br.close();    
+
+                }else if(selectlevel == -120 || selectlevel == -125){      //符文精选或全符文时
+                    
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWS.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                                
+                            }
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWF.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWH.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWT.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close();
+    
+                }else{              //其它单个星级卡牌
+
+                    if(selectlevel == -111 ){             
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard1.txt";
+                    }else if(selectlevel == -112){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard2.txt";
+                    }else if(selectlevel == -113){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard3.txt";
+                    }else if(selectlevel == -114){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
+                    }else if(selectlevel == -115){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
+                    }else if(selectlevel == -121){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWS.txt";
+                    }else if(selectlevel == -122){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWF.txt";
+                    }else if(selectlevel == -123){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWH.txt";
+                    }else if(selectlevel == -124){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWT.txt";
+                    }
+
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    //cardname = cardname +"bbb" + br.readLine();
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        //result.append(System.lineSeparator()+s);
+                        //cardname = cardname +"ccc"+ line;
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != -120 || line.indexOf(',') != -1){     //当选择条件不为精选，或者卡牌本身带精选标记时才放入列表
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close();    
+                }
+*/
+                //用list里的符文分别模拟，将获得的分数写进list里
+                for(sortCard sortcard:sortcards){
+                    String olddeck = deck;
+                    olddeck = olddeck.replace('，', ',');
+                    olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                    String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
+                    /*if(thiscardname.indexOf("-") == -1){
+                        if(selectlevel <= -120){     //为符文时
+                            thiscardname = thiscardname +"-4, ";
+                        }else{                      //为卡牌时
+                            thiscardname = thiscardname +"-10, ";
+                        }
+                    }
+                    String newdeck = thiscardname + olddeck;*/
+                    String newdeck = thiscardname +", "+ olddeck;
+                    //进行模拟并取值
+                    result = null;
+                    ui = new DummyGameUI();
+                    result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
+                    Double thiscnt = Double.valueOf(result.getAdvWinCount());
+                    sortcard.cnt = thiscnt;
+                    if(thiscnt > bestcnt){
+                        bestcnt = thiscnt;
+                        bestdeck = newdeck;
+                    }
+                    if(result.getValidationResult() != ""){
+                        errornote = errornote + sortcard.cardname +":"+ result.getValidationResult() +",";
+                    }
+                }
+                cardsnocnt = bestdeck;
+
+                //list排序
+                Collections.sort(sortcards, new Comparator<sortCard>() {
+                    @Override
+                    public int compare(sortCard o1, sortCard o2) {
+                        return o2.getCnt().compareTo(o1.getCnt());
+                    }
+                });
+
+                //从list中将前20的卡牌和分数取出来
+                int i = 0;
+                for(sortCard sortcard:sortcards){
+                    cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
+                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+
+                    i++;
+                    if(i>=20){
+                        break;
+                    }
+                    
+                }
+
+                //最后显示一遍原始卡组的分数
+                result = null;
+                ui = new DummyGameUI();
+                result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
+
+            } else {    //作者原本的强度分析
+                result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
+            }
+
             writer.append(Utils.getCurrentDateTime() + "<br />");
             writer.append("<div style='color: red'>" + result.getValidationResult() + "</div>");
+            writer.print("<div style='color: red'>" + errornote + "</div>");
+            writer.print("<div style='color: red'>" + ttest + "</div>");
             writer.append("<table>");
             writer.append(String.format("<tr><td>战斗出错: </td><td>%d</td></tr>", result.getUnknownCount()));
             writer.append(String.format("<tr><td>失败: </td><td>%d</td></tr>", result.getLostCount()));
             writer.append(String.format("<tr><td>战斗超时: </td><td>%d</td></tr>", result.getTimeoutCount()));
             writer.append(String.format("<tr><td>胜利，过关条件符合: </td><td>%d</td></tr>", result.getAdvWinCount()));
             writer.append(String.format("<tr><td>胜利，过关条件不符合: </td><td>%d</td></tr>", result.getWinCount()));
+            writer.append("<tr><td>强度卡组排序: </td><td>"+ cardswithcnt +"</td></tr>");
+            writer.append("<tr><td>卡组排序卡组: </td><td>"+ cardsnocnt +"</td></tr>");
             writer.append("</table>");
             writer.append(String.format("<input type=\"hidden\" value=\"basicrate%d\">", result.getWinCount()));
             writer.append(String.format("<input type=\"hidden\" value=\"advrate%d\">", result.getAdvWinCount()));
@@ -1049,15 +1979,440 @@ public class AutoBattleController {
             if (Global.isDebugging()) {
                 ui = new WebPlainTextGameUI();
             }
-            MapGameResult result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
+
+            MapGameResult result = null;
+
+            int selectlevel = 0;
+            if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
+                selectlevel = count/10;
+                count = count - selectlevel*10;
+                if(count == -1){
+                    count = 10;
+                }else if(count == -2){
+                    count = 100;
+                }else if(count == -3){
+                    count = 1000;
+                }else if(count == -4){
+                    count = 10000;
+                }
+            }
+            //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
+            String cardswithcnt = "";
+            String cardsnocnt = "";
+            List<sortCard> sortcards = new ArrayList<>();
+            deck = deck.replace("，", ",");
+            deck = deck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
+            deck = deck.replace(" ", "");
+            deck = deck.replace(",,", ",");
+            deck = deck.replace(",,", ",");
+            String subdeck = deck;
+            int firstcnt = subdeck.indexOf(',');
+            String errornote = "";
+            //String ttest = "";
+
+            if (selectlevel == -100 || selectlevel == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+                while (firstcnt != -1){
+                    //取卡牌
+                    String thisdeck = subdeck.substring(0, firstcnt+1).replace(" ","");  //第一个取出来的卡牌
+                    subdeck = subdeck.substring(firstcnt+1);            //剩下的卡牌组，用来接着循环取剩下的卡牌
+
+                    if(thisdeck.replace(",", "") != ""){
+                        String newdeck = "";
+                        String thisdeck15 = "";
+                        if(selectlevel == -100){        //当为卡组排序时,每次进行去掉本张卡的模拟
+                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            //ttest = ttest + thisdeck +"|"+ newdeck +"@\r\n";
+                        }else if(selectlevel == -101){
+                            
+                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                                thisdeck15 = thisdeck +"-15";
+                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                                thisdeck15 = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                            } 
+                            newdeck = thisdeck15 +","+ newdeck;
+                        }
+                        
+                        //将卡牌胜率写进列表
+                        //result = null;
+                        //ui = new DummyGameUI();
+                        result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,newdeck, map, heroLv, count,rule, ui);
+                        sortcards.add(new sortCard(thisdeck,Double.valueOf(result.getAdvWinCount())));
+                    }
+
+                    firstcnt = subdeck.indexOf(',');                    //下一个卡牌在哪里结束
+                }
+                //最后运行一次正常的, 好显示数据及对比
+                //result = null;
+                //ui = new DummyGameUI();
+                result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
+                //开始排序列表
+                Collections.sort(sortcards, new Comparator<sortCard>() {
+                    @Override
+                    public int compare(sortCard o1, sortCard o2) {
+                        return o2.getCnt().compareTo(o1.getCnt());
+                    }
+                });
+                //从列表中取出来
+                int i = 1;
+                for(sortCard sortcard:sortcards){
+                    cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
+                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+
+                    if(selectlevel == -100){            //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
+                        cardsnocnt = cardsnocnt + sortcard.cardname +" ";
+                    }else if(selectlevel == -101){      //当为15排序的时候, 最后显示最强卡牌15级加其它卡牌来显示卡组
+                        if(i ==1){
+                            String thisdeck = sortcard.cardname;
+                            String newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            thisdeck = thisdeck.replace(",","");
+                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                                thisdeck = thisdeck +"-15";
+                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                                thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                            } 
+                            cardsnocnt = thisdeck +","+ newdeck;
+                        }
+                        i++;
+                    }
+                }
+
+            } else if(selectlevel <= -110 && selectlevel >= -139){              //在已获得的卡牌中选择出对本战胜率最高的
+                
+                String bestdeck = "";
+                Double bestcnt = 0.0;
+
+                InputStream cardFWStream;
+                List<String> txturls=new ArrayList<>();
+
+                //从文件中读取出卡牌列表
+                if(selectlevel == -110){            //精选345
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+               
+                }else if(selectlevel == -120 || selectlevel == -125){      //符文精选或全符文时
+
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+    
+                }else if(selectlevel == -111 ){             
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard1.txt");
+                }else if(selectlevel == -112){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard2.txt");
+                }else if(selectlevel == -113){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+                }else if(selectlevel == -114){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -115){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                }else if(selectlevel == -116){      //45星
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -121){       //水
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+                }else if(selectlevel == -122){       //风
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+                }else if(selectlevel == -123){       //火
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+                }else if(selectlevel == -124){       //土
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+                }else if(selectlevel == -131){       //王国
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                }else if(selectlevel == -132){       //森林
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                }else if(selectlevel == -133){       //蛮荒
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -134){       //地狱
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                }
+                
+                //从mycard文件列表中取出卡牌
+                for (int i = 0; i < txturls.size(); i++) {
+                    
+                    String txturl = txturls.get(i); 
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            line = line.replace('，', ',');
+                            if(selectlevel == -110 || selectlevel == -120){      //当选择类型为精选时
+                                if(line.indexOf(',') != -1){      //当为标记卡牌时
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                                }
+                            }else{                                              //当选择类型为非精选时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close();    
+                }
+/*
+            } else if(selectlevel <= -110 && selectlevel >= -129){              //在已获得的卡牌中选择出对本战胜率最高的
+                
+                String bestdeck = "";
+                Double bestcnt = 0.0;
+
+                InputStream cardFWStream;
+                String txturl = "";
+
+                //从文件中读取出卡牌列表
+                if(selectlevel == -110){            //精选345
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard3.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                        }
+                    }
+                    br.close();    
+
+                }else if(selectlevel == -116){      //45星
+                    
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                        }
+                    }
+                    br.close();    
+
+                }else if(selectlevel == -120 || selectlevel == -125){      //符文精选或全符文时
+                    
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWS.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                                
+                            }
+                        }
+                    }
+                    br.close();    
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWF.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWH.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+
+                    txturl = "cfvbaibai/cardfantasy/data/MyCardFWT.txt";
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close(); 
+    
+                }else{              //其它单个星级卡牌
+
+                    if(selectlevel == -111 ){             
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard1.txt";
+                    }else if(selectlevel == -112){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard2.txt";
+                    }else if(selectlevel == -113){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard3.txt";
+                    }else if(selectlevel == -114){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard4.txt";
+                    }else if(selectlevel == -115){
+                        txturl = "cfvbaibai/cardfantasy/data/MyCard5.txt";
+                    }else if(selectlevel == -121){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWS.txt";
+                    }else if(selectlevel == -122){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWF.txt";
+                    }else if(selectlevel == -123){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWH.txt";
+                    }else if(selectlevel == -124){       
+                        txturl = "cfvbaibai/cardfantasy/data/MyCardFWT.txt";
+                    }
+
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    //cardname = cardname +"bbb" + br.readLine();
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        //result.append(System.lineSeparator()+s);
+                        //cardname = cardname +"ccc"+ line;
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            if(selectlevel != -120 || line.indexOf(',') != -1){     //当选择条件不为精选，或者卡牌本身带精选标记时才放入列表
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close();    
+                }
+*/
+                //用list里的符文分别模拟，将获得的分数写进list里
+                for(sortCard sortcard:sortcards){
+                    String olddeck = deck;
+                    olddeck = olddeck.replace('，', ',');
+                    olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                    String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
+                    /*if(thiscardname.indexOf("-") == -1){
+                        if(selectlevel <= -120){     //为符文时
+                            thiscardname = thiscardname +"-4, ";
+                        }else{                      //为卡牌时
+                            thiscardname = thiscardname +"-10, ";
+                        }
+                    }*/
+                    String newdeck = thiscardname +", "+ olddeck;
+                    //进行模拟并取值
+                    //result = null;
+                    //ui = new DummyGameUI();
+                    result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,newdeck, map, heroLv, count,rule, ui);
+                    Double thiscnt = Double.valueOf(result.getAdvWinCount());
+                    sortcard.cnt = thiscnt;
+                    if(thiscnt > bestcnt){
+                        bestcnt = thiscnt;
+                        bestdeck = newdeck;
+                    }
+                    if(result.getValidationResult() != ""){
+                        errornote = errornote + sortcard.cardname +":"+ result.getValidationResult() +",";
+                    }
+                }
+                cardsnocnt = bestdeck;
+
+                //list排序
+                Collections.sort(sortcards, new Comparator<sortCard>() {
+                    @Override
+                    public int compare(sortCard o1, sortCard o2) {
+                        return o2.getCnt().compareTo(o1.getCnt());
+                    }
+                });
+
+                //从list中将前20的卡牌和分数取出来
+                int i = 0;
+                for(sortCard sortcard:sortcards){
+                    cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
+                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+
+                    i++;
+                    if(i>=20){
+                        break;
+                    }
+                    
+                }
+
+                //最后显示一遍原始卡组的分数
+                //result = null;
+                //ui = new DummyGameUI();
+                result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
+    
+            }else{
+                result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
+            }
+            
             writer.append(Utils.getCurrentDateTime() + "<br />");
             writer.append("<div style='color: red'>" + result.getValidationResult() + "</div>");
+            writer.print("<div style='color: red'>" + errornote + "</div>");
             writer.append("<table>");
             writer.append(String.format("<tr><td>战斗出错: </td><td>%d</td></tr>", result.getUnknownCount()));
             writer.append(String.format("<tr><td>失败: </td><td>%d</td></tr>", result.getLostCount()));
             writer.append(String.format("<tr><td>战斗超时: </td><td>%d</td></tr>", result.getTimeoutCount()));
             writer.append(String.format("<tr><td>胜利，过关条件符合: </td><td>%d</td></tr>", result.getAdvWinCount()));
             writer.append(String.format("<tr><td>胜利，过关条件不符合: </td><td>%d</td></tr>", result.getWinCount()));
+            writer.append("<tr><td>强度卡组排序: </td><td>"+ cardswithcnt +"</td></tr>");
+            writer.append("<tr><td>卡组排序卡组: </td><td>"+ cardsnocnt +"</td></tr>");
             writer.append("</table>");
             writer.append(String.format("<input type=\"hidden\" value=\"basicrate%d\">", result.getWinCount()));
             writer.append(String.format("<input type=\"hidden\" value=\"advrate%d\">", result.getAdvWinCount()));

@@ -368,10 +368,10 @@ public enum SkillType {
     我还会回来的("", 0),
     蛮荒我还会回来的("", 0),
     花族秘术("", 65, 0, 210, 0),
-    涅槃("", 100, 0),
+    涅盘("", 100, 0),
     神性("", 100, 0),
     粗中有细("", 100, 0),
-    凤凰涅槃("", 100, 0,SkillTag.复活),
+    凤凰涅盘("", 100, 0,SkillTag.复活),
     天选之子("", 60, 0),
     净身明礼("", 65, 0,SkillTag.抗沉默),
 
@@ -1245,7 +1245,7 @@ public enum SkillType {
 
     //手牌添加技能 有判定的
     王佐之才("",SkillType.镜面,0,null,0),
-    英雄之托("",SkillType.竹取,0,SkillType.涅槃,0,SkillTag.抗沉默),
+    英雄之托("",SkillType.竹取,0,SkillType.涅盘,0,SkillTag.抗沉默),
     你们来啊("",SkillType.进军之令,0,null,0),
     你们上啊("",SkillType.号角,5,null,0),
     还有谁("",SkillType.星云锁链,0,null,0),
