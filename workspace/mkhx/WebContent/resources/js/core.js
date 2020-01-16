@@ -748,15 +748,11 @@ $(document)
     $('#update-battle-options-button').attr('href', 'javascript:CardFantasy.Core.updateBattleOptions();');
     $('#play-dungeons-1-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(1);');
     $('#simulate-dungeons-1-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(-1);');
-<<<<<<< HEAD
-    $('#play-dungeons-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(500);');
-=======
     $('#play-dungeons-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(1000);');
     $('#sort-dungeons-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(-100);');
     $('#sort15-dungeons-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(-101);');
     $('#select-dungeons-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playDungeonsGame(-110);');
 
->>>>>>> 2020-01-09: a cqhaoer big version
     setBattleOptionsText(dungeonsBattleOptions, 'dungeons-battle-options-text');
 
     var showDungeonsVictoryCondition = function() {
