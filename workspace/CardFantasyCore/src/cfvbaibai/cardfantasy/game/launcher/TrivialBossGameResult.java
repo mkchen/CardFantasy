@@ -4,6 +4,8 @@ import cfvbaibai.cardfantasy.OneDimensionDataStat.ChartDataItem;
 
 public class TrivialBossGameResult {
     private String validationResult;
+    private String cardswithcnt;
+    private String cardsnocnt;
     private int gameCount;
     private int coolDown;
     private int totalCost;
@@ -26,6 +28,18 @@ public class TrivialBossGameResult {
         this.maxDamage = result.getMaxDamage();
         this.cvDamage = result.getCvDamage();
         this.dataItems = result.getDataItems();
+    }
+    public String getCardswithcnt() {
+        return cardswithcnt;
+    }
+    public void setCardswithcnt(String cardswithcnt) {
+        this.cardswithcnt = cardswithcnt;
+    }
+    public String getCardsnocnt() {
+        return cardsnocnt;
+    }
+    public void setCardsnocnt(String cardsnocnt) {
+        this.cardsnocnt = cardsnocnt;
     }
     public String getValidationResult() {
         return validationResult;

@@ -450,10 +450,10 @@ public class AutoBattleController {
                             line = line.replace('，', ',');
                             if(selectlevel == -110 || selectlevel == -120){      //当选择类型为精选时
                                 if(line.indexOf(',') != -1){      //当为标记卡牌时
-                                    sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
                                 }
                             }else{                                              //当选择类型为非精选时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -728,13 +728,300 @@ public class AutoBattleController {
             this.userActionRecorder.addAction(new UserAction(new Date(), request.getRemoteAddr(), "Play Boss Massive Game",
                     String.format("Deck=%s<br />HeroLV=%d, Boss=%s, Count=%d, GuardType=%d", deck, heroLv, bossName, count, guardType)));
             GameUI ui = new DummyGameUI();
-            GameSetup setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
-            BossGameResult result = GameLauncher.playBossGame(setup);
+
+            GameSetup setup = null;
+            BossGameResult result = null;
+
+            int selectlevel = 0;
+            if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
+                selectlevel = count/10;
+                count = count - selectlevel*10;
+                if(count == -1){
+                    count = 10;
+                }else if(count == -2){
+                    count = 100;
+                }else if(count == -3){
+                    count = 1000;
+                }else if(count == -4){
+                    count = 10000;
+                }
+            }
+            //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
+            String cardswithcnt = "";
+            String cardsnocnt = "";
+            List<sortCard> sortcards = new ArrayList<>();
+            deck = deck.replace("，", ",");
+            deck = deck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
+            deck = deck.replace(" ", "");
+            deck = deck.replace(",,", ",");
+            deck = deck.replace(",,", ",");
+            String subdeck = deck;
+            int firstcnt = subdeck.indexOf(',');
+
+            String errornote = "";
+            String ttest = "";
+            
+
+            if (selectlevel == -100 || selectlevel == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+                while (firstcnt != -1){
+                    //取卡牌
+                    String thisdeck = subdeck.substring(0, firstcnt+1).replace(" ","");  //第一个取出来的卡牌
+                    subdeck = subdeck.substring(firstcnt+1);            //剩下的卡牌组，用来接着循环取剩下的卡牌
+
+                    if(thisdeck.replace(",", "") != ""){
+                        String newdeck = "";
+                        String thisdeck15 = "";
+                        if(selectlevel == -100){        //当为卡组排序时,每次进行去掉本张卡的模拟
+                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            //ttest = ttest + thisdeck +"|"+ newdeck +"@\r\n";
+                        }else if(selectlevel == -101){
+                            
+                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                                thisdeck15 = thisdeck +"-15";
+                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                                thisdeck15 = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                            } 
+                            newdeck = thisdeck15 +","+ newdeck;
+                        }
+                        
+
+                        //将卡牌胜率写进列表
+                        result = null;
+                        ui = new DummyGameUI();
+                        //result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
+                        setup = GameSetup.setupBossGame(newdeck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
+                        result = GameLauncher.playBossGame(setup);
+            
+                        //sortcards.add(new sortCard(thisdeck,Double.valueOf(result.getAdvWinCount())));
+                        sortcards.add(new sortCard(thisdeck,Double.valueOf(Math.round(result.getAvgDamagePerMinute()))));
+                    }
+                    firstcnt = subdeck.indexOf(',');                    //下一个卡牌在哪里结束
+                }
+                //最后运行一次正常的, 好显示数据及对比
+                //result = null;
+                //ui = new DummyGameUI();
+                //result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
+                setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
+                result = GameLauncher.playBossGame(setup);
+                //开始排序列表
+                Collections.sort(sortcards, new Comparator<sortCard>() {
+                    @Override
+                    public int compare(sortCard o1, sortCard o2) {
+                        return o2.getCnt().compareTo(o1.getCnt());
+                    }
+                });
+                //从列表中取出来
+                int i = 1;
+                for(sortCard sortcard:sortcards){
+                    cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
+                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+
+                    if(selectlevel == -100){            //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
+                        cardsnocnt = cardsnocnt + sortcard.cardname +" ";
+                    }else if(selectlevel == -101){      //当为15排序的时候, 最后显示最强卡牌15级加其它卡牌来显示卡组
+                        if(i ==1){
+                            String thisdeck = sortcard.cardname;
+                            String newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+"), "");  //去掉取出来的卡牌的卡牌组
+                            thisdeck = thisdeck.replace(",","");
+                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
+                                thisdeck = thisdeck +"-15";
+                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
+                                thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
+                            } 
+                            cardsnocnt = thisdeck +","+ newdeck;
+                        }
+                        i++;
+                    }
+                }
+            } else if(selectlevel <= -110 && selectlevel >= -139){              //在已获得的卡牌中选择出对本战胜率最高的
+                
+                String bestdeck = "";
+                Double bestcnt = 0.0;
+
+                InputStream cardFWStream;
+                List<String> txturls=new ArrayList<>();
+
+                //从文件中读取出卡牌列表
+                if(selectlevel == -110){            //精选345
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
+               
+                }else if(selectlevel == -120 || selectlevel == -125){      //符文精选或全符文时
+
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+    
+                }else if(selectlevel == -111 ){             
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard1.txt");
+                }else if(selectlevel == -112){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard2.txt");
+                }else if(selectlevel == -113){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+                }else if(selectlevel == -114){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
+                }else if(selectlevel == -115){
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
+                }else if(selectlevel == -116){      //45星
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
+                }else if(selectlevel == -121){       //水
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+                }else if(selectlevel == -122){       //风
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+                }else if(selectlevel == -123){       //火
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+                }else if(selectlevel == -124){       //土
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+                }else if(selectlevel == -131){       //王国
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+                }else if(selectlevel == -132){       //森林
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+                }else if(selectlevel == -133){       //蛮荒
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+                }else if(selectlevel == -134){       //地狱
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+                }
+                
+                //从mycard文件列表中取出卡牌
+                for (int i = 0; i < txturls.size(); i++) {
+                    
+                    String txturl = txturls.get(i); 
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String line = null;
+                    while((line = br.readLine())!=null){//使用readLine方法，一次读一行
+                        if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
+                            line = line.replace('，', ',');
+                            if(selectlevel == -110 || selectlevel == -120){      //当选择类型为精选时
+                                if(line.indexOf(',') != -1){      //当为标记卡牌时
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                                }
+                            }else{                                              //当选择类型为非精选时
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
+                            }
+                        }
+                    }
+                    br.close();    
+                }    
+                for(sortCard sortcard:sortcards){
+                    String olddeck = deck;
+                    olddeck = olddeck.replace('，', ',');
+                    olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                    String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
+                    /*if(thiscardname.indexOf("-") == -1){
+                        if(selectlevel <= -120){     //为符文时
+                            thiscardname = thiscardname +"-4, ";
+                        }else{                      //为卡牌时
+                            thiscardname = thiscardname +"-10, ";
+                        }
+                    }
+                    String newdeck = thiscardname + olddeck;*/
+                    String newdeck = thiscardname +", "+ olddeck;
+                    //进行模拟并取值
+                    //result = null;
+                    //ui = new DummyGameUI();
+                    //result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
+                    setup = GameSetup.setupBossGame(newdeck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
+                    result = GameLauncher.playBossGame(setup);
+                    Double thiscnt = Double.valueOf(Math.round(result.getAvgDamagePerMinute()));
+                    sortcard.cnt = thiscnt;
+                    if(thiscnt > bestcnt){
+                        bestcnt = thiscnt;
+                        bestdeck = newdeck;
+                    }
+                    if(result.getValidationResult() != ""){
+                        errornote = errornote + sortcard.cardname +":"+ result.getValidationResult() +",";
+                    }
+                }
+                cardsnocnt = bestdeck;
+
+                //list排序
+                Collections.sort(sortcards, new Comparator<sortCard>() {
+                    @Override
+                    public int compare(sortCard o1, sortCard o2) {
+                        return o2.getCnt().compareTo(o1.getCnt());
+                    }
+                });
+
+                //从list中将前20的卡牌和分数取出来
+                int i = 0;
+                for(sortCard sortcard:sortcards){
+                    cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
+                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+
+                    i++;
+                    if(i>=20){
+                        break;
+                    }
+                    
+                }
+
+                //最后显示一遍原始卡组的分数
+                //result = null;
+                //ui = new DummyGameUI();
+                setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
+                result = GameLauncher.playBossGame(setup);
+
+            } else {    //作者原本的强度分析
+                setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
+                result = GameLauncher.playBossGame(setup);
+            }
+
+
+            //GameSetup setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
+            //BossGameResult result = GameLauncher.playBossGame(setup);
+            
+            //setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
+            //result = GameLauncher.playBossGame(setup);
+            
+            //writer.print("<div style='color: red'>errornote</div>");
             TrivialBossGameResult resultBean = new TrivialBossGameResult(result);
+            //resultBean.setValidationResult("<div style='color: red'>" + errornote + resultBean.getValidationResult() + "</div>");
             resultBean.setValidationResult("<div style='color: red'>" + resultBean.getValidationResult() + "</div>");
+            resultBean.setCardswithcnt(cardswithcnt);
+            resultBean.setCardsnocnt(cardsnocnt);
             long averageDamageToBoss = Math.round(result.getAvgDamage());
             logger.info("Average damage to boss: " + averageDamageToBoss);
             writer.print(jsonHandler.toJson(resultBean));
+            
+/*
+            w.append("<table>");
+            w.append("<tr><td>强度卡组排序: </td><td>"+ cardswithcnt +"</td></tr>");
+            w.append("<tr><td>卡组排序卡组: </td><td>"+ cardsnocnt +"</td></tr>");
+            w.append("</table>");*/
         } catch (Exception e) {
             response.setStatus(500);
             writer.print("{'error':'" + e.getMessage() + "'}");
@@ -1055,10 +1342,10 @@ public class AutoBattleController {
                             line = line.replace('，', ',');
                             if(selectlevel == -110 || selectlevel == -120){      //当选择类型为精选时
                                 if(line.indexOf(',') != -1){      //当为标记卡牌时
-                                    sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
                                 }
                             }else{                                              //当选择类型为非精选时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -1095,7 +1382,7 @@ public class AutoBattleController {
                     
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -1108,7 +1395,7 @@ public class AutoBattleController {
                     
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -1121,7 +1408,7 @@ public class AutoBattleController {
                     
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -1137,7 +1424,7 @@ public class AutoBattleController {
                     
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -1150,7 +1437,7 @@ public class AutoBattleController {
                     
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -1166,7 +1453,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -1181,7 +1468,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -1195,7 +1482,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -1209,7 +1496,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -1251,7 +1538,7 @@ public class AutoBattleController {
                             //cardname = cardname +"ccc"+ line;
                             if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                                 if(selectlevel != -120 || line.indexOf(',') != -1){     //当选择条件不为精选，或者卡牌本身带精选标记时才放入列表
-                                    sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
                                 }
                             }
                         
@@ -1643,10 +1930,10 @@ public class AutoBattleController {
                             line = line.replace('，', ',');
                             if(selectlevel == -110 || selectlevel == -120){      //当选择类型为精选时
                                 if(line.indexOf(',') != -1){      //当为标记卡牌时
-                                    sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
                                 }
                             }else{                                              //当选择类型为非精选时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -1670,7 +1957,7 @@ public class AutoBattleController {
                     String line = null;
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -1682,7 +1969,7 @@ public class AutoBattleController {
                     line = null;
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -1694,7 +1981,7 @@ public class AutoBattleController {
                     line = null;
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -1708,7 +1995,7 @@ public class AutoBattleController {
                     String line = null;
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -1720,7 +2007,7 @@ public class AutoBattleController {
                     line = null;
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -1735,7 +2022,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                                 
                             }
                         }
@@ -1750,7 +2037,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -1763,7 +2050,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -1776,7 +2063,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -1814,7 +2101,7 @@ public class AutoBattleController {
                         //cardname = cardname +"ccc"+ line;
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != -120 || line.indexOf(',') != -1){     //当选择条件不为精选，或者卡牌本身带精选标记时才放入列表
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -2188,10 +2475,10 @@ public class AutoBattleController {
                             line = line.replace('，', ',');
                             if(selectlevel == -110 || selectlevel == -120){      //当选择类型为精选时
                                 if(line.indexOf(',') != -1){      //当为标记卡牌时
-                                    sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                    sortcards.add(new sortCard(line.replace("-",""), 0.0));
                                 }
                             }else{                                              //当选择类型为非精选时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -2215,7 +2502,7 @@ public class AutoBattleController {
                     String line = null;
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -2227,7 +2514,7 @@ public class AutoBattleController {
                     line = null;
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -2239,7 +2526,7 @@ public class AutoBattleController {
                     line = null;
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1 && line.replace('，', ',').indexOf(',') != -1){      //当卡牌不为尚未收录的卡牌,并且为标记卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -2253,7 +2540,7 @@ public class AutoBattleController {
                     String line = null;
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -2265,7 +2552,7 @@ public class AutoBattleController {
                     line = null;
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
-                            sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                            sortcards.add(new sortCard(line.replace("-",""), 0.0));
                         }
                     }
                     br.close();    
@@ -2280,7 +2567,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                                 
                             }
                         }
@@ -2295,7 +2582,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -2308,7 +2595,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -2321,7 +2608,7 @@ public class AutoBattleController {
                     while((line = br.readLine())!=null){//使用readLine方法，一次读一行
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != 120 || line.replace('，', ',').indexOf(",") != -1){      //当为全符文或者为精选标记符文时
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }
@@ -2359,7 +2646,7 @@ public class AutoBattleController {
                         //cardname = cardname +"ccc"+ line;
                         if(line.indexOf("//") == -1){      //当卡牌不为尚未收录的卡牌时
                             if(selectlevel != -120 || line.indexOf(',') != -1){     //当选择条件不为精选，或者卡牌本身带精选标记时才放入列表
-                                sortcards.add(new sortCard(line.replace("-",","), 0.0));
+                                sortcards.add(new sortCard(line.replace("-",""), 0.0));
                             }
                         }
                     }

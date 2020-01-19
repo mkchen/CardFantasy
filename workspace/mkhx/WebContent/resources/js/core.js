@@ -245,6 +245,23 @@ var playBossGame = function(count) {
     var buffForest = $('#buff-forest').val();
     var buffSavage = $('#buff-savage').val();
     var buffHell = $('#buff-hell').val();
+    
+    if(count == -110){                                  //强度选卡时，选择范围为几星卡和符文类别
+        count = $('#select-boss-game-level').val() + $('#cnt-boss-game-level').val();
+    }else if(count == -100 || count == -101){
+        count = count + $('#cnt-boss-game-level').val();
+    }else if(count == 1000){
+        count = $('#cnt-boss-game-level').val();
+        if(count == 1){
+            count = 10;
+        }else if(count == 2){
+            count = 100;
+        }else if(count == 3){
+            count = 1000;
+        }else if(count == 4){
+            count = 10000;
+        }
+    }
     var postData = {
         deck: deck,
         hlv: heroLv,
@@ -285,6 +302,8 @@ var playBossGame = function(count) {
             $('#boss-battle-avg-damage-per-minute').text(Math.round(result.avgDamagePerMinute));
             $('#boss-battle-cv-damage').text(Math.round(result.cvDamage * 100) + '%');
             $('#boss-battle-deck-validation-result').html(result.validationResult);
+            $('#boss-battle-cardswithcnt').html(result.cardswithcnt);
+            $('#boss-battle-cardsnocnt').html(result.cardsnocnt);
             var chartData = { labels: [], datasets: [{
                 label: "伤害",
                 fillColor: "rgba(151,187,205,0.5)",
@@ -798,6 +817,10 @@ $(document)
     $('#play-boss-1-game-button').attr('href', 'javascript:CardFantasy.Core.playBossGame(1);');
     $('#simulate-boss-1-game-button').attr('href', 'javascript:CardFantasy.Core.playBossGame(-1);');
     $('#play-boss-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playBossGame(1000);');
+    $('#sort-boss-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playBossGame(-100);');
+    $('#sort15-boss-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playBossGame(-101);');
+    $('#select-boss-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playBossGame(-110);');
+
 
     var showBossSkills = function() {
         $.get('CardSkills/' + $('#boss-name').val(), function(data) {

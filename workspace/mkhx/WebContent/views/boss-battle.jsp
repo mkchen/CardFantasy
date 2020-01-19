@@ -137,6 +137,34 @@
                 <a id="play-boss-1-game-button" class="battle-button" data-role="button" data-mini="true">文字战斗</a>
                 <a id="simulate-boss-1-game-button" class="battle-button" data-role="button" data-mini="true">动画战斗</a>
                 <a id="play-boss-massive-game-button" class="battle-button" data-role="button" data-mini="true">强度分析</a>
+                <a id="sort-boss-massive-game-button" class="battle-button" data-role="button" data-mini="true">卡组排序</a>
+                <a id="sort15-boss-massive-game-button" class="battle-button" data-role="button" data-mini="true">15级排序</a>
+                <select id="cnt-boss-game-level" data-mini="true" data-native-menu="true">
+                    <option value="1">10次</option>
+                    <option value="2">100次</option>
+                    <option value="3" selected="selected">1000次</option>
+                    <option value="4">10000次</option>
+                </select>
+                <a id="select-boss-massive-game-button" class="battle-button" data-role="button" data-mini="true">强度选卡</a>
+                <select id="select-boss-game-level" data-mini="true" data-native-menu="true">
+                    <option value="-110" selected="selected">精选卡牌</option>
+                    <option value="-111">1星</option>
+                    <option value="-112">2星</option>
+                    <option value="-113">3星</option>
+                    <option value="-114">4星</option>
+                    <option value="-115">5星</option>
+                    <option value="-116">45星</option>
+                    <option value="-131">王国</option>
+                    <option value="-132">森林</option>
+                    <option value="-133">蛮荒</option>
+                    <option value="-134">地狱</option>
+                    <option value="-120">精选符文</option>
+                    <option value="-121">水符文</option>
+                    <option value="-122">风符文</option>
+                    <option value="-123">火符文</option>
+                    <option value="-124">土符文</option>
+                    <option value="-125">全符文</option>
+                </select>
                 <a data-role="button" data-mini="true" data-type="bug" href="#">提BUG</a>
             </div>
             <div id="boss-battle-div" data-mini="true" data-role="collapsible" data-collapsed="false">
@@ -165,6 +193,8 @@
                                     <div id="boss-battle-deck-validation-result"></div>
                                 </td>
                             </tr>
+                            <tr><td>强度卡组排序: </td><td id="boss-battle-cardswithcnt" colspan="5"></td></tr>
+                            <tr><td>卡组排序卡组: </td><td id="boss-battle-cardsnocnt" colspan="5"></td></tr>
                         </table>
                     </div>
                     <div id="boss-battle-chart-wrapper">
