@@ -192,6 +192,8 @@ public class SkillResolver {
                         GiveSideSkill.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo1().getSkill());
                     } else if (skillUseInfo.getType() == SkillType.袈裟斩) {
                         GiveSideSkill.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo1().getSkill());
+                    } else if (skillUseInfo.getType() == SkillType.寒霜护佑) {
+                        GiveSideSkill.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo1().getSkill());
                     } else if (skillUseInfo.getType() == SkillType.厄运枪) {
                         GiveSideSkill.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo1().getSkill());
                     } else if (skillUseInfo.getType() == SkillType.顽石契约) {
@@ -979,6 +981,8 @@ public class SkillResolver {
             } else if (skillUseInfo.getType() == SkillType.寒冰触碰) {
                 IceTouch.apply(skillUseInfo, this, attacker, defender, 3);
             } else if (skillUseInfo.getType() == SkillType.寒霜之指) {
+                IceTouch.apply(skillUseInfo, this, attacker, defender, 1);
+            } else if (skillUseInfo.getType() == SkillType.寒霜之心) {
                 IceTouch.apply(skillUseInfo, this, attacker, defender, 1);
             } else if (skillUseInfo.getType() == SkillType.风暴汇集) {
                 IceTouch.apply(skillUseInfo, this, attacker, defender, -1);
