@@ -37,6 +37,10 @@ public final class SummonStopSkillUseInfoList {
         int number =0;
         SkillUseInfo useSkillUseInfo = null;
         for(SkillUseInfo skillUseInfo:skillUseInfoList){
+            CardInfo cardInfo = (CardInfo) skillUseInfo.getOwner();
+            if(cardInfo.isDead()){
+                continue;
+            }
             ui.useSkill(skillUseInfo.getOwner(), attacker, skillUseInfo.getSkill(), true);
             number = skillUseInfo.getSkillNumber();
             skillUseInfo.setSkillNumber(number-1);

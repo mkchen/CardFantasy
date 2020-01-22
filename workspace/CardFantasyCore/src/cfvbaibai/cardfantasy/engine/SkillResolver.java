@@ -328,6 +328,8 @@ public class SkillResolver {
                         Cooperation.apply(this, skillUseInfo.getAttachedUseInfo2(), card, "旷世绝恋·貂蝉", false);
                     } else if (skillUseInfo.getType() == SkillType.魔王降临 || skillUseInfo.getType() == SkillType.魔王之怒) {
                         RaceChangeSelf.apply(this, skillUseInfo, card);
+                    } else if (skillUseInfo.getType() == SkillType.神谕) {
+                        SummonStopSkillUseInfoList.apply(this,skillUseInfo,  defender);
                     }
                 }
             }
@@ -1399,8 +1401,6 @@ public class SkillResolver {
                 DeathMarkMult.apply(this, skillUseInfo, attacker, defender, 3,1);
             } else if (skillUseInfo.getType() == SkillType.毒物蔓延) {
                 PoisonMagic.apply(skillUseInfo, this, attacker, defender, -1);
-            } else if (skillUseInfo.getType() == SkillType.神谕) {
-                SummonStopSkillUseInfoList.apply(this,skillUseInfo,  defender);
             } else if (skillUseInfo.getType() == SkillType.灵魂称量) {
                 GreatFireMagic.apply(skillUseInfo.getSkill(), this, attacker, defender, 2, false);
                 RegressionSoul.apply(this, skillUseInfo.getAttachedUseInfo1(), attacker, defender);
@@ -4112,12 +4112,22 @@ public class SkillResolver {
                     Snipe.apply(skillUseInfo, skillUseInfo.getSkill(), this, card, enemy, 1);
                 } else if (skillUseInfo.getType() == SkillType.天下桃李) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            HandCardAddSkillLong.apply(this, skillUseInfo, card, skillUseInfo.getSkill());
+                        }
                         continue;
                     }
                     NebulaChain.apply(skillUseInfo, this, card);
                     HandCardAddSkillLong.apply(this, skillUseInfo, card, skillUseInfo.getSkill());
                 } else if (skillUseInfo.getType() == SkillType.分解反应) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            AllDelay.apply(skillUseInfo.getAttachedUseInfo2(), this, card, enemy);
+                        }
                         continue;
                     }
                     Destroy.apply(this, skillUseInfo.getAttachedUseInfo1().getSkill(), card, enemy, 1);
@@ -4129,6 +4139,11 @@ public class SkillResolver {
                     Seal.apply(skillUseInfo, this, card, enemy);
                 } else if (skillUseInfo.getType() == SkillType.咆哮 || skillUseInfo.getType() == SkillType.瓦解) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            Transport.apply(this, skillUseInfo.getSkill(), card, enemy);
+                        }
                         continue;
                     }
                     Destroy.apply(this, skillUseInfo.getSkill(), card, enemy, 1);
@@ -4215,6 +4230,11 @@ public class SkillResolver {
                     Insane.apply(skillUseInfo, this, card, enemy, -1, 70);
                 } else if (skillUseInfo.getType() == SkillType.纷争乱境) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            Erode.apply(this, skillUseInfo.getAttachedUseInfo2(), card, enemy, null, true);
+                        }
                         continue;
                     }
                     Insane.apply(skillUseInfo.getAttachedUseInfo1(), this, card, enemy, -1, 100);
@@ -4292,12 +4312,22 @@ public class SkillResolver {
                     DeathSacrifice.apply(this, skillUseInfo, card, enemy, 1, 2);
                 } else if (skillUseInfo.getType() == SkillType.涤罪神启) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            Bless.apply(skillUseInfo.getAttachedUseInfo2().getSkill(), this, card);
+                        }
                         continue;
                     }
                     SoulCrash.apply(skillUseInfo.getAttachedUseInfo1(), this, card, enemy);
                     Bless.apply(skillUseInfo.getAttachedUseInfo2().getSkill(), this, card);
                 } else if (skillUseInfo.getType() == SkillType.噬血狂袭) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            Pray.apply(skillUseInfo.getSkill(), this, card);
+                        }
                         continue;
                     }
                     Curse.apply(this, skillUseInfo.getSkill(), card, enemy);
@@ -4385,6 +4415,11 @@ public class SkillResolver {
                     Crumbling.apply(this, skillUseInfo.getSkill(), card, enemy, 1, 1);
                 } else if (skillUseInfo.getType() == SkillType.雪幕) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            IceMagic.apply(skillUseInfo.getAttachedUseInfo2(), this, card, enemy, -1, 70, 0);
+                        }
                         continue;
                     }
                     IceMagic.apply(skillUseInfo.getAttachedUseInfo2(), this, card, enemy, -1, 0, 160 * enemy.getField().getAliveCards().size());
@@ -4412,6 +4447,11 @@ public class SkillResolver {
                     Curse.apply(this, skillUseInfo.getSkill(), card, enemy);
                 } else if (skillUseInfo.getType() == SkillType.海滨骚乱) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            Insane.apply(skillUseInfo, this, card, enemy, 3, 150);
+                        }
                         continue;
                     }
                     AddSkillOpponent.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo1().getSkill(), 1, enemy, 0);
@@ -4453,6 +4493,11 @@ public class SkillResolver {
                     AddSkillOpponent.apply(this, skillUseInfo.getAttachedUseInfo2(), card, skillUseInfo.getAttachedUseInfo2().getAttachedUseInfo1().getSkill(), 1, enemy, 0);
                 } else if (skillUseInfo.getType() == SkillType.解惑) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            HandCardAddOneSkill.apply(this, skillUseInfo, card, skillUseInfo.getSkill());
+                        }
                         continue;
                     }
                     Purify.apply(skillUseInfo, this, card, -1);
@@ -4471,6 +4516,11 @@ public class SkillResolver {
                     SkeletonArmy.apply(this, skillUseInfo, card, enemy, -1, 4);
                 } else if (skillUseInfo.getType() == SkillType.戾气诅咒) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            Pray.apply(skillUseInfo.getSkill(), this, card);
+                        }
                         continue;
                     }
                     Curse.apply(this, skillUseInfo.getSkill(), card, enemy);
@@ -4507,6 +4557,11 @@ public class SkillResolver {
                     HomologyMult.apply(this, skillUseInfo, card, "辉夜姬");
                 } else if (skillUseInfo.getType() == SkillType.魂飞魄散) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            HomologyMult.apply(this, skillUseInfo, card, "酒吞童子", "大天狗", "雪女", "八岐大蛇");
+                        }
                         continue;
                     }
                     Asthenia.apply(this, skillUseInfo, card, enemy, 4, 3);
@@ -4534,6 +4589,11 @@ public class SkillResolver {
                     AllDelay.apply(skillUseInfo, this, card, enemy);
                 } else if (skillUseInfo.getType() == SkillType.木牛流马) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            Horn.apply(skillUseInfo.getAttachedUseInfo2(), this, card);
+                        }
                         continue;
                     }
                     RegressionSoul.apply(this, skillUseInfo.getAttachedUseInfo1(), card, enemy);
@@ -4588,6 +4648,11 @@ public class SkillResolver {
                     SnakeShadow.apply(this, skillUseInfo, card, enemy, 3, 2);
                 } else if (skillUseInfo.getType() == SkillType.无常索命) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            WeakenAll.apply(this, skillUseInfo, card, enemy);
+                        }
                         continue;
                     }
                     SoulCrash.apply(skillUseInfo.getAttachedUseInfo1(), this, card, enemy);
@@ -4599,6 +4664,11 @@ public class SkillResolver {
                     Bless.apply(skillUseInfo.getSkill(), this, card);
                 } else if (skillUseInfo.getType() == SkillType.残月之辉) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            RemoveDebuffStatus.apply(skillUseInfo, this, card,2);
+                        }
                         continue;
                     }
                     Purify.apply(skillUseInfo, this, card, -1);
@@ -4651,6 +4721,11 @@ public class SkillResolver {
                     SelfBuff.apply(this, skillUseInfo, card, SkillEffectType.MAXHP_CHANGE);
                 } else if (skillUseInfo.getType() == SkillType.流星) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            AllSpeedUp.apply(skillUseInfo.getAttachedUseInfo2(), this, card);
+                        }
                         continue;
                     }
                     Supplication.apply(this, skillUseInfo.getAttachedUseInfo1(), card, enemy);
@@ -4674,6 +4749,11 @@ public class SkillResolver {
                             "爪黄飞电·幻影");
                 } else if (skillUseInfo.getType() == SkillType.霜火交织) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            HolyFire.apply(skillUseInfo.getAttachedUseInfo2().getSkill(), this, card, enemy);
+                        }
                         continue;
                     }
                     IceTouch.apply(skillUseInfo.getAttachedUseInfo1(), this, card, enemy, 3);
@@ -4718,12 +4798,22 @@ public class SkillResolver {
                     Grudge.apply(this, skillUseInfo, card, enemy, 2);
                 } else if (skillUseInfo.getType() == SkillType.超能力光线) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            Insane.apply(skillUseInfo, this, card, enemy, 1, 100);
+                        }
                         continue;
                     }
                     Confusion.apply(skillUseInfo, this, card, enemy, 1);
                     Insane.apply(skillUseInfo, this, card, enemy, 1, 100);
                 } else if (skillUseInfo.getType() == SkillType.竹影婆娑) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            NebulaChain.apply(skillUseInfo, this, card);
+                        }
                         continue;
                     }
                     Horn.apply(skillUseInfo, this, card);
@@ -4762,11 +4852,18 @@ public class SkillResolver {
                     Ancient.apply(this, skillUseInfo, card, enemy, 3, 1);
                 } else if (skillUseInfo.getType() == SkillType.不朽) {
                     if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                        if(SummonStopSkillUseInfoList.explode(this,card,enemy)){
+                            continue;
+                        }else{
+                            SoulCrash.apply(skillUseInfo, this, card, enemy);
+                        }
                         continue;
                     }
                     AddFiledCardMultSkill.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo1().getSkill()
                             , null, null);
                     SoulCrash.apply(skillUseInfo, this, card, enemy);
+                } else if (skillUseInfo.getType() == SkillType.神谕) {
+                    SummonStopSkillUseInfoList.apply(this,skillUseInfo,  enemy);
                 }
             }
         }
