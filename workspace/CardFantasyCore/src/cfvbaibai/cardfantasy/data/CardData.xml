@@ -530,6 +530,11 @@
         <Skill type="贪吃" level="6" unlock="5" />
         <Skill type="斩杀" level="0" unlock="10" />
     </Card>
+    <Card id="1449" name="寒霜之心" wikiId="" race="王国" speed="3" star="4" cost="15" incrCost="2" at="420" hp="1315" incrAT="35" incrHP="34">
+        <Skill type="寒霜之心" level="0" unlock="0" />
+        <Skill type="寒霜护佑" level="0" unlock="5" />
+        <Skill type="转生" level="6" unlock="10" />
+    </Card>
     <Card id="1501" name="降临天使" wikiId="30922" race="王国" speed="4" star="5" cost="15" incrCost="3" at="365" hp="1800" incrAT="24" incrHP="24">
         <Skill type="魔甲" level="8" unlock="0" />
         <Skill type="送还" level="0" unlock="5" />
