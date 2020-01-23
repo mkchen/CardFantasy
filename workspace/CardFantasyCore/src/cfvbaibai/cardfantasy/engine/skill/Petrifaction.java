@@ -1,10 +1,12 @@
 package cfvbaibai.cardfantasy.engine.skill;
 
 import cfvbaibai.cardfantasy.GameUI;
+import cfvbaibai.cardfantasy.Randomizer;
 import cfvbaibai.cardfantasy.data.CardSkill;
 import cfvbaibai.cardfantasy.data.Skill;
 import cfvbaibai.cardfantasy.engine.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,6 +46,34 @@ public final class Petrifaction {
             thisSkillUserInfo = new SkillUseInfo(victim,cardSkill);
             thisSkillUserInfo.setGiveSkill(2);
             victim.addSkill(thisSkillUserInfo);
+
+            List<CardStatusItem> spreadList = victim.getStatus().getStatusOf(CardStatusType.扩散);
+            if (spreadList.size() > 0) {
+                SkillUseInfo spreadSkill = spreadList.get(0).getCause();
+                List<CardInfo> spreadCardList = new ArrayList<>();
+                spreadCardList.add(victim);
+                StageInfo stage = resolver.getStage();
+                Randomizer random = stage.getRandomizer();
+                List<CardInfo> randomVictims = random.pickRandom(defender.getField().toList(), 1, true, spreadCardList);
+                for (CardInfo randomVictim : randomVictims) {
+                    if (!resolver.resolveAttackBlockingSkills(attacker, randomVictim, skill, 1).isAttackable()) {
+                        continue;
+                    }
+                    if(effectNumber>0)
+                    {
+                        if(!randomVictim.getStatus().getStatusOf(CardStatusType.石化).isEmpty()){
+                            randomVictim.removeForce(CardStatusType.石化);
+                        }
+                    }
+                    ui.useSkill(spreadSkill.getOwner(), randomVictim, spreadSkill.getSkill(), true);
+                    ui.addCardStatus(attacker, randomVictim, skill, statusItem);
+                    randomVictim.addStatus(statusItem);
+                    SkillUseInfo spreadSkillUserInfo=null;
+                    spreadSkillUserInfo = new SkillUseInfo(randomVictim,cardSkill);
+                    spreadSkillUserInfo.setGiveSkill(2);
+                    randomVictim.addSkill(spreadSkillUserInfo);
+                }
+            }
         }
     }
 

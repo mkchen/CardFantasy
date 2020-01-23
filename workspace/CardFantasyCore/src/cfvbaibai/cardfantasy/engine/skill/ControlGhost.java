@@ -3,7 +3,6 @@ package cfvbaibai.cardfantasy.engine.skill;
 import cfvbaibai.cardfantasy.GameUI;
 import cfvbaibai.cardfantasy.Randomizer;
 import cfvbaibai.cardfantasy.data.Skill;
-import cfvbaibai.cardfantasy.data.SkillTag;
 import cfvbaibai.cardfantasy.engine.*;
 import cfvbaibai.cardfantasy.game.DeckBuilder;
 
@@ -12,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ControlGhost {
-    public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo attackCard, Player defenderHero,int victimCount,int effectNumber) throws HeroDieSignal {
+    public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo attackCard, Player defenderHero, int victimCount, int effectNumber) throws HeroDieSignal {
 
         StageInfo stage = resolver.getStage();
         Randomizer random = stage.getRandomizer();
@@ -26,21 +25,42 @@ public class ControlGhost {
         CardStatusItem statusItem = CardStatusItem.deathDamnation(skillUseInfo);
         statusItem.setEffectNumber(effectNumber);
         for (CardInfo victim : victims) {
-            if(victim.getOriginalOwner() != null && victim.getOriginalOwner() != victim.getOwner())
-            {
+            if (victim.getOriginalOwner() != null && victim.getOriginalOwner() != victim.getOwner()) {
                 continue;
             }
             if (!resolver.resolveAttackBlockingSkills(attackCard, victim, skill, 1).isAttackable()) {
                 continue;
             }
-            if(effectNumber>0)
-            {
-                if(!victim.getStatus().getStatusOf(CardStatusType.死咒).isEmpty()){
+            if (effectNumber > 0) {
+                if (!victim.getStatus().getStatusOf(CardStatusType.死咒).isEmpty()) {
                     victim.removeForce(CardStatusType.死咒);
                 }
             }
             ui.addCardStatus(attackCard, victim, skill, statusItem);
             victim.addStatus(statusItem);
+            List<CardStatusItem> spreadList = victim.getStatus().getStatusOf(CardStatusType.扩散);
+            if (spreadList.size() > 0) {
+                SkillUseInfo spreadSkill = spreadList.get(0).getCause();
+                List<CardInfo> spreadCardList = new ArrayList<>();
+                spreadCardList.add(victim);
+                List<CardInfo> randomVictims = random.pickRandom(defenderHero.getField().toList(), 1, true, spreadCardList);
+                for (CardInfo randomVictim : randomVictims) {
+                    if (randomVictim.getOriginalOwner() != null && randomVictim.getOriginalOwner() != randomVictim.getOwner()) {
+                        continue;
+                    }
+                    if (!resolver.resolveAttackBlockingSkills(attackCard, randomVictim, skill, 1).isAttackable()) {
+                        continue;
+                    }
+                    ui.useSkill(spreadSkill.getOwner(), randomVictim, spreadSkill.getSkill(), true);
+                    if (effectNumber > 0) {
+                        if (!randomVictim.getStatus().getStatusOf(CardStatusType.死咒).isEmpty()) {
+                            randomVictim.removeForce(CardStatusType.死咒);
+                        }
+                    }
+                    ui.addCardStatus(attackCard, randomVictim, skill, statusItem);
+                    randomVictim.addStatus(statusItem);
+                }
+            }
         }
     }
 
@@ -55,7 +75,7 @@ public class ControlGhost {
             SkillUseInfo skillUseInfo = statusItem.getCause();
             Skill skill = skillUseInfo.getSkill();
             EntityInfo attacker = skillUseInfo.getOwner();
-            if(attacker instanceof CardInfo) {
+            if (attacker instanceof CardInfo) {
                 CardInfo attackCard = (CardInfo) attacker;
                 ui.useSkill(deadCard, attacker, skill, true);
                 Player enemy = resolver.getStage().getOpponent(deadCard.getOwner());
@@ -66,18 +86,16 @@ public class ControlGhost {
                 }
                 List<CardInfo> cardsToSummon = new ArrayList<CardInfo>();
                 List<CardInfo> summonCardCandidates = null;
-                int summonNumber=0;
+                int summonNumber = 0;
                 summonCardCandidates = DeckBuilder.build(summonedCardsDescs).getCardInfos(enemy);
                 for (CardInfo fieldCard : livingCards) {
                     if (fieldCard.getStatus().containsStatusCausedBy(skillUseInfo, CardStatusType.召唤)) {
-                        if(fieldCard.getRelationCardInfo()==attackCard)
-                        {
+                        if (fieldCard.getRelationCardInfo() == attackCard) {
                             summonNumber++;
                         }
                     }
                 }
-                if(summonNumber>=5)
-                {
+                if (summonNumber >= 5) {
                     return;
                 }
                 cardsToSummon = Randomizer.getRandomizer().pickRandom(summonCardCandidates, 1, true, null);
@@ -90,7 +108,7 @@ public class ControlGhost {
                     resolver.getStage().getUI().addCardStatus(deadCard, summonedCard, skill, weakStatusItem);
                     summonedCard.addStatus(weakStatusItem);
                     summonedCard.setRelationCardInfo(attackCard);
-                    resolver.summonCard(summonedCard.getOwner(), summonedCard, deadCard, true, skill,1);
+                    resolver.summonCard(summonedCard.getOwner(), summonedCard, deadCard, true, skill, 1);
                 }
             }
         }

@@ -40,6 +40,29 @@ public class DeathSacrifice {
             }
             ui.addCardStatus(attackCard, victim, skill, statusItem);
             victim.addStatus(statusItem);
+            List<CardStatusItem> spreadList = victim.getStatus().getStatusOf(CardStatusType.扩散);
+            if (spreadList.size() > 0) {
+                SkillUseInfo spreadSkill = spreadList.get(0).getCause();
+                List<CardInfo> spreadCardList = new ArrayList<>();
+                spreadCardList.add(victim);
+                List<CardInfo> randomVictims = random.pickRandom(defenderHero.getField().toList(), 1, true, spreadCardList);
+                for (CardInfo randomVictim : randomVictims) {
+                    if (randomVictim.getOriginalOwner() != null && randomVictim.getOriginalOwner() != randomVictim.getOwner()) {
+                        continue;
+                    }
+                    if (!resolver.resolveAttackBlockingSkills(attackCard, randomVictim, skill, 1).isAttackable()) {
+                        continue;
+                    }
+                    ui.useSkill(spreadSkill.getOwner(), randomVictim, spreadSkill.getSkill(), true);
+                    if (effectNumber > 0) {
+                        if (!randomVictim.getStatus().getStatusOf(CardStatusType.献祭).isEmpty()) {
+                            randomVictim.removeForce(CardStatusType.献祭);
+                        }
+                    }
+                    ui.addCardStatus(attackCard, randomVictim, skill, statusItem);
+                    randomVictim.addStatus(statusItem);
+                }
+            }
         }
     }
 

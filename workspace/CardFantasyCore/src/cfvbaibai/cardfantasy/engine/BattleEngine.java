@@ -359,6 +359,7 @@ public class BattleEngine {
             resolver.removeStatus(myField.getCard(i), CardStatusType.虚化);
             resolver.removeStatus(myField.getCard(i), CardStatusType.链接);
             resolver.removeStatus(myField.getCard(i), CardStatusType.蛇影);
+            resolver.removeStatus(myField.getCard(i), CardStatusType.扩散);
             resolver.resolveDebuff(myField.getCard(i), CardStatusType.远古);
             resolver.resolveDebuff(myField.getCard(i), CardStatusType.咒怨);
             resolver.resolveAddATDebuff(myField.getCard(i), CardStatusType.咒怨);

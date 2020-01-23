@@ -2952,6 +2952,12 @@
         <Skill type="战术性撤退" level="0" unlock="5" />
         <!--Skill type="勇武" level="0" unlock="10" /-->
     </Card>
+    <Card id="2673" name="凤求凰" wikiId="" race="森林" speed="1" star="5" cost="22" incrCost="2" at="595" hp="1615" incrAT="43" incrHP="50">
+        <Skill type="琴音共鸣" level="0" unlock="0" />
+        <Skill type="余音袅袅" level="0" unlock="5" />
+        <Skill type="疏影横斜" level="0" unlock="10" />
+    </Card>
+
 
 
     <!-- 蛮荒  -->

@@ -321,7 +321,7 @@ public class SkillResolver {
                     } else if (skillUseInfo.getType() == SkillType.天下英主) {
                         Cooperation.applyVague(this, skillUseInfo, card, "五子良将", false);
                     } else if (skillUseInfo.getType() == SkillType.厄运缠身) {
-                        SoulChains.apply(this, skillUseInfo, attacker, defender, 5, 4);
+                        Doom.apply(this, skillUseInfo, attacker, defender, 5, 4);
                     } else if (skillUseInfo.getType() == SkillType.神鬼之医) {
                         DisorderMult.reset(skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.一夫当关) {
@@ -1404,6 +1404,8 @@ public class SkillResolver {
             } else if (skillUseInfo.getType() == SkillType.灵魂称量) {
                 GreatFireMagic.apply(skillUseInfo.getSkill(), this, attacker, defender, 2, false);
                 RegressionSoul.apply(this, skillUseInfo.getAttachedUseInfo1(), attacker, defender);
+            } else if (skillUseInfo.getType() == SkillType.琴音共鸣) {
+                Spread.apply(this, skillUseInfo, attacker, defender, 3, 6);
             }
         }
         if (!attacker.isDead() && status == 0) {
@@ -2428,6 +2430,11 @@ public class SkillResolver {
                     if(!FailureSkillUseInfoList.explode(this,deadCard,opponent)) {
                         Homology.apply(this, deadCardSkillUseInfo, deadCard, "奥西里斯");
                     }
+                } else if (deadCardSkillUseInfo.getType() == SkillType.余音袅袅) {
+                    AddHandOneCardMultSkill.apply(this, deadCardSkillUseInfo, deadCard, deadCardSkillUseInfo.getAttachedUseInfo1().getSkill()
+                            , deadCardSkillUseInfo.getAttachedUseInfo2().getSkill(), null);
+                } else if (deadCardSkillUseInfo.getType() == SkillType.疏影横斜) {
+                    Asthenia.apply(this, deadCardSkillUseInfo, deadCard, opponent, 5, 2);
                 }
             }
         }
@@ -3046,7 +3053,8 @@ public class SkillResolver {
                             skillUseInfo.getType() == SkillType.不息之风 ||
                             skillUseInfo.getType() == SkillType.贪魔伐罪 ||
                             skillUseInfo.getType() == SkillType.三界行者 ||
-                            skillUseInfo.getType() == SkillType.圣灵护佑) {
+                            skillUseInfo.getType() == SkillType.圣灵护佑 ||
+                            skillUseInfo.getType() == SkillType.疏影横斜) {
                         // BUGBUG: The original game does not set cardDead to false
                         // result.cardDead = false
                         result.unbending = Unbending.apply(skillUseInfo, this, defender);

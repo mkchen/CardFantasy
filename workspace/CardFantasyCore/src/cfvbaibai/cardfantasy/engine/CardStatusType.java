@@ -39,7 +39,8 @@ public enum CardStatusType {
     石化(false, "石"),
     远古(false, "远"),
     海啸(false, "啸"),
-    厄运(false, "厄");
+    厄运(false, "厄"),
+    扩散(false, "扩");
     
 
     private boolean quantitive;

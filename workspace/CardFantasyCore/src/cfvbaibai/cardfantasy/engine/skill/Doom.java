@@ -5,6 +5,7 @@ import cfvbaibai.cardfantasy.Randomizer;
 import cfvbaibai.cardfantasy.data.Skill;
 import cfvbaibai.cardfantasy.engine.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Doom {
@@ -33,6 +34,27 @@ public class Doom {
             }
             ui.addCardStatus(attacker, victim, skill, statusItem);
             victim.addStatus(statusItem);
+
+            List<CardStatusItem> spreadList = victim.getStatus().getStatusOf(CardStatusType.扩散);
+            if(spreadList.size()>0){
+                SkillUseInfo spreadSkill = spreadList.get(0).getCause();
+                List<CardInfo> spreadCardList = new ArrayList<>();
+                spreadCardList.add(victim);
+                List<CardInfo> randomVictims = random.pickRandom(defenderHero.getField().toList(), 1, true,spreadCardList);
+                for (CardInfo randomVictim : randomVictims) {
+                    if (!resolver.resolveAttackBlockingSkills(attacker, randomVictim, skill, 1).isAttackable()) {
+                        continue;
+                    }
+                    ui.useSkill(spreadSkill.getOwner(), randomVictim, spreadSkill.getSkill(), true);
+                    if (effectNumber > 0) {
+                        if (!randomVictim.getStatus().getStatusOf(CardStatusType.厄运).isEmpty()) {
+                            randomVictim.removeForce(CardStatusType.厄运);
+                        }
+                    }
+                    ui.addCardStatus(attacker, randomVictim, skill, statusItem);
+                    randomVictim.addStatus(statusItem);
+                }
+            }
         }
     }
 }

@@ -51,6 +51,31 @@ public class Grudge {
                 victim.addStatus(statusItem1);
             }
             victim.addStatus(statusItem2);
+
+            List<CardStatusItem> spreadList = victim.getStatus().getStatusOf(CardStatusType.扩散);
+            if (spreadList.size() > 0) {
+                SkillUseInfo spreadSkill = spreadList.get(0).getCause();
+                List<CardInfo> spreadCardList = new ArrayList<>();
+                spreadCardList.add(victim);
+                List<CardInfo> randomVictims = random.pickRandom(defenderHero.getField().toList(), 1, true, spreadCardList);
+                for (CardInfo randomVictim : randomVictims) {
+                    if (!resolver.resolveAttackBlockingSkills(attackCard, randomVictim, skill, 1).isAttackable()) {
+                        continue;
+                    }
+                    ui.useSkill(spreadSkill.getOwner(), randomVictim, spreadSkill.getSkill(), true);
+                    if (effectNumber > 0) {
+                        if (!randomVictim.getStatus().getStatusOf(CardStatusType.咒怨).isEmpty()) {
+                            randomVictim.removeForce(CardStatusType.咒怨);
+                            randomVictim.removeForce(CardStatusType.沉默);
+                        }
+                    }
+                    ui.addCardStatus(attackCard, randomVictim, skill, statusItem2);
+                    if(!randomVictim.isDeman()) {
+                        randomVictim.addStatus(statusItem1);
+                    }
+                    randomVictim.addStatus(statusItem2);
+                }
+            }
         }
     }
 
