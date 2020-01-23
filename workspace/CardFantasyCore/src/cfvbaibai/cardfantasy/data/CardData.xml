@@ -5781,11 +5781,6 @@
         <Skill type="免疫" level="0" unlock="5" />
         <Skill type="魔族之血" level="0" unlock="10" />
     </Card>
-    <Card id="4700" name="烈焰南瓜" wikiId="" race="地狱" speed="3" star="5" cost="17" incrCost="2" at="550" hp="1580" incrAT="42" incrHP="45">
-        <Skill type="能量转化" level="0" unlock="0"  summon="true" />
-        <!--Skill type="觉醒：放逐" level="0" unlock="5" /-->
-        <Skill type="烈火炙魂" level="0" unlock="10" />
-    </Card>
     <Card id="4701" name="蝙蝠恶魔" wikiId="" race="地狱" speed="3" star="5" cost="18" incrCost="2" at="540" hp="1515" incrAT="44" incrHP="45">
         <Skill type="王国卫士" level="0" unlock="0" />
         <Skill type="同调" level="0" unlock="5" summon="true" />
@@ -5797,6 +5792,18 @@
         <Skill type="末世术" level="9" unlock="5" />
         <Skill type="坚毅" level="0" unlock="10" />
     </Card>
+    <Card id="4700" name="海拉" wikiId="" race="地狱" speed="3" star="5" cost="21" incrCost="2" at="600" hp="1650" incrAT="45" incrHP="47">
+        <Skill type="灵能腐朽" level="0" unlock="0" />
+        <Skill type="冥界之力" level="0" unlock="5" />
+        <Skill type="黑暗侵袭" level="0" unlock="10" />
+    </Card>
+    <Card id="4703" name="烈焰南瓜" wikiId="" race="地狱" speed="3" star="5" cost="17" incrCost="2" at="550" hp="1580" incrAT="42" incrHP="45">
+        <Skill type="能量转化" level="0" unlock="0"  summon="true" />
+        <!--Skill type="觉醒：放逐" level="0" unlock="5" /-->
+        <Skill type="烈火炙魂" level="0" unlock="10" />
+    </Card>
+
+
 
 
 
@@ -6114,6 +6121,12 @@
         <Skill type="神威" level="0" unlock="0" />
         <Skill type="全领域沉默" level="0" unlock="5" />
         <Skill type="反击屏障" level="0" unlock="10" />
+    </Card>
+    <Card id="5574" name="硕大毒汁怪" wikiId="" race="魔神" speed="2" star="5" cost="20" incrCost="0" at="2500" hp="5000" incrAT="0" incrHP="0">
+        <Skill type="我又回来了" level="0" unlock="0" />
+        <Skill type="死亡收割" level="0" unlock="5" />
+        <Skill type="英雄之敌" level="10" unlock="10" />
+        <Skill type="背水" level="0" unlock="10" />
     </Card>
 
     <!-- 魔神 -->

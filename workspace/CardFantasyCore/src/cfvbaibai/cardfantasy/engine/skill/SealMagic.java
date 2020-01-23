@@ -20,23 +20,25 @@ public class SealMagic {
             ui.useSkill(attacker, card, skill, true);
             if (card.getCurrentAT() > attacker.getCurrentAT()) {
                 int adjAT = skill.getImpact();
+                if(adjAT==0){
+                    continue;
+                }
                 resolver.getStage().getUI().adjustAT(attacker, card, adjAT, skill);
                 card.addEffect(new SkillEffect(SkillEffectType.ATTACK_CHANGE, skillUseInfo, adjAT, true));
             } else if (card.getCurrentAT() < attacker.getCurrentAT()) {
                 int adjAT = skill.getImpact();
-                resolver.getStage().getUI().adjustAT(attacker, attacker, adjAT, skill);
-                attacker.addEffect(new SkillEffect(SkillEffectType.ATTACK_CHANGE, skillUseInfo, adjAT, true));
-                ui.killCard(attacker, card, skill);
-                card.removeStatus(CardStatusType.不屈);
-                resolver.killCard(attacker, card, skill);
-//                ui.cardToOutField(defender, card);
-//                if (card.getRace() != Race.DEMON && card.getRace() != Race.BOSS) {
-//                    if (resolver.getStage().getRandomizer().roll100(skill.getImpact2())) {
-//                        defender.getOwner().getField().expelCard(card.getPosition());
-////                      defender.getField().removeCard(card);
-//                        defender.getOutField().addCard(card);
-//                    }
-//                }
+                if(adjAT==0){
+                    ui.killCard(attacker, card, skill);
+                    card.removeStatus(CardStatusType.不屈);
+                    resolver.killCard(attacker, card, skill);
+                    continue;
+                }else {
+                    resolver.getStage().getUI().adjustAT(attacker, attacker, adjAT, skill);
+                    attacker.addEffect(new SkillEffect(SkillEffectType.ATTACK_CHANGE, skillUseInfo, adjAT, true));
+                    ui.killCard(attacker, card, skill);
+                    card.removeStatus(CardStatusType.不屈);
+                    resolver.killCard(attacker, card, skill);
+                }
             }
         }
     }

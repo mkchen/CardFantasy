@@ -125,6 +125,7 @@ public enum SkillType {
     战争怒吼("57022", 0, SkillTag.额外攻击加成, SkillTag.抗免疫, SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
     常夏日光("", 0, SkillTag.额外攻击加成, SkillTag.抗免疫, SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
     碎裂怒吼("", 0, SkillTag.额外攻击加成, SkillTag.抗免疫, SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
+    冥界之力("", 300, 0,3000,0, SkillTag.永久, SkillTag.基础攻击加成),
 
     /* HP 上限调整技能  */
     王国守护("30949", 50,SkillTag.抗毒刃),
@@ -487,6 +488,7 @@ public enum SkillType {
     地裂劲("",70,0),
     溶骨的毒酒("",100,0),
     死亡收割("",85,0),
+    灵能腐朽("",85,0,250,0),
     狂舞("", 70, 0,4,0, SkillTag.抗免疫, SkillTag.物理攻击),
     连续突刺("", 0, 0,2,0, SkillTag.抗免疫, SkillTag.物理攻击),
     采佩什("", 0, 0,2,0, SkillTag.抗免疫, SkillTag.物理攻击,SkillTag.抗沉默),
@@ -1534,6 +1536,7 @@ public enum SkillType {
     暗影奇袭("", 400, 0, 100,0,SkillTag.永久, SkillTag.基础攻击加成),
     狩猎("", 0, 0, 100,0,SkillTag.永久, SkillTag.基础攻击加成),
     花果山美猴王("", 200, 0, 50,0,SkillType.救命毫毛,0,null,0,SkillTag.召唤,SkillTag.永久, SkillTag.基础攻击加成),
+    黑暗侵袭("", 0, 0, 50,0),
 
     //腐化之地
     腐化之地("", 0, 0, SkillTag.不可洗炼),
