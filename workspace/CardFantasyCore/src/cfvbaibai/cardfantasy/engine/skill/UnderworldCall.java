@@ -49,7 +49,7 @@ public final class UnderworldCall {
                             } else {
                                 damage = attacker.getMaxHP();
                                 ui.attackCard(victim, attacker, cardSkill, damage);
-                                resolver.resolveDeathSkills(victim, attacker, cardSkill,  resolver.applyDamage(attacker, victim, cardSkill,damage));
+                                resolver.resolveDeathSkills(victim, attacker, cardSkill,  resolver.applyDamage(victim, attacker, cardSkill,damage));
                             }
                         }
                     }

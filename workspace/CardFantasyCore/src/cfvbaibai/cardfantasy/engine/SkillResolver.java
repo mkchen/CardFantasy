@@ -1551,10 +1551,10 @@ public class SkillResolver {
     }
 
     //返回int类型，0表示不反弹，1表述反弹并且不受伤害，2表示反弹受伤害
-    public int resolveMagicEchoSkill(EntityInfo attacter, CardInfo defender, Skill cardSkill) {
-        if(!FailureSkillUseInfoList.exploded(this,defender,attacter.getOwner())) {
-            if (attacter instanceof CardInfo) {
-                CardInfo cardInfo = (CardInfo) attacter;
+    public int resolveMagicEchoSkill(EntityInfo attacker, CardInfo defender, Skill cardSkill) {
+        if(!FailureSkillUseInfoList.exploded(this,defender,attacker.getOwner())) {
+            if (attacker instanceof CardInfo) {
+                CardInfo cardInfo = (CardInfo) attacker;
                 if (cardInfo.isBoss()) {
                     return 0;
                 }
