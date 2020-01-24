@@ -15,7 +15,7 @@ public class AddSkillOpponentOrder {
         CardSkill cardSkill1 = null;
         CardSkill cardSkill2 = null;
         CardSkill cardSkill3 = null;
-        if(skill.getType() == SkillType.我要打10个) {
+        if(skill.getType() == SkillType.我要打十个) {
             cardSkill1 = new CardSkill(addSkill1.getType(), addSkill1.getLevel(), 0, false, true, false, false);
             cardSkill2 = new CardSkill(addSkill2.getType(), addSkill2.getLevel(), 0, false, true, false, false);
         }
@@ -41,12 +41,12 @@ public class AddSkillOpponentOrder {
             SkillUseInfo thisSkillUserInfo3=null;
             if(cardSkill1!=null&&!once.containsUsableSkill(cardSkill1.getType())){
                 thisSkillUserInfo1 = new SkillUseInfo(once,cardSkill1);
-                thisSkillUserInfo1.setGiveSkill(1);
+                thisSkillUserInfo1.setGiveSkill(2);
                 once.addSkill(thisSkillUserInfo1);
             }
             if(cardSkill2!=null&&!once.containsUsableSkill(cardSkill2.getType())){
                 thisSkillUserInfo2 = new SkillUseInfo(once,cardSkill2);
-                thisSkillUserInfo2.setGiveSkill(1);
+                thisSkillUserInfo2.setGiveSkill(2);
                 once.addSkill(thisSkillUserInfo2);
             }
             if(cardSkill3!=null&&!once.containsUsableSkill(cardSkill3.getType())){

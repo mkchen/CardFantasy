@@ -51,12 +51,12 @@ public final class AddHandOneCardMultSkill {
             SkillUseInfo thisSkillUserInfo3=null;
             if(cardSkill1!=null&&!once.containsUsableSkill(cardSkill1.getType())){
                 thisSkillUserInfo1 = new SkillUseInfo(once,cardSkill1);
-                thisSkillUserInfo1.setGiveSkill(1);
+                thisSkillUserInfo1.setGiveSkill(2);
                 once.addSkill(thisSkillUserInfo1);
             }
             if(cardSkill2!=null&&!once.containsUsableSkill(cardSkill2.getType())){
                 thisSkillUserInfo2 = new SkillUseInfo(once,cardSkill2);
-                thisSkillUserInfo2.setGiveSkill(1);
+                thisSkillUserInfo2.setGiveSkill(2);
                 once.addSkill(thisSkillUserInfo2);
             }
             if(cardSkill3!=null&&!once.containsUsableSkill(cardSkill3.getType())){

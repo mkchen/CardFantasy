@@ -936,7 +936,7 @@
         <Skill type="冰神附体" level="0" unlock="10" />
     </Card>
     <Card id="1572" name="端午节粽子" wikiId="" race="王国" speed="6" star="2" cost="99" incrCost="0" at="1" hp="1" incrAT="0" incrHP="0">
-        <Skill type="丰盛的晚餐" level="0" unlock="0" />
+        <Skill type="物品技能" level="0" unlock="0" />
     </Card>
     <Card id="1573" name="中秋节月饼" wikiId="" race="王国" speed="6" star="2" cost="99" incrCost="0" at="1" hp="1" incrAT="0" incrHP="0">
         <Skill type="物品技能" level="0" unlock="0" />

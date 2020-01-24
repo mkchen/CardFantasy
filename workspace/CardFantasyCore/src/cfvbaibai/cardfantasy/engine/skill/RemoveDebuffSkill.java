@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class RemoveDebuffSkill {
-    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, CardInfo attacker,int number,Player defener)
+    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, EntityInfo attacker,int number,Player defener)
             throws HeroDieSignal {
         CardStatus status = attacker.getStatus();
         if (status.containsStatus(CardStatusType.迷惑) ||
@@ -40,7 +40,8 @@ public final class RemoveDebuffSkill {
                         || cardStatusItem.getType() == CardStatusType.黄天 || cardStatusItem.getType() == CardStatusType.祭奠
                         || cardStatusItem.getType() == CardStatusType.离魂 || cardStatusItem.getType() == CardStatusType.蛇影
                         || cardStatusItem.getType() == CardStatusType.链接 || cardStatusItem.getType() == CardStatusType.石化
-                        || cardStatusItem.getType() == CardStatusType.远古 || cardStatusItem.getType() == CardStatusType.海啸) {
+                        || cardStatusItem.getType() == CardStatusType.远古 || cardStatusItem.getType() == CardStatusType.海啸
+                        || cardStatusItem.getType() == CardStatusType.扩散) {
                     deleteItems.add(cardStatusItem);
                 } else if (cardStatusItem.getType() == CardStatusType.虚化) {
                     SkillUseInfo attackSkillUseInfo = cardStatusItem.getCause();
@@ -80,7 +81,8 @@ public final class RemoveDebuffSkill {
                     if(exitSkill.getType() == SkillType.归魂) {
                         RegressionSoul.apply(resolver, extraSkillUserInfo, attacker, defener);
                     } else if(exitSkill.getType() == SkillType.复活) {
-                        Revive.apply(resolver, extraSkillUserInfo, attacker);
+                        CardInfo cardInfo = (CardInfo) attacker;
+                        Revive.apply(resolver, extraSkillUserInfo, cardInfo);
                     }
                 }
             }

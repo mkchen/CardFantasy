@@ -40,7 +40,8 @@ public final class RemoveDebuffStatus {
                         || cardStatusItem.getType() == CardStatusType.黄天 || cardStatusItem.getType() == CardStatusType.祭奠
                         || cardStatusItem.getType() == CardStatusType.离魂 || cardStatusItem.getType() == CardStatusType.蛇影
                         || cardStatusItem.getType() == CardStatusType.链接 || cardStatusItem.getType() == CardStatusType.石化
-                        || cardStatusItem.getType() == CardStatusType.远古 || cardStatusItem.getType() == CardStatusType.海啸) {
+                        || cardStatusItem.getType() == CardStatusType.远古 || cardStatusItem.getType() == CardStatusType.海啸
+                        || cardStatusItem.getType() == CardStatusType.扩散) {
                     deleteItems.add(cardStatusItem);
                 } else if (cardStatusItem.getType() == CardStatusType.虚化) {
                     SkillUseInfo attackSkillUseInfo = cardStatusItem.getCause();

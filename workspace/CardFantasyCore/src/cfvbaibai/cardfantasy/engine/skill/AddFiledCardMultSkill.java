@@ -42,12 +42,12 @@ public final class AddFiledCardMultSkill {
             SkillUseInfo thisSkillUserInfo3=null;
             if(cardSkill1!=null&&!thisCard.containsUsableSkill(cardSkill1.getType())){
                 thisSkillUserInfo1 = new SkillUseInfo(thisCard,cardSkill1);
-                thisSkillUserInfo1.setGiveSkill(1);
+                thisSkillUserInfo1.setGiveSkill(2);
                 thisCard.addSkill(thisSkillUserInfo1);
             }
             if(cardSkill2!=null&&!thisCard.containsUsableSkill(cardSkill2.getType())){
                 thisSkillUserInfo2 = new SkillUseInfo(thisCard,cardSkill2);
-                thisSkillUserInfo2.setGiveSkill(1);
+                thisSkillUserInfo2.setGiveSkill(2);
                 thisCard.addSkill(thisSkillUserInfo2);
             }
             if(cardSkill3!=null&&!thisCard.containsUsableSkill(cardSkill3.getType())){

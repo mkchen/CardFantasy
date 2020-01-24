@@ -9,6 +9,20 @@
                             <td>地图</td>
                             <td>
                                 <select name="map-id" id="map-id" class="map-select" data-mini="true" data-native-menu="true">
+                                    <optgroup label="24-失落国度">
+                                        <option value="24-1" selected="selected">24-1 晶盐矿井</option>
+                                        <option value="24-2">24-2 守望之塔</option>
+                                        <option value="24-3">24-3 风息峡谷</option>
+                                        <option value="24-4">24-4 风谷镇</option>
+                                        <option value="24-5">24-5 考古营地</option>
+                                        <option value="24-6">24-6 熔火瀑布</option>
+                                        <option value="24-7">24-7 诞生池</option>
+                                        <option value="24-8">24-8 沙蚀边境</option>
+                                        <option value="24-9">24-9 鲜血要塞</option>
+                                        <option value="24-10">24-10 海龙冢</option>
+                                        <option value="24-11">24-11 吞噬森林</option>
+                                        <option value="24-H">24-H 失落祭坛</option>
+                                    </optgroup>
                                     <optgroup label="23-流亡之地">
                                         <option value="23-1" selected="selected">23-1 流亡者之家</option>
                                         <option value="23-2">23-2 红土戈壁</option>
