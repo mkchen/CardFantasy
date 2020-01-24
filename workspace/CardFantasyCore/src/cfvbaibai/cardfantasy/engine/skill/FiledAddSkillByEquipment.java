@@ -20,11 +20,11 @@ public final class FiledAddSkillByEquipment {
         Skill skill = skillUseInfo.getSkill();
         CardSkill cardSkill = new CardSkill(addSkill.getType(), addSkill.getLevel(), 0, false, false, false, false);
         resolver.getStage().getUI().useSkill(attacker, skill, true);
-        SkillUseInfo thisSkillUserInfo=null;
         for (CardInfo thisCard : addCard) {
             if(thisCard.containsUsableSkill(cardSkill.getType())){
                 continue;
             }
+            SkillUseInfo thisSkillUserInfo=null;
             thisSkillUserInfo = new SkillUseInfo(thisCard,cardSkill);
             thisSkillUserInfo.setGiveSkill(1);
             thisCard.addSkill(thisSkillUserInfo);

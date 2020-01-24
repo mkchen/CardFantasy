@@ -38,6 +38,17 @@ public final class HellPrison {
                         resolver.getStage().getUI().increaseSummonDelay(card, skillUseInfo.getSkill().getImpact());
                         card.setSummonDelay(summonDelay + skillUseInfo.getSkill().getImpact());
                     }
+                } else if(skillUseInfo.getSkill().getType()==SkillType.坚不可摧) {
+                    resolver.getStage().getUI().useSkill(attackerCard, allHandCards, skillUseInfo.getSkill(), true);
+                    for (CardInfo card : allHandCards) {
+                        if(resolver.resolveStopCardDelay(card)) {
+                            continue;
+                        }
+                        resolver.getStage().getUI().useSkill(attackerCard, allHandCards, skillUseInfo.getSkill(), true);
+                        int summonDelay = card.getSummonDelay();
+                        resolver.getStage().getUI().increaseSummonDelay(card, skillUseInfo.getSkill().getImpact2());
+                        card.setSummonDelay(summonDelay + skillUseInfo.getSkill().getImpact2());
+                    }
                 } else if(skillUseInfo.getSkill().getType()==SkillType.血祭禁术){
                     Skill addSkill = skillUseInfo.getAttachedUseInfo1().getSkill();
                     CardSkill cardSkill = new CardSkill(addSkill.getType(), addSkill.getLevel(), 0, false, false, false, false);

@@ -36,10 +36,10 @@ public final class AddFiledCardMultSkill {
         resolver.getStage().getUI().useSkill(card, skill, true);
         int victimCount = skill.getImpact();
         List<CardInfo> addCard = random.pickRandom(card.getOwner().getField().toList(), victimCount, true, null);
-        SkillUseInfo thisSkillUserInfo1=null;
-        SkillUseInfo thisSkillUserInfo2=null;
-        SkillUseInfo thisSkillUserInfo3=null;
         for (CardInfo thisCard : addCard) {
+            SkillUseInfo thisSkillUserInfo1=null;
+            SkillUseInfo thisSkillUserInfo2=null;
+            SkillUseInfo thisSkillUserInfo3=null;
             if(cardSkill1!=null&&!thisCard.containsUsableSkill(cardSkill1.getType())){
                 thisSkillUserInfo1 = new SkillUseInfo(thisCard,cardSkill1);
                 thisSkillUserInfo1.setGiveSkill(1);

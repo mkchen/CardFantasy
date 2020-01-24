@@ -17,7 +17,6 @@ public class AddSkillOpponentFactor {
         List<CardInfo> allHandCards = defenderHero.getHand().toList();
         List<CardInfo> addCard= new ArrayList<CardInfo>();
         List<CardInfo> revivableCards = new ArrayList<CardInfo>();
-        SkillUseInfo thisSkillUserInfo=null;
         for (CardInfo handCard : allHandCards) {
             if (handCard != null && !handCard.containsAllSkill(addSkill.getType())) {
                 revivableCards.add(handCard);
@@ -50,6 +49,7 @@ public class AddSkillOpponentFactor {
             {
                 continue;
             }
+            SkillUseInfo thisSkillUserInfo=null;
             thisSkillUserInfo = new SkillUseInfo(once,cardSkill);
             thisSkillUserInfo.setGiveSkill(2);
             once.addSkill(thisSkillUserInfo);

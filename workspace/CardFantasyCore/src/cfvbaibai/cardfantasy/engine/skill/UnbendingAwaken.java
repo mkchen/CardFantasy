@@ -62,7 +62,7 @@ public class UnbendingAwaken {
         if (!items.isEmpty()) {
             return false;
         }
-        if(attackFieldCount>fieldCount)
+        if(attackFieldCount>=fieldCount)
         {
             return false;
         }

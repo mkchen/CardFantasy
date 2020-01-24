@@ -45,10 +45,10 @@ public final class AddHandOneCardMultSkill {
         if (oneCard != null) {
             addCard.add(oneCard);
         }
-        SkillUseInfo thisSkillUserInfo1=null;
-        SkillUseInfo thisSkillUserInfo2=null;
-        SkillUseInfo thisSkillUserInfo3=null;
         for (CardInfo once : addCard) {
+            SkillUseInfo thisSkillUserInfo1=null;
+            SkillUseInfo thisSkillUserInfo2=null;
+            SkillUseInfo thisSkillUserInfo3=null;
             if(cardSkill1!=null&&!once.containsUsableSkill(cardSkill1.getType())){
                 thisSkillUserInfo1 = new SkillUseInfo(once,cardSkill1);
                 thisSkillUserInfo1.setGiveSkill(1);

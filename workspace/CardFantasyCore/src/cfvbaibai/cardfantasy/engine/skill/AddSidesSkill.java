@@ -21,11 +21,11 @@ public final class AddSidesSkill {
         resolver.getStage().getUI().useSkill(card, skill, true);
         List<CardInfo> cardsAttacked = resolver.getCardsOnSides(
                 card.getOwner().getField(), card.getPosition());
-        SkillUseInfo thisSkillUserInfo =null;
         for (CardInfo thisCard : cardsAttacked) {
             if(thisCard.containsUsableSkill(cardSkill.getType())){
                 continue;
             }
+            SkillUseInfo thisSkillUserInfo =null;
             thisSkillUserInfo = new SkillUseInfo(thisCard,cardSkill);
             thisSkillUserInfo.setGiveSkill(1);
             thisCard.addSkill(thisSkillUserInfo);

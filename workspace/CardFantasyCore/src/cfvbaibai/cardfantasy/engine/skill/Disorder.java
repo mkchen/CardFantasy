@@ -38,6 +38,9 @@ public final class Disorder {
         List<CardInfo> cardInfoList = player.getField().getAliveCards();
         cardInfoList.addAll(defenderHero.getField().getAliveCards());
         List<CardInfo> effectCardList = random.pickRandom(cardInfoList, 1, true, extraCard);
+        if(effectCardList.size()==0){
+            return;
+        }
         for(CardInfo cardInfo:effectCardList){
             resolver.killCard(card,cardInfo,skill);//杀死卡牌
         }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DisorderMult {
-    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, CardInfo card,Player defenderHero) throws HeroDieSignal {
+    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, CardInfo card,Player defenderHero,int killCount) throws HeroDieSignal {
         int impact2 = skillUseInfo.getSkill().getImpact2();
         int number = skillUseInfo.getSkillNumber();
         if(number==0)
@@ -45,7 +45,10 @@ public final class DisorderMult {
         }
         List<CardInfo> cardInfoList = player.getField().getAliveCards();
         cardInfoList.addAll(defenderHero.getField().getAliveCards());
-        List<CardInfo> effectCardList = random.pickRandom(cardInfoList, 1, true, extraCard);
+        List<CardInfo> effectCardList = random.pickRandom(cardInfoList, killCount, true, extraCard);
+        if(effectCardList.size()==0){
+            return;
+        }
         for(CardInfo cardInfo:effectCardList){
             resolver.killCard(card,cardInfo,skill);//杀死卡牌
         }

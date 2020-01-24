@@ -19,11 +19,11 @@ public final class AllFiledExceptSelf {
         CardSkill cardSkill = new CardSkill(addSkill.getType(), addSkill.getLevel(), 0, false, false, false, false);
         resolver.getStage().getUI().useSkill(card, skill, true);
         List<CardInfo> addCard=card.getOwner().getField().getAliveCards();
-        SkillUseInfo thisSkillUserInfo=null;
         for (CardInfo thisCard : addCard) {
             if(thisCard.containsUsableSkill(cardSkill.getType()) ||thisCard==card){
                 continue;
             }
+            SkillUseInfo thisSkillUserInfo=null;
             thisSkillUserInfo = new SkillUseInfo(thisCard,cardSkill);
             thisSkillUserInfo.setGiveSkill(1);
             thisCard.addSkill(thisSkillUserInfo);

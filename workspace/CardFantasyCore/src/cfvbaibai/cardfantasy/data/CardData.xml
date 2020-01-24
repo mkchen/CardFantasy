@@ -954,7 +954,7 @@
         <Skill type="物品技能" level="0" unlock="0" />
     </Card>
     <Card id="1578" name="梦·众神之神" wikiId="" race="王国" speed="6" star="5" cost="99" incrCost="0" at="1" hp="1" incrAT="0" incrHP="0">
-        <Skill type="众神之神" level="0" unlock="0" />
+        <Skill type="物品技能" level="0" unlock="0" />
     </Card>
     <Card id="1579" name="青铜新人" wikiId="" race="王国" speed="6" star="1" cost="99" incrCost="0" at="1" hp="1" incrAT="0" incrHP="0">
         <Skill type="物品技能" level="0" unlock="0" />

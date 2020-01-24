@@ -29,6 +29,9 @@ public final class Scapegoat {
             }
         }
         List<CardInfo> defenderList = random.pickRandom(player.getField().getAliveCards(), 1, true, extraCard);
+        if(defenderList.size()==0){
+            return;
+        }
         for(CardInfo cardInfo:defenderList){
             resolver.killCard(card,cardInfo,skill);//杀死己方卡牌
         }
