@@ -1222,7 +1222,7 @@ public class SkillResolver {
             } else if (skillUseInfo.getType() == SkillType.龙城之志) {
                 SummonWhenAttack.apply(this, skillUseInfo, attacker, 1, false, "龙城义士");
             } else if (skillUseInfo.getType() == SkillType.风暴之力) {
-                SummonWhenAttack.apply(this, skillUseInfo, attacker, 1, false, "风眼", "雷云");
+                SummonMult.apply(this, skillUseInfo, attacker, 1, false, "风眼", "雷云");
             } else if (skillUseInfo.getType() == SkillType.能量汇集) {
                 AddSkillOpponent.apply(this, skillUseInfo, attacker, skillUseInfo.getAttachedUseInfo1().getSkill(), 1, defender, 2);
             } else if (skillUseInfo.getType() == SkillType.圣火) {
@@ -3235,20 +3235,8 @@ public class SkillResolver {
                 if (!(cardSkill != null && (cardSkill.getType() == SkillType.背水 || cardSkill.getType() == SkillType.良禽择木))) {
                     CounterAttackHero.explode(this, attacker, defenderPlayer, damage);
                 }
-                int remainingDamage = damage;
-                if (!(cardSkill != null && (cardSkill.getType() == SkillType.自动扣血 || cardSkill.getType() == SkillType.羽扇虎拳 || cardSkill.getType() == SkillType.天罡咒
-                        || cardSkill.getType() == SkillType.王者之风))) {
-                    remainingDamage = ImpregnableDefenseHeroBuff.explode(this, attacker, defenderPlayer, remainingDamage);
-                }
-                if (remainingDamage > defenderPlayer.getHP()) {
-                    remainingDamage = defenderPlayer.getHP();
-                }
-                remainingDamage = this.resolveAttackHeroBlockingSkills(attacker, defenderPlayer, cardSkill, remainingDamage);
-                damage = remainingDamage;
                 if (damage > 0) {
-                    if (isPhysicalAttackSkill(cardSkill) || (cardSkill != null&&(cardSkill.getType() == SkillType.穿刺 || cardSkill.getType() == SkillType.英雄之敌
-                            || cardSkill.getType() == SkillType.头槌破门 || cardSkill.getType() == SkillType.横扫千军
-                            || cardSkill.getType() == SkillType.一夫之勇 || cardSkill.getType() == SkillType.精准打击 || cardSkill.getType() == SkillType.精准射击))) {
+                    if (isPhysicalAttackSkill(cardSkill)) {
                         if(attacker instanceof CardInfo) {
                             CardInfo attackerCard = (CardInfo) attacker;
                             for (EquipmentInfo equipmentInfo : defenderPlayer.getEquipmentBox().getEquipmentInfos()) {
@@ -3300,173 +3288,192 @@ public class SkillResolver {
                                     
                                 }
                             }
-                            Player attackPlayer = attacker.getOwner();
-                            if(damage>0) {
-                                for (EquipmentInfo equipmentInfo : attackPlayer.getEquipmentBox().getEquipmentInfos()) {
-                                    for (SkillUseInfo equipmentSkillUserInfo : equipmentInfo.getSkillUseInfoList()) {
-                                        if (equipmentSkillUserInfo.getType() == SkillType.装备裂魂) {
-                                            int skillNumber = equipmentSkillUserInfo.getSkillNumber();
-                                            if (skillNumber < 0) {
-                                                equipmentSkillUserInfo.setSkillNumber(0);
-                                            }
-                                            if (skillNumber < 1) {
-                                                ContinuousFire.apply(this, equipmentSkillUserInfo, equipmentInfo, defenderPlayer);
-                                                equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
-                                            }
-                                        } else if (equipmentSkillUserInfo.getType() == SkillType.装备死咒) {
-                                            int skillNumber = equipmentSkillUserInfo.getSkillNumber();
-                                            if (skillNumber < 0) {
-                                                equipmentSkillUserInfo.setSkillNumber(0);
-                                            }
-                                            if (skillNumber < equipmentSkillUserInfo.getSkill().getImpact2()) {
-                                                Curse.apply(this, equipmentSkillUserInfo.getSkill(), equipmentInfo, defenderPlayer);
-                                                equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
-                                            }
-                                        } else if (equipmentSkillUserInfo.getType() == SkillType.装备箭雨) {
-                                            int skillNumber = equipmentSkillUserInfo.getSkillNumber();
-                                            int impact = equipmentSkillUserInfo.getSkill().getImpact();
-                                            if (skillNumber < 0) {
-                                                equipmentSkillUserInfo.setSkillNumber(0);
-                                            }
-                                            if (skillNumber < 1) {
-                                                if (impact == 1) {
-                                                    Snipe.apply(equipmentSkillUserInfo, equipmentSkillUserInfo.getSkill(), this, attacker, defenderPlayer, 3);
-                                                } else if (impact == 2) {
-                                                    Snipe.apply(equipmentSkillUserInfo, equipmentSkillUserInfo.getSkill(), this, attacker, defenderPlayer, 5);
-                                                } else if (impact == 3) {
-                                                    Snipe.apply(equipmentSkillUserInfo, equipmentSkillUserInfo.getSkill(), this, attacker, defenderPlayer, -1);
-                                                }
-                                                equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
-                                            }
-                                        } else if (equipmentSkillUserInfo.getType() == SkillType.装备操魂) {
-                                            int skillNumber = equipmentSkillUserInfo.getSkillNumber();
-                                            int impact2 = equipmentSkillUserInfo.getSkill().getImpact2();
-                                            if (skillNumber < 0) {
-                                                if (impact2 == 1) {
-                                                    equipmentSkillUserInfo.setSkillNumber(10);
-                                                    skillNumber = 10;
-                                                } else if (impact2 == 2) {
-                                                    equipmentSkillUserInfo.setSkillNumber(9999);
-                                                    skillNumber = 9999;
-                                                } else if (impact2 == 3) {
-                                                    equipmentSkillUserInfo.setSkillNumber(9999);
-                                                    skillNumber = 9999;
-                                                }
-                                            }
-                                            if (skillNumber > 0 && !equipmentSkillUserInfo.getIsUsed()) {
-                                                if(impact2<3) {
-                                                    ResurrectionByEquipment.apply(this, equipmentSkillUserInfo, equipmentInfo);
-                                                }else{
-                                                    RegressionSoul.apply(this, equipmentSkillUserInfo, attackPlayer, defenderPlayer);
-                                                }
-                                                equipmentSkillUserInfo.setIsUsed(true);
-                                                equipmentSkillUserInfo.setSkillNumber(skillNumber - 1);
-                                            }
-                                        } else if (equipmentSkillUserInfo.getType() == SkillType.装备威压) {
-                                            int skillNumber = equipmentSkillUserInfo.getSkillNumber();
-                                            if (skillNumber < 0) {
-                                                equipmentSkillUserInfo.setSkillNumber(0);
-                                            }
-                                            if (skillNumber < equipmentSkillUserInfo.getSkill().getImpact2()) {
-                                                WeakenAllByEquipment.apply(this, equipmentSkillUserInfo, equipmentInfo, defenderPlayer);
-                                                equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
-                                            }
-                                        } else if (equipmentSkillUserInfo.getType() == SkillType.装备星辉) {
-                                            int skillNumber = equipmentSkillUserInfo.getSkillNumber();
-                                            if (skillNumber < 0) {
-                                                equipmentSkillUserInfo.setSkillNumber(0);
-                                            }
-                                            if (skillNumber < 1) {
-                                                int impact = equipmentSkillUserInfo.getSkill().getLevel();
-                                                int impact2 = equipmentSkillUserInfo.getSkill().getImpact2();
-                                                int impact3 = equipmentSkillUserInfo.getSkill().getImpact3();
-                                                if (impact == 1) {
-                                                    IceMagic.apply(equipmentSkillUserInfo, this, equipmentInfo, attacker.getOwner(), 1, impact2, impact3);
-                                                } else if (impact == 2) {
-                                                    IceMagic.apply(equipmentSkillUserInfo, this, equipmentInfo, attacker.getOwner(), 3, impact2, impact3);
-                                                } else if (impact == 3) {
-                                                    IceMagic.apply(equipmentSkillUserInfo, this, equipmentInfo, attacker.getOwner(), -1, impact2, impact3);
-                                                }
-                                                equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
-                                            }
-                                        } else if (equipmentSkillUserInfo.getType() == SkillType.冥府之召) {
-                                            int skillNumber = equipmentSkillUserInfo.getSkillNumber();
-                                            if (skillNumber < 0) {
-                                                equipmentSkillUserInfo.setSkillNumber(0);
-                                            }
-                                            if (skillNumber < 1) {
-                                                int impact = equipmentSkillUserInfo.getSkill().getLevel();
-                                                if (impact == 1) {
-                                                    UnderworldCallByEquipment.apply(this, equipmentSkillUserInfo.getSkill(), equipmentInfo, defenderPlayer, 1);
-                                                } else if (impact == 2) {
-                                                    UnderworldCallByEquipment.apply(this, equipmentSkillUserInfo.getSkill(), equipmentInfo, defenderPlayer, 2);
-                                                } else if (impact == 3) {
-                                                    UnderworldCallByEquipment.apply(this, equipmentSkillUserInfo.getSkill(), equipmentInfo, defenderPlayer, 3);
-                                                }
-                                                equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
-                                            }
-                                        } else if (equipmentSkillUserInfo.getType() == SkillType.装备震击) {
-                                            int skillNumber = equipmentSkillUserInfo.getSkillNumber();
-                                            if (skillNumber < 0) {
-                                                equipmentSkillUserInfo.setSkillNumber(0);
-                                            }
-                                            if (skillNumber < 1) {
-                                                int impact = equipmentSkillUserInfo.getSkill().getLevel();
-                                                if (impact == 1) {
-                                                    RedGun.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 1);
-                                                } else if (impact == 2) {
-                                                    RedGun.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 3);
-                                                } else if (impact == 3) {
-                                                    RedGun.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 5);
-                                                }
-                                                equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
-                                            }
-                                        } else if (equipmentSkillUserInfo.getType() == SkillType.装备顺劈) {
-                                            int impact = equipmentSkillUserInfo.getSkill().getLevel();
+                        }
+                    }
+                }
+                int remainingDamage = damage;
+                if (!(cardSkill != null && (cardSkill.getType() == SkillType.自动扣血 || cardSkill.getType() == SkillType.羽扇虎拳 || cardSkill.getType() == SkillType.天罡咒
+                        || cardSkill.getType() == SkillType.王者之风))) {
+                    remainingDamage = ImpregnableDefenseHeroBuff.explode(this, attacker, defenderPlayer, remainingDamage);
+                }
+                if (remainingDamage > defenderPlayer.getHP()) {
+                    remainingDamage = defenderPlayer.getHP();
+                }
+                remainingDamage = this.resolveAttackHeroBlockingSkills(attacker, defenderPlayer, cardSkill, remainingDamage);
+                if(defenderPlayer.getHP()<remainingDamage) {
+                    remainingDamage = this.resolveHeroUnbending(attacker, defenderPlayer, cardSkill, remainingDamage);
+                }
+                damage = remainingDamage;
+                if (remainingDamage > 0) {
+                    stage.getUI().attackHero(attacker, defenderPlayer, cardSkill, remainingDamage);
+                    defenderPlayer.setHP(defenderPlayer.getHP() - remainingDamage);
+                }
+                if(damage>0){
+                    if(isPhysicalAttackSkill(cardSkill)){
+                        Player attackPlayer = attacker.getOwner();
+                        if(damage>0) {
+                            for (EquipmentInfo equipmentInfo : attackPlayer.getEquipmentBox().getEquipmentInfos()) {
+                                for (SkillUseInfo equipmentSkillUserInfo : equipmentInfo.getSkillUseInfoList()) {
+                                    if (equipmentSkillUserInfo.getType() == SkillType.装备裂魂) {
+                                        int skillNumber = equipmentSkillUserInfo.getSkillNumber();
+                                        if (skillNumber < 0) {
+                                            equipmentSkillUserInfo.setSkillNumber(0);
+                                        }
+                                        if (skillNumber < 1) {
+                                            ContinuousFire.apply(this, equipmentSkillUserInfo, equipmentInfo, defenderPlayer);
+                                            equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
+                                        }
+                                    } else if (equipmentSkillUserInfo.getType() == SkillType.装备死咒) {
+                                        int skillNumber = equipmentSkillUserInfo.getSkillNumber();
+                                        if (skillNumber < 0) {
+                                            equipmentSkillUserInfo.setSkillNumber(0);
+                                        }
+                                        if (skillNumber < equipmentSkillUserInfo.getSkill().getImpact2()) {
+                                            Curse.apply(this, equipmentSkillUserInfo.getSkill(), equipmentInfo, defenderPlayer);
+                                            equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
+                                        }
+                                    } else if (equipmentSkillUserInfo.getType() == SkillType.装备箭雨) {
+                                        int skillNumber = equipmentSkillUserInfo.getSkillNumber();
+                                        int impact = equipmentSkillUserInfo.getSkill().getImpact();
+                                        if (skillNumber < 0) {
+                                            equipmentSkillUserInfo.setSkillNumber(0);
+                                        }
+                                        if (skillNumber < 1) {
                                             if (impact == 1) {
-                                                RedGunByEquipment.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 1);
+                                                Snipe.apply(equipmentSkillUserInfo, equipmentSkillUserInfo.getSkill(), this, attacker, defenderPlayer, 3);
                                             } else if (impact == 2) {
-                                                RedGunByEquipment.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 1);
+                                                Snipe.apply(equipmentSkillUserInfo, equipmentSkillUserInfo.getSkill(), this, attacker, defenderPlayer, 5);
                                             } else if (impact == 3) {
-                                                RedGunByEquipment.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 1);
-                                            }
-                                        } else if (equipmentSkillUserInfo.getType() == SkillType.装备饮魂) {
-                                            int level = equipmentSkillUserInfo.getSkill().getLevel();
-                                            int skillNumber = equipmentSkillUserInfo.getSkillNumber();
-                                            if (skillNumber < 0) {
-                                                equipmentSkillUserInfo.setSkillNumber(0);
-                                            }
-                                            if (level == 1) {
-                                                if (skillNumber < 3) {
-                                                    Pray.apply(equipmentSkillUserInfo.getSkill(), this, equipmentInfo);
-                                                }
-                                            } else if (level == 2) {
-                                                if (skillNumber < 5) {
-                                                    Pray.apply(equipmentSkillUserInfo.getSkill(), this, equipmentInfo);
-                                                }
-                                            } else if (level == 3) {
-                                                Pray.apply(equipmentSkillUserInfo.getSkill(), this, equipmentInfo);
+                                                Snipe.apply(equipmentSkillUserInfo, equipmentSkillUserInfo.getSkill(), this, attacker, defenderPlayer, -1);
                                             }
                                             equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
                                         }
+                                    } else if (equipmentSkillUserInfo.getType() == SkillType.装备操魂) {
+                                        int skillNumber = equipmentSkillUserInfo.getSkillNumber();
+                                        int impact2 = equipmentSkillUserInfo.getSkill().getImpact2();
+                                        if (skillNumber < 0) {
+                                            if (impact2 == 1) {
+                                                equipmentSkillUserInfo.setSkillNumber(10);
+                                                skillNumber = 10;
+                                            } else if (impact2 == 2) {
+                                                equipmentSkillUserInfo.setSkillNumber(9999);
+                                                skillNumber = 9999;
+                                            } else if (impact2 == 3) {
+                                                equipmentSkillUserInfo.setSkillNumber(9999);
+                                                skillNumber = 9999;
+                                            }
+                                        }
+                                        if (skillNumber > 0 && !equipmentSkillUserInfo.getIsUsed()) {
+                                            if(impact2<3) {
+                                                ResurrectionByEquipment.apply(this, equipmentSkillUserInfo, equipmentInfo);
+                                            }else{
+                                                RegressionSoul.apply(this, equipmentSkillUserInfo, attackPlayer, defenderPlayer);
+                                            }
+                                            equipmentSkillUserInfo.setIsUsed(true);
+                                            equipmentSkillUserInfo.setSkillNumber(skillNumber - 1);
+                                        }
+                                    } else if (equipmentSkillUserInfo.getType() == SkillType.装备威压) {
+                                        int skillNumber = equipmentSkillUserInfo.getSkillNumber();
+                                        if (skillNumber < 0) {
+                                            equipmentSkillUserInfo.setSkillNumber(0);
+                                        }
+                                        if (skillNumber < equipmentSkillUserInfo.getSkill().getImpact2()) {
+                                            WeakenAllByEquipment.apply(this, equipmentSkillUserInfo, equipmentInfo, defenderPlayer);
+                                            equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
+                                        }
+                                    } else if (equipmentSkillUserInfo.getType() == SkillType.装备星辉) {
+                                        int skillNumber = equipmentSkillUserInfo.getSkillNumber();
+                                        if (skillNumber < 0) {
+                                            equipmentSkillUserInfo.setSkillNumber(0);
+                                        }
+                                        if (skillNumber < 1) {
+                                            int impact = equipmentSkillUserInfo.getSkill().getLevel();
+                                            int impact2 = equipmentSkillUserInfo.getSkill().getImpact2();
+                                            int impact3 = equipmentSkillUserInfo.getSkill().getImpact3();
+                                            if (impact == 1) {
+                                                IceMagic.apply(equipmentSkillUserInfo, this, equipmentInfo, attacker.getOwner(), 1, impact2, impact3);
+                                            } else if (impact == 2) {
+                                                IceMagic.apply(equipmentSkillUserInfo, this, equipmentInfo, attacker.getOwner(), 3, impact2, impact3);
+                                            } else if (impact == 3) {
+                                                IceMagic.apply(equipmentSkillUserInfo, this, equipmentInfo, attacker.getOwner(), -1, impact2, impact3);
+                                            }
+                                            equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
+                                        }
+                                    } else if (equipmentSkillUserInfo.getType() == SkillType.装备绝杀) {
+                                        int skillNumber = equipmentSkillUserInfo.getSkillNumber();
+                                        if (skillNumber < 0) {
+                                            equipmentSkillUserInfo.setSkillNumber(0);
+                                        }
+                                        if (skillNumber < 1) {
+                                            int impact = equipmentSkillUserInfo.getSkill().getLevel();
+                                            if (impact == 1) {
+                                                UnderworldCallByEquipment.apply(this, equipmentSkillUserInfo.getSkill(), equipmentInfo, defenderPlayer, 1);
+                                            } else if (impact == 2) {
+                                                UnderworldCallByEquipment.apply(this, equipmentSkillUserInfo.getSkill(), equipmentInfo, defenderPlayer, 2);
+                                            } else if (impact == 3) {
+                                                UnderworldCallByEquipment.apply(this, equipmentSkillUserInfo.getSkill(), equipmentInfo, defenderPlayer, 3);
+                                            }
+                                            equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
+                                        }
+                                    } else if (equipmentSkillUserInfo.getType() == SkillType.装备震击) {
+                                        int skillNumber = equipmentSkillUserInfo.getSkillNumber();
+                                        if (skillNumber < 0) {
+                                            equipmentSkillUserInfo.setSkillNumber(0);
+                                        }
+                                        if (skillNumber < 1) {
+                                            int impact = equipmentSkillUserInfo.getSkill().getLevel();
+                                            if (impact == 1) {
+                                                RedGun.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 1);
+                                            } else if (impact == 2) {
+                                                RedGun.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 3);
+                                            } else if (impact == 3) {
+                                                RedGun.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 5);
+                                            }
+                                            equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
+                                        }
+                                    } else if (equipmentSkillUserInfo.getType() == SkillType.装备顺劈) {
+                                        int impact = equipmentSkillUserInfo.getSkill().getLevel();
+                                        if (impact == 1) {
+                                            RedGunByEquipment.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 1);
+                                        } else if (impact == 2) {
+                                            RedGunByEquipment.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 1);
+                                        } else if (impact == 3) {
+                                            RedGunByEquipment.apply(equipmentSkillUserInfo, this, equipmentInfo, defenderPlayer, 1);
+                                        }
+                                    } else if (equipmentSkillUserInfo.getType() == SkillType.装备饮魂) {
+                                        int level = equipmentSkillUserInfo.getSkill().getLevel();
+                                        int skillNumber = equipmentSkillUserInfo.getSkillNumber();
+                                        if (skillNumber < 0) {
+                                            equipmentSkillUserInfo.setSkillNumber(0);
+                                        }
+                                        if (level == 1) {
+                                            if (skillNumber < 3) {
+                                                Pray.apply(equipmentSkillUserInfo.getSkill(), this, equipmentInfo);
+                                            }
+                                        } else if (level == 2) {
+                                            if (skillNumber < 5) {
+                                                Pray.apply(equipmentSkillUserInfo.getSkill(), this, equipmentInfo);
+                                            }
+                                        } else if (level == 3) {
+                                            Pray.apply(equipmentSkillUserInfo.getSkill(), this, equipmentInfo);
+                                        }
+                                        equipmentSkillUserInfo.setSkillNumber(skillNumber + 1);
                                     }
                                 }
                             }
-                            for(SkillUseInfo skillUseInfo:attackerCard.getUsableNormalSkills()){
-                                if(skillUseInfo.getType() == SkillType.灵能腐朽){
-                                    PsionicDecay.apply(skillUseInfo,this,attackerCard,defenderPlayer,damage);
+                        }
+                    } else if(damage>0&&cardSkill != null&&(cardSkill.getType() == SkillType.穿刺 || cardSkill.getType() == SkillType.英雄之敌
+                            || cardSkill.getType() == SkillType.头槌破门 || cardSkill.getType() == SkillType.横扫千军
+                            || cardSkill.getType() == SkillType.一夫之勇 || cardSkill.getType() == SkillType.精准打击 || cardSkill.getType() == SkillType.精准射击)){
+                        if(attacker instanceof CardInfo) {
+                            CardInfo attackerCard = (CardInfo) attacker;
+                            for (SkillUseInfo skillUseInfo : attackerCard.getUsableNormalSkills()) {
+                                if (skillUseInfo.getType() == SkillType.灵能腐朽) {
+                                    PsionicDecay.apply(skillUseInfo, this, attackerCard, defenderPlayer, damage);
                                 }
                             }
                         }
                     }
-                }
-                remainingDamage = damage;
-                if(defenderPlayer.getHP()<remainingDamage) {
-                    remainingDamage = this.resolveHeroUnbending(attacker, defenderPlayer, cardSkill, remainingDamage);
-                }
-                if (remainingDamage > 0) {
-                    stage.getUI().attackHero(attacker, defenderPlayer, cardSkill, remainingDamage);
-                    defenderPlayer.setHP(defenderPlayer.getHP() - remainingDamage);
                 }
             } else {
                 if (defenderPlayer.getHP() - damage > defenderPlayer.getMaxHP()) {
