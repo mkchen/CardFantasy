@@ -2483,9 +2483,9 @@ public class AutoBattleController {
 
             List<SkillTypeRuntimeInfo> skillList = new ArrayList<SkillTypeRuntimeInfo>(); 
             for (SkillType skillType : SkillType.values()) {
-                if (!skillType.containsTag(SkillTag.不可洗炼)) {
+//                if (!skillType.containsTag(SkillTag.不可洗炼)) {
                     skillList.add(new SkillTypeRuntimeInfo(skillType));
-                }
+//                }
             }
 
             Collections.sort(skillList, new Comparator<SkillTypeRuntimeInfo>() {

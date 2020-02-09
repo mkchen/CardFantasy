@@ -7,16 +7,16 @@ public class SkillTypeRuntimeInfo {
     public SkillTypeRuntimeInfo(SkillType skillType) {
         this.name = skillType.name();
         this.growable = skillType.isGrowable();
-        this.wikiId = skillType.getWikiId();
+//        this.wikiId = skillType.getWikiId();
     }
 
     private String name;
     private boolean growable;
-    private String wikiId;
+//    private String wikiId;
     
-    public String getWikiId() {
-        return wikiId;
-    }
+//    public String getWikiId() {
+//        return wikiId;
+//    }
     
     public String getName() {
         return name;
