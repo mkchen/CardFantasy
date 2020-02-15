@@ -31,7 +31,7 @@ public class MapStages {
                 String descText = mapNode.getText();
                 String[] descs = descText.split(",");
                 DeckStartupInfo deck = DeckBuilder.build(descs);
-                MapEnemyHero hero = new MapEnemyHero(id, heroHP, deck.getRunes(), deck.getCards());
+                MapEnemyHero hero = new MapEnemyHero(id, heroHP, deck.getRunes(),deck.getIndentures(),deck.getEquipments(), deck.getCards());
                 String victoryText = mapNode.valueOf("@victory");
                 VictoryCondition victory = VictoryCondition.parse(victoryText);
                 String deckInfo = mapNode.getText();

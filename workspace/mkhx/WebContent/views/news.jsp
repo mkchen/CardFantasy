@@ -41,6 +41,9 @@
             <div data-role="collapsible" data-collapsed="false" data-mini="true">
                 <h3>更新日志</h3>
                 <ul class="news-content">
+                    <li>2020-02-15<x>欢笑，波波</x><ul>
+                        <li>修复地图模块【地图】无法触发契约和装备的问题，感谢<x>凤鸣</x>提供的帮助</li>
+                    </ul></li>
                     <li>2020-02-04<x>欢笑，波波</x><ul>
                         <li>调整装备和守护的结算顺序，感谢泰尔诺奇提供的帮助</li>
                         <li>调整技能【风暴之力】（风眼和雷云最多两张），感谢泰尔诺奇提供的帮助</li>
