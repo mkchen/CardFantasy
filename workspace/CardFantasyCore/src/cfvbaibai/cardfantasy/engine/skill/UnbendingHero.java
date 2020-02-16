@@ -26,6 +26,7 @@ public class UnbendingHero {
             CardInfo liveCard = field.getCard(i);
             if (card == liveCard) {
                 field.expelCard(i);
+                ParadiseLost.removeCard(resolver,card,defender);
                 card.getOwner().getGrave().addCard(card);
                 break;
             }

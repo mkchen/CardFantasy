@@ -28,6 +28,7 @@ public final class Transport {
         }
         resolver.getStage().getUI().cardToGrave(defenderHero, cardToTransport);
         defenderHero.getHand().removeCard(cardToTransport);
+        ParadiseLost.remove(resolver,cardToTransport,attacker.getOwner());
         defenderHero.getGrave().addCard(cardToTransport);
         //传送移除附加技能
         resolver.resolveLeaveSkills(cardToTransport);

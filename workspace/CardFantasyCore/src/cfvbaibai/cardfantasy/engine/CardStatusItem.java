@@ -186,6 +186,10 @@ public class CardStatusItem {
         return new CardStatusItem(CardStatusType.离魂, 0, cause);
     }
 
+    public static CardStatusItem ParadiseLost(SkillUseInfo cause) {
+        return new CardStatusItem(CardStatusType.失乐, 0, cause);
+    }
+
     public String getShortDesc() {
         StringBuffer sb = new StringBuffer();
         sb.append(getType().name());

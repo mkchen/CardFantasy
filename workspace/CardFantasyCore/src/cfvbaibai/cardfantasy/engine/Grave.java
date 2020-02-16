@@ -18,8 +18,8 @@ public class Grave extends CardPile {
             throw new CardFantasyRuntimeException("Cannot find card in grave: " + card.getShortDesc());
         }
         return true;
+
     }
-    
     @Override
 //    public CardInfo addCard(CardInfo card,SkillResolver... resolver) {
     public CardInfo addCard(CardInfo card) {

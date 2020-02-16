@@ -8,6 +8,7 @@ import cfvbaibai.cardfantasy.engine.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Trap 1*level enemy card at 65% probability.
@@ -15,12 +16,13 @@ import java.util.List;
  * Can be blocked by Immue
  */
 public final class Petrifaction {
-    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, CardInfo attacker, Player defender)
+    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, CardInfo attacker, Player defender,int rate)
             throws HeroDieSignal {
         int position = attacker.getPosition();
         if(defender.getField().getCard(position) == null){
             return;
         }
+        Randomizer randomizer = resolver.getStage().getRandomizer();
         Skill skill = skillUseInfo.getSkill();
         int effectNumber = skill.getImpact2();
         List<CardInfo> victims = resolver.getAdjacentCards(defender.getField(),position);
@@ -32,6 +34,9 @@ public final class Petrifaction {
         CardSkill cardSkill = new CardSkill(addSkill.getType(), addSkill.getLevel(), 0, false, false, false, false);
         for (CardInfo victim : victims) {
             if (!resolver.resolveAttackBlockingSkills(attacker, victim, skill, 1).isAttackable()) {
+                continue;
+            }
+            if(!randomizer.roll100(rate)){
                 continue;
             }
             if(effectNumber>0)
