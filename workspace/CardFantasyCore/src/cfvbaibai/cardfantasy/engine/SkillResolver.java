@@ -334,7 +334,7 @@ public class SkillResolver {
                         RaceChangeSelf.apply(this, skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.神谕 || skillUseInfo.getType() == SkillType.冰与火之歌) {
                         SummonStopSkillUseInfoList.apply(this,skillUseInfo,  defender);
-                    } else if (skillUseInfo.getType() == SkillType.棋布星罗) {
+                    } else if (skillUseInfo.getType() == SkillType.棋布星罗 || skillUseInfo.getType() == SkillType.同调) {
                         ScatterHereAndThere.reset(skillUseInfo, card);
                     }
                 }
@@ -607,7 +607,7 @@ public class SkillResolver {
                 HeavenWrath.apply(this, skillUseInfo.getAttachedUseInfo1().getSkill(), attacker, defender);
             } else if (skillUseInfo.getType() == SkillType.封印 || skillUseInfo.getType() == SkillType.封锁) {
                 Seal.apply(skillUseInfo, this, attacker, defender);
-            } else if (skillUseInfo.getType() == SkillType.圣炎 || skillUseInfo.getType() == SkillType.弑魂夺魄) {
+            } else if (skillUseInfo.getType() == SkillType.圣炎 || skillUseInfo.getType() == SkillType.弑魂夺魄 || skillUseInfo.getType() == SkillType.冰与火之歌) {
                 HolyFire.apply(skillUseInfo.getSkill(), this, attacker, defender);
             } else if (skillUseInfo.getType() == SkillType.法力侵蚀 || skillUseInfo.getType() == SkillType.灵王的轰击 || skillUseInfo.getType() == SkillType.灵能冲击 ||
                     skillUseInfo.getType() == SkillType.觉醒灵王的轰击 && attacker.isAwaken(skillUseInfo, Race.FOREST, 2)) {
@@ -1166,7 +1166,7 @@ public class SkillResolver {
                 Horn.apply(skillUseInfo, this, attacker);
             } else if (skillUseInfo.getType() == SkillType.同调) {
                 if(!FailureSkillUseInfoList.explode(this,attacker,defender)) {
-                    Homology.apply(this, skillUseInfo, attacker, attacker.getName());
+                    HomologyOnlySelf.apply(this, skillUseInfo, attacker, attacker.getName());
                 }
             } else if (skillUseInfo.getType() == SkillType.月神祈福) {
                 Bless.apply(skillUseInfo.getAttachedUseInfo1().getSkill(), this, attacker);
@@ -2442,7 +2442,7 @@ public class SkillResolver {
                 } else if (deadCardSkillUseInfo.getType() == SkillType.疏影横斜) {
                     Asthenia.apply(this, deadCardSkillUseInfo, deadCard, opponent, 5, 2);
                 } else if (deadCardSkillUseInfo.getType() == SkillType.雪影分身) {
-                    AddCard.apply(this, deadCardSkillUseInfo, deadCard, SummonType.Summoning, 1,
+                    AddSelfCard.apply(this, deadCardSkillUseInfo, deadCard, SummonType.Summoning, 1,
                             deadCard.getName());
                 } else if (deadCardSkillUseInfo.getType() == SkillType.传承之力) {
                     HandCardAddSkillNormal.apply(this, deadCardSkillUseInfo, deadCard, deadCardSkillUseInfo.getAttachedUseInfo1().getSkill(), 1);

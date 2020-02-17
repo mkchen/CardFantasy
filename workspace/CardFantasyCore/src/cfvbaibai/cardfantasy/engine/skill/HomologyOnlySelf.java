@@ -1,18 +1,24 @@
 package cfvbaibai.cardfantasy.engine.skill;
 
 import cfvbaibai.cardfantasy.CardFantasyRuntimeException;
-import cfvbaibai.cardfantasy.data.Skill;
-import cfvbaibai.cardfantasy.data.SkillTag;
 import cfvbaibai.cardfantasy.engine.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Homology {
+public final class HomologyOnlySelf {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo reviver,String cardName) throws HeroDieSignal {
         if (reviver == null) {
             throw new CardFantasyRuntimeException("reviver should not be null");
         }
+        int impact = 1;
+        if(skillUseInfo.getSkillNumber()==0) {
+            return;
+        }
+        if(skillUseInfo.getSkillNumber()==-1) {
+            skillUseInfo.setSkillNumber(impact);
+        }
+        skillUseInfo.setSkillNumber(skillUseInfo.getSkillNumber()-1);
         Grave grave = reviver.getOwner().getGrave();
         Hand hand = reviver.getOwner().getHand();
         Deck deck = reviver.getOwner().getDeck();
