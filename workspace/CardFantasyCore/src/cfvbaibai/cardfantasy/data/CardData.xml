@@ -815,7 +815,7 @@
         <Skill type="精准打击" level="8" unlock="5" />
         <Skill type="免疫" level="0" unlock="10" />
     </Card>
-    <Card id="1548" name="星空战姬" wikiId="" race="王国" speed="4" star="5" cost="19" incrCost="2" at="350" hp="1850" incrAT="48" incrHP="50">
+    <Card id="1548" name="原星空战姬" wikiId="" race="王国" speed="4" star="5" cost="19" incrCost="2" at="350" hp="1850" incrAT="48" incrHP="50">
         <Skill type="反射装甲" level="0" unlock="0" />
         <Skill type="水流护甲" level="7" unlock="5" />
         <Skill type="镜面装甲" level="0" unlock="10" />
@@ -1631,6 +1631,11 @@
         <Skill type="寒霜之心" level="0" unlock="0" />
         <Skill type="寒霜护佑" level="0" unlock="5" />
         <Skill type="转生" level="6" unlock="10" />
+    </Card>
+    <Card id="1708" name="星空战姬" wikiId="" race="王国" speed="3" star="5" cost="19" incrCost="2" at="515" hp="2100" incrAT="50" incrHP="58">
+        <Skill type="星夜之翼" level="0" unlock="0" />
+        <Skill type="结界立场" level="0" unlock="5" />
+        <Skill type="星阵" level="0" unlock="10" />
     </Card>
 
 
@@ -5834,6 +5839,16 @@
         <Skill type="能量转化" level="0" unlock="0" summon="true" />
         <Skill type="觉醒放逐" level="0" unlock="5" />
         <Skill type="烈火炙魂" level="0" unlock="10" />
+    </Card>
+    <Card id="4706" name="魅之术士" wikiId="" race="地狱" speed="8" star="5" cost="21" incrCost="2" at="620" hp="1675" incrAT="45" incrHP="47">
+        <Skill type="深渊号角" level="0" unlock="0" />
+        <Skill type="厄运降临" level="0" unlock="5" />
+        <Skill type="虚幻之影" level="0" unlock="10" precast="true"/>
+    </Card>
+    <Card id="4707" name="魅魔之影" wikiId="" race="地狱" speed="6" star="5" cost="99" incrCost="0" at="535" hp="1540" incrAT="40" incrHP="45">
+        <Skill type="魔力汲取" level="0" unlock="0" />
+        <Skill type="暗影之佑" level="0" unlock="5" />
+        <Skill type="全体加速" level="1" unlock="10" summon="true"/>
     </Card>
 
 

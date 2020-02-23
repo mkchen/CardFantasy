@@ -324,8 +324,6 @@ public class SkillResolver {
                         Cooperation.apply(this, skillUseInfo, card, "风暴主宰", false);
                     } else if (skillUseInfo.getType() == SkillType.天下英主) {
                         Cooperation.applyVague(this, skillUseInfo, card, "五子良将", false);
-                    } else if (skillUseInfo.getType() == SkillType.厄运缠身) {
-                        Doom.apply(this, skillUseInfo, attacker, defender, 5, 4);
                     } else if (skillUseInfo.getType() == SkillType.神鬼之医) {
                         DisorderMult.reset(skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.一夫当关) {
@@ -1039,7 +1037,8 @@ public class SkillResolver {
                 ThunderStrike.apply(skillUseInfo, this, attacker, defender, -1);
             } else if (skillUseInfo.getType() == SkillType.雷霆之怒) {
                 ThunderStrike.apply(skillUseInfo, this, attacker, defender, -1);
-            } else if (skillUseInfo.getType() == SkillType.赤之魔枪 || skillUseInfo.getType() == SkillType.灵能启迪 || skillUseInfo.getType() == SkillType.狂怒) {
+            } else if (skillUseInfo.getType() == SkillType.赤之魔枪 || skillUseInfo.getType() == SkillType.灵能启迪 || skillUseInfo.getType() == SkillType.狂怒
+                    || skillUseInfo.getType() == SkillType.魔力汲取) {
                 RedGun.apply(skillUseInfo, this, attacker, defender, 3);
             } else if (skillUseInfo.getType() == SkillType.灰飞烟灭) {
                 RedGun.apply(skillUseInfo, this, attacker, defender, 1);
@@ -1450,6 +1449,10 @@ public class SkillResolver {
             } else if (skillUseInfo.getType() == SkillType.恶魔之门) {
                 Summon.apply(this, skillUseInfo, attacker, SummonType.Random, 2,
                         "巨斧战将", "亡灵支配者", "恐惧梦魇", "夜行神龙", "无头死骑", "缚魂者");
+            } else if (skillUseInfo.getType() == SkillType.厄运缠身) {
+                Doom.apply(this, skillUseInfo, attacker, defender, 5, 4);
+            } else if (skillUseInfo.getType() == SkillType.厄运降临) {
+                Doom.apply(this, skillUseInfo, attacker, defender, 3, 3);
             }
         }
         if (!attacker.isDead() && status == 0) {
@@ -2448,6 +2451,8 @@ public class SkillResolver {
                     HandCardAddSkillNormal.apply(this, deadCardSkillUseInfo, deadCard, deadCardSkillUseInfo.getAttachedUseInfo1().getSkill(), 1);
                 } else if (deadCardSkillUseInfo.getType() == SkillType.故技重演) {
                     TurbulenceDeck.apply(deadCardSkillUseInfo.getSkill(), this, deadCard, opponent,70);
+                } else if (deadCardSkillUseInfo.getType() == SkillType.暗影之佑) {
+                    RegressionSoul.apply(this, deadCardSkillUseInfo, deadCard, opponent);
                 }
             }
         }
@@ -5465,6 +5470,14 @@ public class SkillResolver {
         return false;
     }
 
+    public void resolveTrumpetHorn(CardInfo summonCard) throws HeroDieSignal {
+        for (SkillUseInfo skillUseInfo : summonCard.getAllNormalSkills()) {
+            if (skillUseInfo.getType() == SkillType.深渊号角) {
+                TrumpetHorn.apply(skillUseInfo, this, summonCard);
+            }
+        }
+    }
+
     public boolean resolveStopHolyFire(Player defender) {
         for (CardInfo defenderCard : defender.getField().getAliveCards()) {
             for (SkillUseInfo defenderSkillUseInfo : defenderCard.getUsableNormalSkills()) {
@@ -6088,9 +6101,9 @@ public class SkillResolver {
             } else if (skillUseInfo.getType() == SkillType.御剑) {
                 RedGun.apply(skillUseInfo, this, card, defenderHero, 1);
             }
-//            else if (skillUseInfo.getType() == SkillType.虚幻之影) {
-//                SummonWhenAttack.apply(this, skillUseInfo, card, 1, false, "魅魔之影");
-//            }
+            else if (skillUseInfo.getType() == SkillType.虚幻之影) {
+                SummonWhenAttack.apply(this, skillUseInfo, card, 1, false, "魅魔之影");
+            }
         }
         if (card.containsUsableSkill(SkillType.异元干扰)) {
             for (SkillUseInfo skillUseInfo : card.getUsableNormalSkills()) {

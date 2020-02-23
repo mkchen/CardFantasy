@@ -190,6 +190,10 @@ public class CardStatusItem {
         return new CardStatusItem(CardStatusType.失乐, 0, cause);
     }
 
+    public static CardStatusItem Trumpet(SkillUseInfo cause) {
+        return new CardStatusItem(CardStatusType.深渊, 0, cause);
+    }
+
     public String getShortDesc() {
         StringBuffer sb = new StringBuffer();
         sb.append(getType().name());

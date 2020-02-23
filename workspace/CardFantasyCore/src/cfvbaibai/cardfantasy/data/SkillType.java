@@ -545,6 +545,7 @@ public enum SkillType {
     神恩(1,SkillTag.抗沉默),
     放飞自我(3,0),
     归魂(1),
+    暗影之佑(1,0,SkillTag.守护),
     逆转之风(1,0, SkillTag.即死),
     降归魂(1),
     彼岸轮回(1),
@@ -720,6 +721,7 @@ public enum SkillType {
 
     屠戮(3500, 0, 1, 0, SkillTag.抗免疫),
     赤之魔枪(200, 50, 3, 0, SkillTag.抗免疫),
+    魔力汲取(600, 0, 3, 0, SkillTag.抗免疫),
     狂怒(800, 0, 3, 0, SkillTag.抗免疫),
     神谴(300, 0, 7, 0, SkillTag.抗免疫),
     用兵之道(700, 0, 3, 0, SkillTag.抗免疫),
@@ -1482,6 +1484,7 @@ public enum SkillType {
     支配者(3,0,6,0,SkillType.魔法装甲,10,null,0, SkillTag.抗免疫,SkillTag.魔王无效),
     觉醒放逐(1,0,4,0,SkillType.魔法装甲,10,null,0, SkillTag.抗免疫,SkillTag.魔王无效),
     厄运缠身(5,0,80,0, SkillTag.抗免疫,SkillTag.魔王无效),
+    厄运降临(3,0,60,0, SkillTag.抗免疫,SkillTag.魔王无效),
     古神的低语(3,0,50,0, SkillTag.抗免疫,SkillTag.魔王无效),
     古神的低语伪(1,0,30,0, SkillTag.抗免疫,SkillTag.魔王无效),
 

@@ -3,6 +3,7 @@ package cfvbaibai.cardfantasy.engine.skill;
 import cfvbaibai.cardfantasy.CardFantasyRuntimeException;
 import cfvbaibai.cardfantasy.GameUI;
 import cfvbaibai.cardfantasy.Randomizer;
+import cfvbaibai.cardfantasy.data.Rune;
 import cfvbaibai.cardfantasy.data.Skill;
 import cfvbaibai.cardfantasy.engine.*;
 
@@ -28,6 +29,10 @@ public final class Supplication {
         addHand = Randomizer.getRandomizer().pickRandom(deck, count, true,null);
         GameUI ui = resolver.getStage().getUI();
         ui.useSkill(card, card, skill, true);
+        boolean isRune = false;
+        if (card instanceof RuneInfo) {
+            isRune = true;
+        }
         for(CardInfo addcard : addHand)
         {
             if(hand.isFull())
@@ -39,6 +44,9 @@ public final class Supplication {
                 player.getDeck().removeCard(addcard);
                 hand.addCard(addcard);
                 resolver.resolvePrecastSkills(addcard, defender, false);
+                if(isRune){
+                    resolver.resolveTrumpetHorn(addcard);
+                }
             }
         }
         HellPrison.apply(resolver,defender,player);

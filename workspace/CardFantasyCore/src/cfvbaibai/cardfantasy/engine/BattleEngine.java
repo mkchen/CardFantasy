@@ -11,6 +11,7 @@ import cfvbaibai.cardfantasy.data.Rune;
 import cfvbaibai.cardfantasy.data.Skill;
 import cfvbaibai.cardfantasy.data.SkillType;
 import cfvbaibai.cardfantasy.engine.skill.Petrifaction;
+import cfvbaibai.cardfantasy.engine.skill.TrumpetHorn;
 
 public class BattleEngine {
 
@@ -363,6 +364,7 @@ public class BattleEngine {
             resolver.resolveDebuff(myField.getCard(i), CardStatusType.远古);
             resolver.resolveDebuff(myField.getCard(i), CardStatusType.咒怨);
             resolver.resolveAddATDebuff(myField.getCard(i), CardStatusType.咒怨);
+            TrumpetHorn.explode(resolver,myField.getCard(i)); //深渊号角返回手牌
 
             Petrifaction.reset(myField.getCard(i),1); //重置技能
             resolver.removeStatus(myField.getCard(i), CardStatusType.石化);
@@ -728,6 +730,7 @@ public class BattleEngine {
         }
         CardInfo newCard = deck.draw();
         hand.addCard(newCard);
+        this.stage.getResolver().resolveTrumpetHorn(newCard);
         stage.getUI().cardDrawed(activePlayer, newCard);
         return Phase.召唤;
     }
