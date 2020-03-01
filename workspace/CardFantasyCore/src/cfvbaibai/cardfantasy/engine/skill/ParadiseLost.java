@@ -14,7 +14,7 @@ public class ParadiseLost {
         GameUI ui = resolver.getStage().getUI();
         Skill skill = skillUseInfo.getSkill();
         ui.useSkill(defenderCard, attackCard, skill, true);
-        CardStatusItem statusItem = CardStatusItem.ParadiseLost(skillUseInfo);
+        CardStatusItem statusItem = CardStatusItem.paradiseLost(skillUseInfo);
         if(attackCard.isBoss()){
            return;
         }

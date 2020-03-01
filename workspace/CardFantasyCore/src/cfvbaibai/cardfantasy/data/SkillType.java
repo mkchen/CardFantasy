@@ -21,6 +21,7 @@ public enum SkillType {
     瘟疫(5, SkillTag.永久, SkillTag.基础攻击加成),
     凋零真言(4,1,SkillTag.永久, SkillTag.基础攻击加成),
     暗之凋零(40,0,SkillTag.永久, SkillTag.基础攻击加成),
+    地狱之火(13,0,SkillTag.永久, SkillTag.基础攻击加成),
     花刺(35,0,SkillTag.永久, SkillTag.基础攻击加成),
     /* 攻击力加成技能 */
     /**
@@ -42,6 +43,7 @@ public enum SkillType {
     血祭(0, 0),
     守望之力(50, 0,800,0, SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效, SkillTag.魔族天赋),
     奔袭(100, 0, SkillTag.永久, SkillTag.基础攻击加成, SkillTag.不动,SkillTag.魔王无效, SkillTag.魔族天赋),
+
 
     群攻提升(15, SkillTag.基础攻击加成, SkillTag.抗削弱),
     狂热(10, SkillTag.永久, SkillTag.基础攻击加成),
@@ -79,6 +81,7 @@ public enum SkillType {
     暗杀(15, 15, SkillTag.额外攻击加成),
     污染(15, 15, SkillTag.额外攻击加成),
     暴击(20, SkillTag.额外攻击加成),
+    勇武(100,0, SkillTag.基础攻击加成, SkillTag.抗削弱),
     凯撒之击(10, 5, SkillTag.额外攻击加成),
     穷追猛打(15, SkillTag.额外攻击加成),
     战意(15, SkillTag.额外攻击加成),
@@ -117,6 +120,7 @@ public enum SkillType {
     星座能量清醒(0,0,SkillType.星座连携,0,null,0, SkillTag.额外攻击加成),
     破魔神兵(0, SkillTag.额外攻击加成),
     鲜血记忆(150, 0, SkillTag.额外攻击加成),
+    生命汲取(70, 0, SkillTag.额外攻击加成),
     良驹(0, SkillTag.额外攻击加成),
     死亡女神(0, SkillTag.额外攻击加成,SkillTag.抗夺魂),
 
@@ -137,6 +141,7 @@ public enum SkillType {
     坚壁(10,SkillTag.抗毒刃),
     乐善好施(1000,0,SkillTag.抗毒刃,SkillTag.复活),
     自我改造(2500,0,20000,0,SkillTag.抗毒刃),
+    成长(300,0,6000,0,SkillTag.抗毒刃),
     金刚不坏之躯(2500,0,20000,0, new int[] { 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600 },SkillTag.抗毒刃, SkillTag.永久, SkillTag.基础攻击加成),
     神魔附体(1000,0,20000,0, new int[] { 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500 },SkillTag.抗毒刃, SkillTag.永久, SkillTag.基础攻击加成),
     偶像演出(50,0, SkillTag.抗毒刃, SkillTag.基础攻击加成,SkillTag.抗削弱),
@@ -280,6 +285,7 @@ public enum SkillType {
     守护(10, SkillTag.守护),
     神之守护(0, SkillTag.守护),
     否决(3,0),
+    云隐时现(3,0,SkillTag.魔族天赋),
     祈祷(50),
     终极祈祷(2500,0),
     补给(700,0),
@@ -949,7 +955,7 @@ public enum SkillType {
     生灭(SkillType.召唤酒吞,0, SkillType.召唤雪女,0,SkillTag.召唤),
 
     幻影军团(4,0,70,0),
-    勇冠三军(4,0,60,0,SkillTag.基础攻击加成),
+    勇冠三军(4,0,60,0,SkillTag.基础攻击加成,SkillTag.抗削弱),
     秘术投影(4,0,100,0),
     幻影奇袭(4,0,60,0),
     幻象幽灵(2,0,100,0),
@@ -1191,6 +1197,7 @@ public enum SkillType {
     风驰电掣(1,0),
     霜火交织(SkillType.霜火,0,SkillType.圣炎,0),
     冥界三重奏(SkillType.侧击,0,SkillType.夹击,0),
+    云雾缭绕(3,0, SkillType.侧击,0,SkillType.夹击,0,SkillTag.抗免疫,SkillTag.魔王无效),
     猛禽(SkillType.归魂,1,SkillType.加速,2),
     恐惧降临(SkillType.沉默,0,SkillType.凋零真言,5),
     星决(SkillType.归魂,1,SkillType.复活,0,SkillTag.复活),
@@ -1202,6 +1209,7 @@ public enum SkillType {
     自然之力(2000,0,SkillType.祈福,5,null,0),
 
     新生(0,0,SkillTag.新生,SkillTag.抗夺魂),
+    滋养(0,0,SkillTag.新生,SkillTag.抗夺魂),
     圣灵之泉(0,0,SkillTag.新生,SkillTag.抗夺魂),
     倾城(10,0,SkillTag.新生,SkillTag.抗夺魂),
     重整(0,0,SkillTag.抗夺魂),
@@ -1217,6 +1225,7 @@ public enum SkillType {
     游击(0,0,SkillTag.抗夺魂),
     周旋(0,0,SkillTag.抗夺魂),
     柳暗花明(8,0,SkillTag.抗夺魂),
+    海渊之力(24,0, null, 0, SkillType.圣母回声, 0,SkillTag.抗免疫, SkillTag.魔王无效, SkillTag.魔族天赋),
 
     深渊号角(2,0),
 
@@ -1232,6 +1241,7 @@ public enum SkillType {
     还魂(80,0, new int[]{ 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}),
     不灭(new int[] { 0,20, 25, 35, 45, 55, 65, 70, 75, 80, 90 }),
     顽强(new int[] { 0,20, 25, 35, 45, 55, 65, 70, 75, 80, 90 }, SkillTag.不动),
+    筑巢(70,0,SkillTag.守护),
     冥界守护(75,0, SkillTag.抗免疫,SkillTag.魔王无效),
     阴阳术轮回(65,0),
     壮心不已(65,0,SkillTag.抗沉默),
@@ -1470,6 +1480,7 @@ public enum SkillType {
     噩梦来临(1,0,100,0,SkillTag.抗免疫, SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋,SkillTag.基础攻击加成),
     实验失败(2500,0,4500,0,SkillTag.抗免疫, SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋,SkillTag.基础攻击加成),
     逆转之刃(1001,0,1001,0,SkillTag.抗免疫, SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋,SkillTag.基础攻击加成,SkillTag.复活),
+    压制(0,0,10000,0,SkillTag.抗免疫, SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋,SkillTag.基础攻击加成),
     支配亡灵(0, SkillTag.魔王无效, SkillTag.魔族天赋,SkillTag.召唤),
     蛇影迷踪(0, SkillTag.魔王无效, SkillTag.魔族天赋,SkillTag.召唤),
     骸骨大军(0, SkillTag.魔王无效, SkillTag.魔族天赋,SkillTag.召唤),
@@ -1487,6 +1498,11 @@ public enum SkillType {
     厄运降临(3,0,60,0, SkillTag.抗免疫,SkillTag.魔王无效),
     古神的低语(3,0,50,0, SkillTag.抗免疫,SkillTag.魔王无效),
     古神的低语伪(1,0,30,0, SkillTag.抗免疫,SkillTag.魔王无效),
+    寄生(0, SkillTag.魔王无效, SkillTag.召唤),
+    庚子守护(0, SkillTag.魔王无效, SkillTag.召唤),
+    秘术守护(0, SkillTag.魔王无效, SkillTag.召唤),
+    疾行突击(4,0, SkillType.号角,1,null,0, SkillTag.抗免疫,SkillTag.魔王无效),
+    进退自如(100,0,2,0,SkillType.秘术守护,0, null,0,SkillTag.复活),
 
     死亡诅咒(1,0, SkillTag.抗免疫,SkillTag.魔王无效),
     蚀月军团(1,0, SkillTag.抗免疫,SkillTag.魔王无效),
@@ -1495,6 +1511,7 @@ public enum SkillType {
     血魂之咒(3,0, SkillTag.抗免疫,SkillTag.魔王无效),
     锁魂(5,0, SkillTag.抗免疫,SkillTag.魔王无效),
     离魂芳印(2,0,1,0,SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
+    深海巨口(2,0,2,0,SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
     生死界限(3,0,2,0,SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋, SkillTag.守护),
     斗者(1,0,1,0,SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
     时空封印(1,0,1,0,SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
@@ -1516,6 +1533,7 @@ public enum SkillType {
     形散如烟(3,0,25,0, SkillTag.魔王无效,SkillTag.抗免疫),
     审判之翼(3,0,25,0, SkillTag.魔王无效,SkillTag.抗免疫),
     疏影横斜(2,0,25,0, SkillTag.魔王无效,SkillTag.抗免疫),
+    蛛网束缚(2,0,0,0, SkillTag.魔王无效,SkillTag.抗免疫),
     目标锁定(1,0,50,0, SkillTag.魔王无效,SkillTag.抗免疫),
     虚无(1,0,20,0, new int[]{ 0,20, 20, 20, 30, 35, 35, 35, 35, 35, 35 }, SkillTag.魔王无效,SkillTag.抗免疫),
     吞噬(1,0,2,0,SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
@@ -1573,10 +1591,11 @@ public enum SkillType {
     快速甬道(2,0,SkillType.风行,0,null,0),//条件赋予卡牌技能
 
     封魔神剑(444, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
+    裂地斩(0, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
     对决(400, 0, 40,0,SkillTag.永久, SkillTag.基础攻击加成),
     裂地(0, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
     暗影奇袭(400, 0, 100,0,SkillTag.永久, SkillTag.基础攻击加成),
-    狩猎(0, 0, 100,0,SkillTag.永久, SkillTag.基础攻击加成),
+    狩猎(0, 0, 0,0),
     花果山美猴王(200, 0, 50,0,SkillType.救命毫毛,0,null,0,SkillTag.召唤,SkillTag.永久, SkillTag.基础攻击加成),
     黑暗侵袭(0, 0, 50,0),
 
@@ -1586,6 +1605,8 @@ public enum SkillType {
     //神谕
     神谕(3, 0),
     冰与火之歌(1, 0,SkillTag.魔族天赋),
+
+    置换(3,0),
 
     //装备技能
     装备护体(0, 0, new int[] { 0, 10, 25, 40, 40, 40, 40, 40, 40, 40, 40 }),

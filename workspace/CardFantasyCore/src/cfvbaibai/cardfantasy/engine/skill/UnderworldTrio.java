@@ -44,7 +44,7 @@ public final class UnderworldTrio {
         }
         CardInfo nextCardInfo = defender.getOwner().getField().getCard(position+1);
         for(SkillUseInfo skillUseInfo:attacker.getUsableNormalSkills()){
-            if(skillUseInfo.getType() == SkillType.冥界三重奏){
+            if(skillUseInfo.getType() == SkillType.冥界三重奏 || skillUseInfo.getType() == SkillType.云雾缭绕){
                 attackSkillUseInfo = skillUseInfo;
                 type++;
                 self = true;
@@ -53,7 +53,7 @@ public final class UnderworldTrio {
         }
         if(preCardInfo!=null) {
             for (SkillUseInfo skillUseInfo : preCardInfo.getUsableNormalSkills()) {
-                if (skillUseInfo.getType() == SkillType.冥界三重奏) {
+                if (skillUseInfo.getType() == SkillType.冥界三重奏 || skillUseInfo.getType() == SkillType.云雾缭绕) {
                     attackSkillUseInfo = skillUseInfo;
                     type++;
                     break;
@@ -62,7 +62,7 @@ public final class UnderworldTrio {
         }
         if(nextCardInfo!=null) {
             for (SkillUseInfo skillUseInfo : nextCardInfo.getUsableNormalSkills()) {
-                if (skillUseInfo.getType() == SkillType.冥界三重奏) {
+                if (skillUseInfo.getType() == SkillType.冥界三重奏 || skillUseInfo.getType() == SkillType.云雾缭绕) {
                     attackSkillUseInfo = skillUseInfo;
                     type++;
                     break;
@@ -74,7 +74,13 @@ public final class UnderworldTrio {
             //大于等于二
             if(self&&type>=2){
                 ui.killCard(attacker, defender, attackSkillUseInfo.getAttachedUseInfo2().getSkill());
-                resolver.killCard(attacker, defender, attackSkillUseInfo.getAttachedUseInfo2().getSkill());
+                int reallyRate = resolver.getStage().getRandomizer().next(0,100);
+                ui.roll100(reallyRate, 80);
+                if(reallyRate>=80) {
+                    resolver.killCard(attacker, defender, attackSkillUseInfo.getAttachedUseInfo2().getSkill());
+                }else{
+                    resolver.killCard(attacker, defender, attackSkillUseInfo.getAttachedUseInfo1().getSkill());
+                }
             }else{
                 ui.killCard(attacker, defender, attackSkillUseInfo.getSkill());
                 resolver.killCard(attacker, defender, attackSkillUseInfo.getAttachedUseInfo1().getSkill());

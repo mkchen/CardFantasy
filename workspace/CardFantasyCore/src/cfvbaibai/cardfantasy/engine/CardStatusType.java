@@ -42,6 +42,8 @@ public enum CardStatusType {
     海啸(false, "啸"),
     厄运(false, "厄"),
     扩散(false, "扩"),
+    子嗣(false, "嗣"),
+    庚子(false, "庚"),
     深渊(false, "深");
     
 

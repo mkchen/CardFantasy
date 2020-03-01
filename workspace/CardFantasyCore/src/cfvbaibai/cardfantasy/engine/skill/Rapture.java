@@ -23,7 +23,7 @@ public class Rapture {
         GameUI ui = resolver.getStage().getUI();
         Skill skill = skillUseInfo.getSkill();
         ui.useSkill(attackCard, victims, skill, true);
-        CardStatusItem statusItem = CardStatusItem.Rapture(skillUseInfo);
+        CardStatusItem statusItem = CardStatusItem.rapture(skillUseInfo);
         statusItem.setEffectNumber(effectNumber);
         boolean flag = digestionCard(resolver,skillUseInfo,defenderHero);
         if(!flag){

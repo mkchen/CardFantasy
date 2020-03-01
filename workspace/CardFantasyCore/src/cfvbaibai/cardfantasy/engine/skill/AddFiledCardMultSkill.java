@@ -16,8 +16,8 @@ import java.util.List;
 
 public final class AddFiledCardMultSkill {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card, Skill addSkill1,Skill addSkill2,Skill addSkill3) {
-        if (card == null || card.isDead()) {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+        if (card == null) {
+            throw new CardFantasyRuntimeException("card should not be null!");
         }
         StageInfo stage = resolver.getStage();
         Randomizer random = stage.getRandomizer();
@@ -26,15 +26,18 @@ public final class AddFiledCardMultSkill {
         CardSkill cardSkill1 = null;
         CardSkill cardSkill2 = null;
         CardSkill cardSkill3 = null;
+        int victimCount = skill.getImpact();
         if(skill.getType() == SkillType.知人善任) {
             cardSkill1 = new CardSkill(addSkill1.getType(), addSkill1.getLevel(), 0, false, false, false, false);
             cardSkill2 = new CardSkill(addSkill2.getType(), addSkill2.getLevel(), 0, false, true, false, false);
             cardSkill3 = new CardSkill(addSkill3.getType(), addSkill3.getLevel(), 0, false, true, false, false);
-        }else if(skill.getType() == SkillType.不朽) {
+        } else if(skill.getType() == SkillType.不朽) {
+            cardSkill1 = new CardSkill(addSkill1.getType(), addSkill1.getLevel(), 0, false, false, false, false);
+        } else if(skill.getType() == SkillType.进退自如) {
+            victimCount = skill.getImpact2();
             cardSkill1 = new CardSkill(addSkill1.getType(), addSkill1.getLevel(), 0, false, false, false, false);
         }
         resolver.getStage().getUI().useSkill(card, skill, true);
-        int victimCount = skill.getImpact();
         List<CardInfo> addCard = random.pickRandom(card.getOwner().getField().toList(), victimCount, true, null);
         for (CardInfo thisCard : addCard) {
             SkillUseInfo thisSkillUserInfo1=null;

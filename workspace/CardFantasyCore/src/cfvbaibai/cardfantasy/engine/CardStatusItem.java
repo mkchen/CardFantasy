@@ -182,12 +182,20 @@ public class CardStatusItem {
         return new CardStatusItem(CardStatusType.扩散, 0, cause);
     }
 
-    public static CardStatusItem Rapture(SkillUseInfo cause) {
+    public static CardStatusItem rapture(SkillUseInfo cause) {
         return new CardStatusItem(CardStatusType.离魂, 0, cause);
     }
 
-    public static CardStatusItem ParadiseLost(SkillUseInfo cause) {
+    public static CardStatusItem paradiseLost(SkillUseInfo cause) {
         return new CardStatusItem(CardStatusType.失乐, 0, cause);
+    }
+
+    public static CardStatusItem offspring(SkillUseInfo cause) {
+        return new CardStatusItem(CardStatusType.子嗣, 0, cause);
+    }
+
+    public static CardStatusItem mouseGuard(SkillUseInfo cause) {
+        return new CardStatusItem(CardStatusType.庚子, 0, cause);
     }
 
     public static CardStatusItem Trumpet(SkillUseInfo cause) {

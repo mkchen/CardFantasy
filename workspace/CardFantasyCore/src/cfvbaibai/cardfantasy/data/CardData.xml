@@ -2983,6 +2983,26 @@
         <Skill type="传承之力" level="0" unlock="5" />
         <Skill type="金身" level="9" unlock="10" />
     </Card>
+    <Card id="2672" name="暗精灵射手" wikiId="" race="森林" speed="3" star="4" cost="15" incrCost="2" at="425" hp="1480" incrAT="33" incrHP="40">
+        <Skill type="冰封禁制" level="0" unlock="0" />
+        <Skill type="穷追猛打" level="6" unlock="5" />
+        <Skill type="生命汲取" level="0" unlock="10" />
+    </Card>
+    <Card id="2673" name="庚子灵鼠" wikiId="" race="森林" speed="1" star="5" cost="22" incrCost="2" at="590" hp="1640" incrAT="42" incrHP="46">
+        <Skill type="庚子守护" level="0" unlock="0" />
+        <Skill type="疾行突击" level="0" unlock="5" />
+        <Skill type="进退自如" level="0" unlock="10" />
+    </Card>
+    <Card id="2674" name="宣花斧" wikiId="" race="森林" speed="3" star="5" cost="20" incrCost="2" at="525" hp="1540" incrAT="40" incrHP="46">
+        <Skill type="裂地斩" level="0" unlock="0" />
+        <Skill type="战术性撤退" level="0" unlock="5" />
+        <Skill type="勇武" level="0" unlock="10" />
+    </Card>
+    <Card id="2675" name="云梦仙子" wikiId="" race="森林" speed="3" star="5" cost="19" incrCost="2" at="600" hp="1615" incrAT="41" incrHP="44">
+        <Skill type="云雾缭绕" level="0" unlock="0" />
+        <Skill type="置换" level="0" unlock="5" />
+        <Skill type="云隐时现" level="0" unlock="10" />
+    </Card>
 
 
 
@@ -5850,6 +5870,21 @@
         <Skill type="暗影之佑" level="0" unlock="5" />
         <Skill type="全体加速" level="1" unlock="10" summon="true"/>
     </Card>
+    <Card id="4708" name="地狱魔龙" wikiId="" race="地狱" speed="3" star="4" cost="15" incrCost="2" at="550" hp="1300" incrAT="40" incrHP="30">
+        <Skill type="地狱之火" level="0" unlock="0" postcast="true" />
+        <Skill type="狩猎" level="0" unlock="5" />
+        <Skill type="浴火重生" level="0" unlock="10" />
+    </Card>
+    <Card id="4709" name="深海巨兽" wikiId="" race="地狱" speed="3" star="5" cost="19" incrCost="2" at="525" hp="1560" incrAT="40" incrHP="44">
+        <Skill type="深海巨口" level="0" unlock="0" />
+        <Skill type="物理屏障" level="0" unlock="5" />
+        <Skill type="海渊之力" level="0" unlock="10" />
+    </Card>
+    <Card id="4710" name="洞穴蜘蛛" wikiId="" race="地狱" speed="3" star="5" cost="18" incrCost="2" at="525" hp="1510" incrAT="45" incrHP="46">
+        <Skill type="蛛网束缚" level="0" unlock="0" />
+        <Skill type="灵魂消散" level="0" unlock="5" death="true"/>
+        <Skill type="筑巢" level="0" unlock="10" />
+    </Card>
 
 
 
@@ -6589,6 +6624,16 @@
         <Skill type="冰与火之歌" level="0" unlock="0" />
         <Skill type="雪影分身" level="0" unlock="5" />
         <Skill type="同调" level="0" unlock="10" />
+    </Card>
+    <Card id="6118" name="饲育之母" wikiId="" race="魔族" speed="3" star="5" cost="22" incrCost="2" at="640" hp="1655" incrAT="45" incrHP="50">
+        <Skill type="压制" level="0" unlock="0" />
+        <Skill type="寄生" level="0" unlock="5" />
+        <Skill type="成长" level="0" unlock="10" />
+    </Card>
+    <Card id="6119" name="饲育之母子嗣" wikiId="" race="魔族" speed="3" star="5" cost="99" incrCost="0" at="600" hp="1600" incrAT="45" incrHP="50">
+        <Skill type="鲜血记忆" level="0" unlock="0" />
+        <Skill type="滋养" level="0" unlock="5" />
+        <Skill type="守护" level="0" unlock="10" />
     </Card>
 
     <!-- 测试卡 -->

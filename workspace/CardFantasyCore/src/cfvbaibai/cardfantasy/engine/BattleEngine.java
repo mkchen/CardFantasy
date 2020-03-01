@@ -10,6 +10,8 @@ import cfvbaibai.cardfantasy.data.PlayerInfo;
 import cfvbaibai.cardfantasy.data.Rune;
 import cfvbaibai.cardfantasy.data.Skill;
 import cfvbaibai.cardfantasy.data.SkillType;
+import cfvbaibai.cardfantasy.engine.skill.MouseGuard;
+import cfvbaibai.cardfantasy.engine.skill.Offspring;
 import cfvbaibai.cardfantasy.engine.skill.Petrifaction;
 import cfvbaibai.cardfantasy.engine.skill.TrumpetHorn;
 
@@ -365,6 +367,8 @@ public class BattleEngine {
             resolver.resolveDebuff(myField.getCard(i), CardStatusType.咒怨);
             resolver.resolveAddATDebuff(myField.getCard(i), CardStatusType.咒怨);
             TrumpetHorn.explode(resolver,myField.getCard(i)); //深渊号角返回手牌
+            Offspring.explode(resolver,myField.getCard(i),"饲育之母子嗣"); //寄生触发
+            MouseGuard.explode(resolver,myField.getCard(i),getInactivePlayer()); //触发庚子守护
 
             Petrifaction.reset(myField.getCard(i),1); //重置技能
             resolver.removeStatus(myField.getCard(i), CardStatusType.石化);
@@ -430,6 +434,7 @@ public class BattleEngine {
         if (myField.getCard(i) == null) {
             return;
         }
+        MouseGuard.explodePre(resolver,myField.getCard(i),getInactivePlayer());
         resolver.resolvePreAttackSkills(myField.getCard(i), getInactivePlayer(),0);
         if (myField.getCard(i) == null||myField.getCard(i).getStatus().containsStatus(CardStatusType.不屈)) {
             return;

@@ -9,10 +9,17 @@ import java.util.List;
 
 public final class Scapegoat {
     public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, CardInfo card) throws HeroDieSignal {
-        if (card.hasUsed(skillUseInfo)) {
+        int number = skillUseInfo.getSkillNumber();
+        if(number==0)
+        {
             return;
         }
-        card.setUsed(skillUseInfo);
+        if(number<0)
+        {
+            number = 1;
+            skillUseInfo.setSkillNumber(1);
+        }
+        skillUseInfo.setSkillNumber(number-1);
         Skill skill = skillUseInfo.getSkill();
         Player player = card.getOwner();
         StageInfo stage = resolver.getStage();
