@@ -189,6 +189,7 @@ public enum SkillType {
     地狱烈火("", 500, 0, 100, 0, SkillTag.魔法),
     火烧连营("", 150, 0, 60, 0, SkillTag.魔法),
     权倾朝野("", 200, 0, 70, 0, SkillTag.魔法),
+    能量转化("", 250, 0, 40, 0, SkillTag.魔法),
     邪龙之怒("", 500, 0, SkillTag.魔法),
     侵略火("", 210, 0, 90, 0, SkillTag.魔法),
     彻骨霜火("", 200, 0, 40, 0, SkillTag.魔法),
@@ -628,6 +629,7 @@ public enum SkillType {
 
     代罪("", 999999,0, SkillTag.魔王无效, SkillTag.抗免疫,SkillTag.即死,SkillTag.抗不屈),
     紊乱("", 999999,0, SkillTag.魔王无效, SkillTag.抗免疫,SkillTag.即死,SkillTag.抗不屈),
+    风雨无阻("", 999999,0, SkillTag.魔王无效, SkillTag.抗免疫,SkillTag.即死,SkillTag.抗不屈),
     神鬼之医("", 999999,0,2,0, SkillTag.魔王无效, SkillTag.抗免疫,SkillTag.即死,SkillTag.抗不屈),
 
 
@@ -856,6 +858,7 @@ public enum SkillType {
     无尽梦魇("", 0, 0, SkillTag.召唤, SkillTag.不可洗炼),
     百鬼夜行("", 0, 0, SkillTag.召唤, SkillTag.不可洗炼),
     武形降临("", 0, 0, SkillTag.召唤, SkillTag.不可洗炼),
+    神兽降世("", 0, 0, SkillTag.召唤, SkillTag.不可洗炼),
     万兽奔腾("", 0, 0, SkillTag.召唤, SkillTag.不可洗炼),
     爱之召唤("", 0, 0, SkillTag.召唤, SkillTag.不可洗炼),
     仙子召唤("", 0, 0, SkillTag.召唤, SkillTag.不可洗炼),
@@ -920,6 +923,8 @@ public enum SkillType {
     幽魂铁骑("",0,0, SkillTag.不可洗炼,SkillTag.召唤),
     反间("", 3000, 0, SkillTag.魔王无效,SkillTag.召唤),
     意外的挖掘("", 0, 0, SkillTag.召唤, SkillTag.不可洗炼),
+    圣诞惊喜("", 0, 0, SkillTag.召唤, SkillTag.不可洗炼),
+    圣诞礼物("", 0, 0, SkillTag.召唤, SkillTag.不可洗炼),
     海滨乐园("",0,0, SkillTag.不可洗炼,SkillTag.召唤),
     号令三军("",0,0, SkillTag.不可洗炼,SkillTag.召唤),
     如影随形("",0,0, SkillTag.不可洗炼,SkillTag.召唤),
@@ -971,6 +976,7 @@ public enum SkillType {
     魏之恋("", 1, 0,SkillTag.抗夺魂),
     残影("", 3, 0,SkillTag.抗夺魂),
     魔偶替身("", 2, 0,SkillTag.抗夺魂),
+    雪影分身("", 1, 0,SkillTag.抗夺魂),
     风暴之主("", 2, 0,SkillTag.抗夺魂),
     吴之悌("", 1, 0,SkillTag.抗夺魂),
     吴之恋("", 1, 0,SkillTag.抗夺魂),
@@ -1304,6 +1310,7 @@ public enum SkillType {
     致命晶莹("",SkillType.霜火炸弹,0,null,0),
     乐不思蜀("",SkillType.治愈音符,0,null,0),
     御魔屏障("",SkillType.魔甲,2,null,0),
+    魔力护甲("",SkillType.魔甲,9,null,0),
     邪恶光环("",SkillType.生命吸取,0,null,0),
     荆棘刺盾("",SkillType.荆棘术,7,null,0),
     共生链接("",SkillType.生命链接,0,null,0),
@@ -1368,6 +1375,7 @@ public enum SkillType {
     神圣放逐("",0,SkillTag.魔王无效,SkillTag.抗免疫),
     天使降临("", SkillType.灵魂消散,0,SkillType.神圣放逐,0),
     放逐("",1,0,SkillTag.魔王无效,SkillTag.抗免疫),
+    觉醒孤胆英雄("", SkillType.放逐, 0, SkillType.浩劫, 0),
     放逐之刃("",SkillType.放逐之雷,0,SkillType.放逐,0),
     //对己方发动
     溃散("",0,SkillTag.魔王无效,SkillTag.抗免疫),
@@ -1519,7 +1527,9 @@ public enum SkillType {
 
     封魔神剑("", 444, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
     对决("", 400, 0, 40,0,SkillTag.永久, SkillTag.基础攻击加成),
+    裂地("", 0, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
     暗影奇袭("", 400, 0, 100,0,SkillTag.永久, SkillTag.基础攻击加成),
+    狩猎("", 0, 0, 100,0,SkillTag.永久, SkillTag.基础攻击加成),
     花果山美猴王("", 200, 0, 50,0,SkillType.救命毫毛,0,null,0,SkillTag.召唤,SkillTag.永久, SkillTag.基础攻击加成),
 
     //腐化之地
@@ -1562,6 +1572,11 @@ public enum SkillType {
     装备震击("", 400, 100, 3, 0, SkillTag.抗免疫, SkillTag.不可洗炼),
     装备顺劈("", 0, 1, 1, 0, new int[] { 0, 250, 650, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200 },SkillTag.抗免疫, SkillTag.不可洗炼),
     装备饮魂("", 200,100,0,1, SkillTag.不可洗炼),
+    装备恶魔诅咒("31145", 2000),
+    装备咒怨("",2,0,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
+
+    
+    
 
 
 
@@ -1576,40 +1591,24 @@ public enum SkillType {
     // 待更新列表：
 //    魔咒之骸("", 0),
     万蛛之后("", 0),
-    三个首都("", 0),
-    三姐的新年贺词("", 0),
     丰盛的晚餐("", 0),
-    二姐的新年贺词("", 0),
-    五星荣耀("", 0),
     众神之神("", 0),
-    傲慢惩罚者("", 0),
 //    光灿侍女("", 0),
 //    晚会之星鬼魂("", 0),
 //    晚会之星魔女("", 0),
     晨星之子("", 0),
     智慧("", 0),
-    暗夜唤灵法师("", 0),
-    暗夜死灵术士("", 0),
-    暗夜皎月女神("", 0),
-    暗夜阴影佣兵("", 0),
     暗夜鬼魅刺客("", 0),
     暗夜魔剑骑士("", 0),
-    暴食惩罚者("", 0),
-    极秘("", 0),
     梦境侍女("", 0),
 //    樱魂冠冕圣女("", 0),
-//    樱魂律法圣女("", 0),
 //    樱魂心控圣女("", 0),
-//    樱魂战神圣女("", 0),
-//    樱魂灵力圣女("", 0),
-//    樱魂诡诈圣女("", 0),
-    歌姬魔偶("", 0),
+    //歌姬魔偶("", 0),
     武斗侍女("", 0),
-    毁灭之神("", 0),
-    治愈侍女("", 0),
+    //毁灭之神("", 0),
+    //治愈侍女("", 0),
 //    玉女("", 0),
 //    生命侍女("", 0),
-//
 //    黄金战士("", 0),
     齐天小猴王("", 0);
 

@@ -98,6 +98,10 @@
                 <option value="-123">火符文</option>
                 <option value="-124">土符文</option>
                 <option value="-125">全符文</option>
+                    <option value="-140">精选契约</option>
+                    <option value="-141">契约</option>
+                    <option value="-150">精选装备</option>
+                    <option value="-151">装备</option>
             </select>
         <a data-role="button" data-mini="true" data-type="bug" href="#">提BUG</a>
             

@@ -86,6 +86,16 @@ public class OneDimensionDataStat {
         }
         return sum;
     }
+    public double getSumBoss() {
+        double sum = 0.0;
+        for (double data : this.dataList) {
+            if(data > 199999){
+                data = 199999;
+            }
+            sum += data;
+        }
+        return sum;
+    }
 
     public double getAverage() {
         int count = this.getCount();
@@ -93,6 +103,13 @@ public class OneDimensionDataStat {
             throw new CardFantasyRuntimeException("Cannot get average on empty data set.");
         }
         return this.getSum() / count;
+    }
+    public double getAverageBoss() {
+        int count = this.getCount();
+        if (count == 0) {
+            throw new CardFantasyRuntimeException("Cannot get average on empty data set.");
+        }
+        return this.getSumBoss() / count;
     }
 
     public double getCoefficientOfVariation() {

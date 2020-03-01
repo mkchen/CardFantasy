@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Grudge {
-    public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo attackCard, Player defenderHero,int victimCount) throws HeroDieSignal {
+    public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, EntityInfo attackCard, Player defenderHero,int victimCount) throws HeroDieSignal {
 
         StageInfo stage = resolver.getStage();
         Randomizer random = stage.getRandomizer();

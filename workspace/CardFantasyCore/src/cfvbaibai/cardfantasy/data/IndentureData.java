@@ -35,7 +35,7 @@ public enum IndentureData {
     王国的惩戒("", 10, 1, IndentureActivator.myGrave(10, Race.KINGDOM)),
     森林的复仇("", 10, 1, IndentureActivator.myGrave(10, Race.FOREST)),
     蛮荒的反攻("", 10, 1, IndentureActivator.myGrave(10, Race.SAVAGE)),
-    地狱的复仇("", 10, 1, IndentureActivator.myGrave(10, Race.HELL)),
+    地狱的诅咒("", 10, 1, IndentureActivator.myGrave(10, Race.HELL)),
     预备队("", 10, 1, IndentureActivator.myGrave(10, null)),
 
     正义联军("", 5, 1, IndentureActivator.doubleOrRace(5)),

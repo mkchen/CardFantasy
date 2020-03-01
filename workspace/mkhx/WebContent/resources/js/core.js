@@ -390,9 +390,9 @@ var playMapGame = function(count) {
     var map = getMap();
     if(count == -110){                                  //强度选卡时，选择范围为几星卡和符文类别
         count = $('#select-map-game-level').val() + $('#cnt-map-game-level').val();
-    }else if(count == -100 || count == -101){
-        count = count + $('#cnt-map-game-level').val();
-    }else if(count == 1000){
+    }else if(count == -100 || count == -101){           //强度排序和15级排序
+        count = count + $('#cnt-map-game-level').val(); 
+    }else if(count == 1000){                            //普通模拟
         count = $('#cnt-map-game-level').val();
         if(count == 1){
             count = 10;
@@ -401,6 +401,12 @@ var playMapGame = function(count) {
         }else if(count == 3){
             count = 1000;
         }else if(count == 4){
+            count = 10000;
+        }else if(count == 5){
+            count = 100;
+        }else if(count == 6){
+            count = 1000;
+        }else if(count == 7){
             count = 10000;
         }
     }
@@ -839,12 +845,14 @@ $(document)
 .on("pageinit", "#lilith-battle", function(event) {
     var updateRemainingHp = function() {
         var lilithName = $('#lilith-name').val();
-        if (lilithName.indexOf('困难') >= 0) {
+        if (lilithName.indexOf('困难莉') >= 0) {
             $('#lilith-remaining-hp').val(90000);
-        } else if (lilithName.indexOf('噩梦') >= 0) {
+        } else if (lilithName.indexOf('噩梦莉') >= 0) {
             $('#lilith-remaining-hp').val(160000);
-        } else if (lilithName.indexOf('炼狱') >= 0) {
+        } else if (lilithName.indexOf('炼狱莉') >= 0) {
             $('#lilith-remaining-hp').val(250000);
+        } else if (lilithName.indexOf('试炼') >= 0) {
+            $('#lilith-remaining-hp').val(400000);
         }
     };
     var updateCustomLilithGuardsVisibility = function () {

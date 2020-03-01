@@ -535,8 +535,13 @@
         <Skill type="寒霜护佑" level="0" unlock="5" />
         <Skill type="转生" level="6" unlock="10" />
     </Card>
+    <Card id="1501" name="领航者" wikiId="30922" race="王国" speed="3" star="4" cost="15" incrCost="2" at="450" hp="1350" incrAT="35" incrHP="35">
+        <Skill type="铁壁" level="4" unlock="0" />
+        <Skill type="镜像" level="0" unlock="5" death="true"/>
+        <Skill type="风雨无阻" level="6" unlock="10" />
+    </Card>
 
-    <Card id="1501" name="降临天使" wikiId="30922" race="王国" speed="4" star="5" cost="15" incrCost="3" at="365" hp="1800" incrAT="24" incrHP="24">
+    <Card id="11501" name="降临天使" wikiId="30922" race="王国" speed="4" star="5" cost="15" incrCost="3" at="365" hp="1800" incrAT="24" incrHP="24">
         <Skill type="魔甲" level="8" unlock="0" />
         <Skill type="送还" level="0" unlock="5" />
         <Skill type="甘霖" level="8" unlock="10" />
@@ -982,7 +987,7 @@
     <Card id="1587" name="玫瑰甜心" wikiId="" race="王国" speed="2" star="5" cost="18" incrCost="2" at="390" hp="1720" incrAT="41" incrHP="37">
         <Skill type="爱之召唤" level="0" unlock="0" />
         <Skill type="燕返" level="0" unlock="5" />
-        <Skill type="镜像" level="0" unlock="10"  death="true"/>
+        <Skill type="镜像" level="0" unlock="10" death="true"/>
     </Card>
     <Card id="1588" name="迷糊女仆" wikiId="" race="王国" speed="0" star="4" cost="14" incrCost="2" at="300" hp="1410" incrAT="37" incrHP="28">
         <Skill type="炼金失败" level="0" unlock="0" />
@@ -1568,7 +1573,50 @@
         <Skill type="魂之枷锁" level="0" unlock="5" />
         <Skill type="灵魂消散" level="0" unlock="10" />
     </Card>
-
+    <Card id="1705" name="圣诞之夜" wikiId="" race="王国" speed="4" star="5" cost="19" incrCost="2" at="625" hp="1418" incrAT="40" incrHP="40">
+        <Skill type="圣诞惊喜" level="0" unlock="0" />
+        <Skill type="圣诞礼物" level="0" unlock="5" />
+        <Skill type="连续魔法" level="5" unlock="10" />
+    </Card>
+    <Card id="11706" name="圣诞帽" wikiId="" race="王国" speed="6" star="5" cost="99" incrCost="0" at="500" hp="1000" incrAT="0" incrHP="0">
+        <Skill type="全体阻碍" level="1" unlock="0" summon="true"/>
+        <Skill type="自毁" level="0" unlock="5" summon="true"/>
+    </Card>
+    <Card id="11707" name="圣诞袜" wikiId="" race="王国" speed="6" star="5" cost="99" incrCost="0" at="500" hp="1000" incrAT="0" incrHP="0">
+        <Skill type="全体加速" level="1" unlock="0" summon="true"/>
+        <Skill type="自毁" level="0" unlock="5" summon="true"/>
+    </Card>
+    <Card id="11708" name="小鹿" wikiId="" race="王国" speed="6" star="5" cost="99" incrCost="0" at="500" hp="1000" incrAT="0" incrHP="0">
+        <Skill type="退散" level="0" unlock="0" summon="true"/>
+        <Skill type="自毁" level="0" unlock="5" summon="true"/>
+    </Card>
+    <Card id="11709" name="圣诞晚餐" wikiId="" race="王国" speed="6" star="5" cost="99" incrCost="0" at="500" hp="1000" incrAT="0" incrHP="0">
+        <Skill type="祈祷" level="8" unlock="0" summon="true"/>
+        <Skill type="祈祷" level="8" unlock="0" summon="true"/>
+        <Skill type="祈祷" level="8" unlock="0" summon="true"/>
+        <Skill type="自毁" level="0" unlock="5" summon="true"/>
+    </Card>
+    <Card id="11710" name="雪人" wikiId="" race="王国" speed="6" star="5" cost="99" incrCost="0" at="500" hp="1000" incrAT="0" incrHP="0">
+        <Skill type="诅咒" level="10" unlock="0" summon="true"/>
+        <Skill type="诅咒" level="10" unlock="0" summon="true"/>
+        <Skill type="诅咒" level="10" unlock="0" summon="true"/>
+        <Skill type="诅咒" level="10" unlock="0" summon="true"/>
+        <Skill type="诅咒" level="1" unlock="0" summon="true"/>
+        <Skill type="自毁" level="0" unlock="5" summon="true"/>
+    </Card>
+    <Card id="1706" name="南山唤龙" wikiId="" race="王国" speed="3" star="5" cost="18" incrCost="2" at="580" hp="1630" incrAT="46" incrHP="48">
+        <Skill type="神兽降世" level="0" unlock="0" summon="true" />
+        <Skill type="铁壁" level="4" unlock="5" />
+        <Skill type="祈福" level="7" unlock="5" death="true" />
+        <Skill type="镜面" level="0" unlock="10" />
+        <Skill type="不灭" level="6" unlock="10" />
+    </Card>
+    <Card id="1707" name="黄金镖客" wikiId="" race="王国" speed="3" star="5" cost="18" incrCost="2" at="580" hp="1580" incrAT="40" incrHP="40">
+        <Skill type="星云锁链" level="0" unlock="0" />
+        <Skill type="祈愿" level="2" unlock="0" />
+        <Skill type="全体加速" level="1" unlock="5" />
+        <Skill type="终焉脱壳" level="0" unlock="10" />
+    </Card>
 
 
 
@@ -2884,7 +2932,26 @@
         <Skill type="扼杀" level="0" unlock="5" />
         <Skill type="重整" level="0" unlock="10" />
     </Card>
-
+    <Card id="2670" name="病毒终结" wikiId="" race="森林" speed="3" star="5" cost="18" incrCost="2" at="530" hp="1520" incrAT="43" incrHP="46">
+        <Skill type="神性祈求" level="0" unlock="0" />
+        <Skill type="灵魂消散" level="0" unlock="0" />
+        <Skill type="生命符文" level="5" unlock="5" />
+        <Skill type="魔力护甲" level="0" unlock="10" />
+    </Card>
+    <Card id="2671" name="丛林使者" wikiId="" race="森林" speed="3" star="5" cost="18" incrCost="2" at="530" hp="1605" incrAT="41" incrHP="42">
+        <Skill type="祈福" level="5" unlock="0" />
+        <Skill type="诅咒" level="66" unlock="0" />
+        <Skill type="号角" level="0" unlock="5" summon="true"/>
+        <!--Skill type="传承之力" level="0" unlock="5" /-->
+        <Skill type="卧薪尝胆" level="0" unlock="10" />
+    </Card>
+    <Card id="2672" name="宣花斧" wikiId="" race="森林" speed="3" star="5" cost="20" incrCost="2" at="525" hp="1540" incrAT="40" incrHP="46">
+        <Skill type="裂地" level="0" unlock="0" />
+        <Skill type="裂地" level="0" unlock="0" />
+        <Skill type="裂地" level="0" unlock="0" />
+        <Skill type="战术性撤退" level="0" unlock="5" />
+        <!--Skill type="勇武" level="0" unlock="10" /-->
+    </Card>
 
 
     <!-- 蛮荒  -->
@@ -4198,6 +4265,15 @@
         <Skill type="雷霆一击" level="6" unlock="5"  summon="true"/>
         <Skill type="游击" level="0" unlock="10" />
     </Card>
+    <Card id="3659" name="黄昏镖客" wikiId="" race="蛮荒" speed="3" star="5" cost="18" incrCost="2" at="550" hp="1550" incrAT="40" incrHP="40">
+        <Skill type="觉醒孤胆英雄" level="0" unlock="0"  summon="true"/>
+        <Skill type="金汤" level="5" unlock="5"  summon="true"/>
+        <Skill type="连续魔法" level="7" unlock="10" />
+    </Card>
+
+
+
+
 
 
 
@@ -4514,7 +4590,7 @@
         <Skill type="二重狙击" level="8" unlock="5" />
         <Skill type="迷魂" level="8" unlock="10" />
     </Card>
-    <!--  BUGBUG: Need to move 刀锋女王 to 45xx -->
+        <!--  BUGBUG: Need to move 刀锋女王 to 45xx -->
     <Card id="4413" name="刀锋女王" wikiId="40082" race="地狱" speed="4" star="5" cost="17" incrCost="1" at="355" hp="1410" incrAT="28" incrHP="30">
         <Skill type="吸血" level="6" unlock="0" />
         <Skill type="复仇" level="7" unlock="5" />
@@ -4680,6 +4756,14 @@
         <Skill type="复活" level="0" unlock="5" />
         <Skill type="送葬之刃" level="6" unlock="10" />
     </Card>
+    <Card id="4445" name="地狱魔龙" wikiId="" race="地狱" speed="3" star="4" cost="15" incrCost="2" at="168" hp="749" incrAT="40" incrHP="30">
+        <Skill type="凋零真言" level="8" unlock="0" summon="true"/>
+        <Skill type="凋零真言" level="8" unlock="0" postcast="true" />
+        <Skill type="狩猎" level="0" unlock="5" />
+        <Skill type="浴火重生" level="0" unlock="10" />
+    </Card>
+
+
     <Card id="4501" name="毁灭之龙" wikiId="31064" race="地狱" speed="4" star="5" cost="14" incrCost="2" at="350" hp="1270" incrAT="34" incrHP="34">
         <Skill type="暴击" level="6" unlock="0" />
         <Skill type="裂伤" level="0" unlock="5" />
@@ -5691,6 +5775,22 @@
         <Skill type="免疫" level="0" unlock="5" />
         <Skill type="魔族之血" level="0" unlock="10" />
     </Card>
+    <Card id="4700" name="烈焰南瓜" wikiId="" race="地狱" speed="3" star="5" cost="17" incrCost="2" at="550" hp="1580" incrAT="42" incrHP="45">
+        <Skill type="能量转化" level="0" unlock="0"  summon="true" />
+        <!--Skill type="觉醒：放逐" level="0" unlock="5" /-->
+        <Skill type="烈火炙魂" level="0" unlock="10" />
+    </Card>
+    <Card id="4701" name="蝙蝠恶魔" wikiId="" race="地狱" speed="3" star="5" cost="18" incrCost="2" at="540" hp="1515" incrAT="44" incrHP="45">
+        <Skill type="王国卫士" level="0" unlock="0" />
+        <Skill type="同调" level="0" unlock="5" summon="true" />
+        <Skill type="不屈" level="0" unlock="5" />
+        <Skill type="妖狐火焰" level="0" unlock="10" />
+    </Card>
+    <Card id="4702" name="深海人鱼" wikiId="" race="地狱" speed="3" star="5" cost="18" incrCost="2" at="495" hp="1510" incrAT="43" incrHP="43">
+        <Skill type="幻影奇袭" level="0" unlock="0" />
+        <Skill type="末世术" level="9" unlock="5" />
+        <Skill type="坚毅" level="0" unlock="10" />
+    </Card>
 
 
 
@@ -6053,6 +6153,7 @@
         <Skill type="魔神之甲" level="6" unlock="10" />
         <Skill type="破魔手" level="10" unlock="10" />
         <Skill type="神威" level="0" unlock="10" />
+        <Skill type="奋战" level="1" unlock="10" />
     </Card>
     <Card id="5619" name="试炼·毁灭之神" wikiId="" race="魔神" speed="4" star="5" cost="99" incrCost="0" at="1200" hp="5600" incrAT="0" incrHP="0">
         <Skill type="邪灵汲取" level="8" unlock="0" />
@@ -6084,7 +6185,7 @@
     </Card>
     <Card id="5623" name="试炼·深渊影魔" wikiId="" race="魔神" speed="4" star="5" cost="99" incrCost="0" at="1500" hp="4800" incrAT="0" incrHP="0">
         <Skill type="弱点攻击" level="0" unlock="0" />
-        <Skill type="群体追击" level="10" unlock="5" />
+        <Skill type="毒刃" level="0" unlock="5" />
         <Skill type="魔神之甲" level="6" unlock="10" />
         <Skill type="天火" level="7" unlock="10" />
         <Skill type="免疫" level="0" unlock="10" />
@@ -6416,6 +6517,12 @@
         <Skill type="神谴" level="0" unlock="0" />
         <Skill type="厄运缠身" level="0" unlock="5" />
         <Skill type="邪影智蚀" level="0" unlock="10" />
+    </Card>
+    <Card id="6117" name="冰焰魔女" wikiId="" race="魔族" speed="3" star="4" cost="17" incrCost="2" at="500" hp="1450" incrAT="40" incrHP="45">
+        <!--Skill type="冰封之境" level="0" unlock="0" /-->
+        <Skill type="圣炎" level="0" unlock="0" />
+        <Skill type="雪影分身" level="0" unlock="5" />
+        <Skill type="同调" level="0" unlock="10" />
     </Card>
 
     <!-- 测试卡 -->

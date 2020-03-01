@@ -25,7 +25,8 @@ public class BossGameResult {
         this.totalCost = totalCost;
         this.timeoutCount = timeoutCount;
         this.minDamage = stat.getMin();
-        this.avgDamage = stat.getAverage();
+        //this.avgDamage = stat.getAverage();
+        this.avgDamage = stat.getAverageBoss();
         this.avgDamagePerMinute = this.avgDamage * (double)60 / (double)coolDown;
         this.maxDamage = stat.getMax();
         this.cvDamage = stat.getCoefficientOfVariation();
@@ -106,3 +107,4 @@ public class BossGameResult {
         this.lastDetail = lastDetail;
     }
 }
+
