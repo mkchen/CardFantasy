@@ -1518,11 +1518,11 @@ public enum SkillType {
     咒怨(2,0,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
     毒刃攻心(4,0,300,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
     威震天下(2,0,300,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
-    魔龙诅咒(2,0,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
-    暗黑咒术(2,0,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
-    幽冥诅咒(2,0,650,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
-    白衣渡江(4,0,800,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
-    默示(2,0,1000,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
+    魔龙诅咒(2,0,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.魔王无效),
+    暗黑咒术(2,0,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.魔王无效),
+    幽冥诅咒(2,0,650,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.魔王无效),
+    白衣渡江(4,0,800,0,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
+    默示(2,0,1000,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.魔王无效),
     人体炼成(0, SkillTag.魔王无效, SkillTag.魔族天赋,SkillTag.召唤),
     海滨大作战(0,0,SkillType.锁魂,0,SkillType.二重大灵轰,0),
     死亡链接(5,0, SkillTag.抗免疫,SkillTag.魔王无效),
@@ -1643,7 +1643,8 @@ public enum SkillType {
     装备顺劈(0, 1, 1, 0, new int[] { 0, 250, 650, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200 },SkillTag.抗免疫),
     装备饮魂(200,100,0,1),
     装备恶魔诅咒(2000,0,0,1),
-    装备瘟疫蔓延(0,1,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效);
+    装备瘟疫蔓延(0,1,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
+    装备雷神之锤(1000,0,3,0, SkillTag.抗免疫);
 
 
     // 以下全部技能皆为待更新的空技能，请在更新之后将其移动到上面适合的位置

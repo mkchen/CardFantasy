@@ -365,7 +365,9 @@ public class BattleEngine {
             resolver.removeStatus(myField.getCard(i), CardStatusType.扩散);
             resolver.resolveDebuff(myField.getCard(i), CardStatusType.远古);
             resolver.resolveDebuff(myField.getCard(i), CardStatusType.咒怨);
+            resolver.resolveDebuff(myField.getCard(i), CardStatusType.咒皿);
             resolver.resolveAddATDebuff(myField.getCard(i), CardStatusType.咒怨);
+            resolver.resolveAddATDebuff(myField.getCard(i), CardStatusType.咒恨);
             TrumpetHorn.explode(resolver,myField.getCard(i)); //深渊号角返回手牌
             Offspring.explode(resolver,myField.getCard(i),"饲育之母子嗣"); //寄生触发
             MouseGuard.explode(resolver,myField.getCard(i),getInactivePlayer()); //触发庚子守护
@@ -406,6 +408,8 @@ public class BattleEngine {
             // 解除状态
             resolver.removeStatus(myField.getCard(i), CardStatusType.中毒);
             resolver.removeStatus(myField.getCard(i), CardStatusType.咒怨);
+            resolver.removeStatus(myField.getCard(i), CardStatusType.咒恨);
+            resolver.removeStatus(myField.getCard(i), CardStatusType.咒皿);
             resolver.removeStatus(myField.getCard(i), CardStatusType.远古);
             ui.cardActionEnds(card);
         }

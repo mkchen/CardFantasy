@@ -340,7 +340,7 @@ public class SkillResolver {
                         ReformingAwaken.reset(skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.无刀取 || skillUseInfo.getType() == SkillType.神圣领域) {
                         HolyShield.resetApply(skillUseInfo, this, card);
-                    } else if (skillUseInfo.getType() == SkillType.神鬼之医) {
+                    } else if (skillUseInfo.getType() == SkillType.神鬼之医 || skillUseInfo.getType() == SkillType.逆转之矢) {
                         DisorderMult.reset(skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.棋布星罗 || skillUseInfo.getType() == SkillType.同调) {
                         ScatterHereAndThere.reset(skillUseInfo, card);
@@ -1146,8 +1146,10 @@ public class SkillResolver {
                 Crumbling.apply(this, skillUseInfo.getSkill(), attacker, defender, 1, 1);
             } else if (skillUseInfo.getType() == SkillType.咒怨) {
                 Grudge.apply(this, skillUseInfo, attacker, defender, 2);
-            } else if (skillUseInfo.getType() == SkillType.白衣渡江 || skillUseInfo.getType() == SkillType.魔龙诅咒 || skillUseInfo.getType() == SkillType.暗黑咒术) {
-                Grudge.apply(this, skillUseInfo, attacker, defender, 1);
+            } else if (skillUseInfo.getType() == SkillType.白衣渡江) {
+                GrudgeAt.apply(this, skillUseInfo, attacker, defender, 1);
+            } else if (skillUseInfo.getType() == SkillType.魔龙诅咒 || skillUseInfo.getType() == SkillType.暗黑咒术) {
+                GrudgeHp.apply(this, skillUseInfo, attacker, defender, 1);
             } else if (skillUseInfo.getType() == SkillType.帝国光辉) {
                 Bless.apply(skillUseInfo.getAttachedUseInfo1().getSkill(), this, attacker);
                 Rainfall.apply(skillUseInfo.getAttachedUseInfo2().getSkill(), this, attacker);
@@ -2397,7 +2399,7 @@ public class SkillResolver {
                 } else if (deadCardSkillUseInfo.getType() == SkillType.龙城之志) {
                     Summon.apply(this, deadCardSkillUseInfo, deadCard, SummonType.Normal, 1, deadCard.getName());
                 } else if (deadCardSkillUseInfo.getType() == SkillType.默示) {
-                    Grudge.apply(this, deadCardSkillUseInfo, deadCard, opponent, 2);
+                    GrudgeHp.apply(this, deadCardSkillUseInfo, deadCard, opponent, 2);
                 } else if (deadCardSkillUseInfo.getType() == SkillType.哀歌) {
                     Bless.apply(deadCardSkillUseInfo.getAttachedUseInfo1().getSkill(), this, deadCard);
                     HeavenWrath.apply(this, deadCardSkillUseInfo.getAttachedUseInfo2().getSkill(), deadCard, opponent);
@@ -2516,6 +2518,10 @@ public class SkillResolver {
                     HumanRefining.explode(this, deadCard, result, "进化材料");
                 } else if (item.getType() == CardStatusType.咒怨) {
                     Grudge.Infected(this, deadCard);
+                } else if (item.getType() == CardStatusType.咒恨) {
+                    GrudgeAt.Infected(this, deadCard);
+                } else if (item.getType() == CardStatusType.咒皿) {
+                    GrudgeHp.Infected(this, deadCard);
                 } else if (item.getType() == CardStatusType.链接) {
                     SoulLink.explode(this, deadCard);
                 } else if (item.getType() == CardStatusType.蛇影) {
@@ -3168,9 +3174,15 @@ public class SkillResolver {
                                 scapegoat = true;
                             }
                         }
-                    } else if (skillUseInfo.getType() == SkillType.神鬼之医 || skillUseInfo.getType() == SkillType.逆转之矢) {
+                    } else if (skillUseInfo.getType() == SkillType.神鬼之医) {
                         Player opponent = this.getStage().getOpponent(defender.getOwner());
-                        DisorderMult.apply(skillUseInfo, this, defender, opponent, 1);
+                        DisorderMult.apply(skillUseInfo, this, defender, opponent, 1,0);
+                        if (defender.getHP() > 0 && defender.isAlive()) {
+                            scapegoat = true;
+                        }
+                    } else if (skillUseInfo.getType() == SkillType.逆转之矢) {
+                        Player opponent = this.getStage().getOpponent(defender.getOwner());
+                        DisorderMult.apply(skillUseInfo, this, defender, opponent, 1,1);
                         if (defender.getHP() > 0 && defender.isAlive()) {
                             scapegoat = true;
                         }
@@ -4906,7 +4918,7 @@ public class SkillResolver {
                     if (SummonStopSkillUseInfoList.explode(this, card, enemy)) {
                         continue;
                     }
-                    Grudge.apply(this, skillUseInfo, card, enemy, 2);
+                    GrudgeHp.apply(this, skillUseInfo, card, enemy, 2);
                 } else if (skillUseInfo.getType() == SkillType.超能力光线) {
                     if (SummonStopSkillUseInfoList.explode(this, card, enemy)) {
                         if (SummonStopSkillUseInfoList.explode(this, card, enemy)) {
@@ -5936,6 +5948,10 @@ public class SkillResolver {
                 } else if (equipmentSkillUserInfo.getType() == SkillType.装备瘟疫蔓延) {
                     if (player.getOwner().getHP() < player.getOwner().getMaxHP() * 0.6) {
                         GrudgeByEquipment.apply(this, equipmentSkillUserInfo, equipmentInfo, enemy, 2, 2);
+                    }
+                } else if (equipmentSkillUserInfo.getType() == SkillType.装备雷神之锤) {
+                    if (enemy.getField().getAliveCards().size()>7) {
+                       RedGunByDamnationEquipment.apply(equipmentSkillUserInfo, this, equipmentInfo, enemy, 3);
                     }
                 }
 

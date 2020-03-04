@@ -29,6 +29,8 @@ public enum CardStatusType {
     离魂(false, "离"),
     失乐(false, "失"),
     咒怨(false, "怨"),
+    咒恨(false, "恨"),
+    咒皿(false, "皿"),
     链接(false, "链"),
     虚化(false, "虚"),
     王国(false, "王"),

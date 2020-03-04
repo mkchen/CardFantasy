@@ -170,6 +170,14 @@ public class CardStatusItem {
         return new CardStatusItem(CardStatusType.咒怨, effect, cause);
     }
 
+    public static CardStatusItem grudgeAt(int effect,SkillUseInfo cause) {
+        return new CardStatusItem(CardStatusType.咒恨, effect, cause);
+    }
+
+    public static CardStatusItem grudgeHp(int effect,SkillUseInfo cause) {
+        return new CardStatusItem(CardStatusType.咒皿, effect, cause);
+    }
+
     public static CardStatusItem ancientSummon(SkillUseInfo cause) {
         return new CardStatusItem(CardStatusType.海啸, 0, cause);
     }

@@ -56,7 +56,7 @@ public final class RemoveDebuffSkill {
                         }
                     }
                     deleteItems.add(cardStatusItem);
-                } else if (cardStatusItem.getType() == CardStatusType.咒怨) {
+                } else if (cardStatusItem.getType() == CardStatusType.咒怨 || cardStatusItem.getType() == CardStatusType.咒恨 || cardStatusItem.getType() == CardStatusType.咒皿) {
                     SkillUseInfo attackSkillUseInfo = cardStatusItem.getCause();
                     List<CardStatusItem> effectItems = cardStatus.getStatusOf(CardStatusType.沉默);
                     for(CardStatusItem effectItem:effectItems)
@@ -72,12 +72,19 @@ public final class RemoveDebuffSkill {
             }
             for(CardStatusItem deleteItem:deleteItems)
             {
-                if(deleteItem.getType() == CardStatusType.咒怨 || deleteItem.getType() == CardStatusType.虚化)
-                {
+                if(deleteItem.getType() == CardStatusType.咒怨) {
                    cardStatus.removeItem(deleteItem);
                     resolver.getStage().getUI().removeCardStatus(card, CardStatusType.咒怨);
-                }
-                else{
+                }else if(deleteItem.getType() == CardStatusType.咒恨){
+                    cardStatus.removeItem(deleteItem);
+                    resolver.getStage().getUI().removeCardStatus(card, CardStatusType.咒恨);
+                } else if(deleteItem.getType() == CardStatusType.咒皿){
+                    cardStatus.removeItem(deleteItem);
+                    resolver.getStage().getUI().removeCardStatus(card, CardStatusType.咒皿);
+                } else if(deleteItem.getType() == CardStatusType.虚化){
+                    cardStatus.removeItem(deleteItem);
+                    resolver.getStage().getUI().removeCardStatus(card, CardStatusType.虚化);
+                } else{
                     cardStatus.removeItem(deleteItem);
                     if(exitSkill.getType() == SkillType.归魂) {
                         RegressionSoul.apply(resolver, extraSkillUserInfo, attacker, defener);

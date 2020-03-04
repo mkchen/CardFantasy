@@ -17,7 +17,7 @@ public final class BurningByEquipment {
             }
         }
         Skill skill = skillUseInfo.getSkill();
-        int damage = skill.getImpact();
+        int damage = skill.getImpact3();
         GameUI ui = resolver.getStage().getUI();
         ui.useSkill(defender, attacker, skill, true);
         OnAttackBlockingResult result = resolver.resolveAttackBlockingSkills(defender, attacker, skill, damage);
