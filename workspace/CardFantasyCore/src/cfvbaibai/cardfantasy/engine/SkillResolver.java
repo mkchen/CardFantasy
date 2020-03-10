@@ -322,7 +322,7 @@ public class SkillResolver {
                     } else if (skillUseInfo.getType() == SkillType.魔王降临 || skillUseInfo.getType() == SkillType.魔王之怒) {
                         RaceChangeSelf.apply(this, skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.神谕 || skillUseInfo.getType() == SkillType.冰与火之歌) {
-                        SummonStopSkillUseInfoList.apply(this, skillUseInfo, defender);
+                        SummonStopSkillUseInfoList.apply(this, skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.棋布星罗 || skillUseInfo.getType() == SkillType.同调) {
                         ScatterHereAndThere.reset(skillUseInfo, card);
                     }
@@ -3389,8 +3389,7 @@ public class SkillResolver {
                     }
                 }
                 int remainingDamage = damage;
-                if (!(cardSkill != null && (cardSkill.getType() == SkillType.自动扣血 || cardSkill.getType() == SkillType.羽扇虎拳 || cardSkill.getType() == SkillType.天罡咒
-                        || cardSkill.getType() == SkillType.王者之风))) {
+                if (!(cardSkill != null && (cardSkill.getType() == SkillType.自动扣血))) {
                     remainingDamage = ImpregnableDefenseHeroBuff.explode(this, attacker, defenderPlayer, remainingDamage);
                 }
                 if (remainingDamage > defenderPlayer.getHP()) {
@@ -4986,7 +4985,7 @@ public class SkillResolver {
                             , null, null);
                     SoulCrash.apply(skillUseInfo, this, card, enemy);
                 } else if (skillUseInfo.getType() == SkillType.神谕 || skillUseInfo.getType() == SkillType.冰与火之歌) {
-                    SummonStopSkillUseInfoList.apply(this, skillUseInfo, enemy);
+                    SummonStopSkillUseInfoList.apply(this, skillUseInfo, card);
                 } else if (skillUseInfo.getType() == SkillType.断绝之翼) {
                     if (SummonStopSkillUseInfoList.explode(this, card, enemy)) {
                         continue;

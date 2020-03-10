@@ -44,7 +44,7 @@ public final class SuddenKill {
         if (defender.getHP() >= defender.getMaxHP() * threshold / 100) {
             return;
         }
-        if (defender.getRace() == Race.BOSS || defender.getRace() == Race.DEMON) {
+        if (defender.getRace() == Race.BOSS) {
             return;
         }
         resolver.getStage().getUI().useSkill(attacker, defender, skillUseInfo.getSkill(), true);
