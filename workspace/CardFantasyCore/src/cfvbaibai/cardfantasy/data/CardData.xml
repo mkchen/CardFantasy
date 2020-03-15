@@ -1637,6 +1637,16 @@
         <Skill type="结界立场" level="0" unlock="5" />
         <Skill type="星阵" level="0" unlock="10" />
     </Card>
+    <Card id="1709" name="百里" wikiId="" race="王国" speed="3" star="5" cost="20" incrCost="2" at="525" hp="1575" incrAT="43" incrHP="44">
+        <Skill type="嘲讽" level="0" unlock="0" />
+        <Skill type="威慑" level="0" unlock="5" />
+        <Skill type="不灭之志" level="0" unlock="10" />
+    </Card>
+    <Card id="1710" name="紫电" wikiId="" race="王国" speed="0" star="5" cost="20" incrCost="2" at="505" hp="1565" incrAT="46" incrHP="45">
+        <Skill type="星云锁链" level="0" unlock="0" />
+        <Skill type="风驰电掣" level="0" unlock="5" />
+        <Skill type="妖力驱散" level="0" unlock="10" />
+    </Card>
 
 
 
@@ -2988,6 +2998,11 @@
         <Skill type="云雾缭绕" level="0" unlock="0" />
         <Skill type="置换" level="0" unlock="5" />
         <Skill type="云隐时现" level="0" unlock="10" />
+    </Card>
+    <Card id="2676" name="青冥" wikiId="" race="森林" speed="3" star="5" cost="20" incrCost="2" at="530" hp="1550" incrAT="44" incrHP="45">
+        <Skill type="护体之刃" level="0" unlock="0" />
+        <Skill type="浴火重生" level="0" unlock="5" />
+        <Skill type="祈福" level="5" unlock="10" postcast="true"/>
     </Card>
 
 

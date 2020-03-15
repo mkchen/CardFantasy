@@ -183,6 +183,8 @@ public class SkillResolver {
                         Purify.apply(skillUseInfo, this, card, -1);
                     } else if (skillUseInfo.getType() == SkillType.驱魔) {
                         RemoveDebuffStatus.apply(skillUseInfo, this, card, -1);
+                    } else if (skillUseInfo.getType() == SkillType.妖力驱散) {
+                        RemoveDebuffStatus.apply(skillUseInfo, this, card, 4);
                     } else if (skillUseInfo.getType() == SkillType.以德服人) {
                         RemoveDebuffSkill.apply(skillUseInfo, this, card, -1, defender);
                     } else if (skillUseInfo.getType() == SkillType.圣灵之力) {
@@ -1410,7 +1412,8 @@ public class SkillResolver {
             } else if (skillUseInfo.getType() == SkillType.黄天太平) {
                 if (attacker.getOwner().getGrave().size() >= 1) {
                     RegressionSoul.apply(this, skillUseInfo.getAttachedUseInfo1(), attacker, defender);
-                } else {
+                }
+                if(attacker.getOwner().getGrave().size() < 1) {
                     Horn.apply(skillUseInfo.getAttachedUseInfo2(), this, attacker);
                 }
             } else if (skillUseInfo.getType() == SkillType.黑之诅咒) {
@@ -2676,7 +2679,7 @@ public class SkillResolver {
                             reincarnated = true;
                             break;
                         }
-                    } else if (deadCardSkillUseInfo.getType() == SkillType.不死金身) {
+                    } else if (deadCardSkillUseInfo.getType() == SkillType.不死金身 || deadCardSkillUseInfo.getType() == SkillType.不灭之志) {
                         if (MultipleReincarnation.apply(this, deadCardSkillUseInfo, deadCard, result.unbending, opponent, 40, 0, 40)) {
                             reincarnated = true;
                             break;
@@ -3635,8 +3638,7 @@ public class SkillResolver {
         int remainingDamage = damage;
         if (cardSkill == null) {
             remainingDamage = damage;
-        } else if (cardSkill.getType() == SkillType.自动扣血 || cardSkill.getType() == SkillType.羽扇虎拳 || cardSkill.getType() == SkillType.天罡咒
-                || cardSkill.getType() == SkillType.王者之风) {
+        } else if (cardSkill.getType() == SkillType.自动扣血) {
             return remainingDamage;
         }
 //        boolean exitFlag=true;
@@ -4835,7 +4837,7 @@ public class SkillResolver {
                     }
                     Summon.apply(this, skillUseInfo, card, SummonType.RandomSummoning, 1,
                             "东吴四杰·周瑜", "东吴四杰·鲁肃", "东吴四杰·吕蒙", "东吴四杰·陆逊");
-                } else if (skillUseInfo.getType() == SkillType.自我改造 || skillUseInfo.getType() == SkillType.成长) {
+                } else if (skillUseInfo.getType() == SkillType.自我改造 || skillUseInfo.getType() == SkillType.成长 || skillUseInfo.getType() == SkillType.不灭之志) {
                     SelfBuff.apply(this, skillUseInfo, card, SkillEffectType.MAXHP_CHANGE);
                 } else if (skillUseInfo.getType() == SkillType.冥界之力) {
                     SelfBuff.apply(this, skillUseInfo, card, SkillEffectType.ATTACK_CHANGE);
@@ -6216,6 +6218,8 @@ public class SkillResolver {
                     HolyFire.apply(skillUseInfo.getSkill(), this, card, defenderHero);
                 } else if (skillUseInfo.getType() == SkillType.地狱之火) {
                     Plague.apply(skillUseInfo, this, card, defenderHero);
+                } else if (skillUseInfo.getType() == SkillType.祈福) {
+                    Bless.apply(skillUseInfo.getSkill(), this, card);
                 }
             }
         }
