@@ -1593,7 +1593,7 @@ public enum SkillType {
     封魔神剑(444, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
     裂地斩(0, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
     对决(400, 0, 40,0,SkillTag.永久, SkillTag.基础攻击加成),
-    裂地(0, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
+    //裂地(0, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
     暗影奇袭(400, 0, 100,0,SkillTag.永久, SkillTag.基础攻击加成),
     狩猎(0, 0, 0,0),
     花果山美猴王(200, 0, 50,0,SkillType.救命毫毛,0,null,0,SkillTag.召唤,SkillTag.永久, SkillTag.基础攻击加成),

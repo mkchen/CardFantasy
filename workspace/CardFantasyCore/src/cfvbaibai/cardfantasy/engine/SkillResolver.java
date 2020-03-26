@@ -298,7 +298,7 @@ public class SkillResolver {
                         Reforming.reset(skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.烈火炙魂 || skillUseInfo.getType() == SkillType.据守) {
                         ReformingMult.reset(skillUseInfo, card);
-                    } else if (skillUseInfo.getType() == SkillType.代罪 || skillUseInfo.getType() == SkillType.紊乱) {
+                    } else if (skillUseInfo.getType() == SkillType.代罪 || skillUseInfo.getType() == SkillType.紊乱 || skillUseInfo.getType() == SkillType.风雨无阻) {
                         Reforming.reset(skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.风暴雷云) {
                         ReformingAwaken.reset(skillUseInfo, card);
@@ -334,7 +334,7 @@ public class SkillResolver {
                         Reforming.reset(skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.烈火炙魂 || skillUseInfo.getType() == SkillType.据守) {
                         ReformingMult.reset(skillUseInfo, card);
-                    } else if (skillUseInfo.getType() == SkillType.代罪 || skillUseInfo.getType() == SkillType.紊乱) {
+                    } else if (skillUseInfo.getType() == SkillType.代罪 || skillUseInfo.getType() == SkillType.紊乱 || skillUseInfo.getType() == SkillType.风雨无阻) {
                         Reforming.reset(skillUseInfo, card);
                     } else if (skillUseInfo.getType() == SkillType.风暴雷云) {
                         ReformingAwaken.reset(skillUseInfo, card);
@@ -3163,7 +3163,7 @@ public class SkillResolver {
                     } else if (skillUseInfo.getType() == SkillType.风雨无阻) {
                         if (!defender.hasUsed(skillUseInfo)) {
                             Player opponent = this.getStage().getOpponent(defender.getOwner());
-                            Disorder2.apply(skillUseInfo, this, defender, opponent);
+                            Disorder3.apply(skillUseInfo, this, defender, opponent);
                             if (defender.getHP() > 0 && defender.isAlive()) {
                                 scapegoat = true;
                             }

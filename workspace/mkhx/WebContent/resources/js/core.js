@@ -202,6 +202,12 @@ var playAutoGame = function(count) {
             count = 1000;
         }else if(count == 4){
             count = 10000;
+        }else if(count == 5){
+            count = 100;
+        }else if(count == 6){
+            count = 1000;
+        }else if(count == 7){
+            count = 10000;
         }
     }
     var postData = {
@@ -259,6 +265,12 @@ var playBossGame = function(count) {
         }else if(count == 3){
             count = 1000;
         }else if(count == 4){
+            count = 10000;
+        }else if(count == 5){
+            count = 100;
+        }else if(count == 6){
+            count = 1000;
+        }else if(count == 7){
             count = 10000;
         }
     }
@@ -350,6 +362,12 @@ var playLilithGame = function(count) {
         }else if(count == 3){
             count = 1000;
         }else if(count == 4){
+            count = 10000;
+        }else if(count == 5){
+            count = 100;
+        }else if(count == 6){
+            count = 1000;
+        }else if(count == 7){
             count = 10000;
         }
     }
@@ -450,7 +468,14 @@ var playDungeonsGame = function(count) {
                 count = 1000;
             }else if(count == 4){
                 count = 10000;
+            }else if(count == 5){
+                count = 100;
+            }else if(count == 6){
+                count = 1000;
+            }else if(count == 7){
+                count = 10000;
             }
+            
         }
         var postData = {
             'fa': dungeonsBattleOptions.firstAttack,

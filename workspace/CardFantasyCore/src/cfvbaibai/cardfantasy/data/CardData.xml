@@ -2953,27 +2953,13 @@
         <Skill type="扼杀" level="0" unlock="5" />
         <Skill type="重整" level="0" unlock="10" />
     </Card>
-    <Card id="2670" name="病毒终结" wikiId="" race="森林" speed="3" star="5" cost="18" incrCost="2" at="530" hp="1520" incrAT="43" incrHP="46">
+    <Card id="12670" name="病毒终结" wikiId="" race="森林" speed="3" star="5" cost="18" incrCost="2" at="530" hp="1520" incrAT="43" incrHP="46">
         <Skill type="神性祈求" level="0" unlock="0" />
         <Skill type="灵魂消散" level="0" unlock="0" />
         <Skill type="生命符文" level="5" unlock="5" />
         <Skill type="魔力护甲" level="0" unlock="10" />
     </Card>
-    <Card id="2671" name="丛林使者" wikiId="" race="森林" speed="3" star="5" cost="18" incrCost="2" at="530" hp="1605" incrAT="41" incrHP="42">
-        <Skill type="祈福" level="5" unlock="0" />
-        <Skill type="诅咒" level="66" unlock="0" />
-        <Skill type="号角" level="0" unlock="5" summon="true"/>
-        <!--Skill type="传承之力" level="0" unlock="5" /-->
-        <Skill type="卧薪尝胆" level="0" unlock="10" />
-    </Card>
-    <Card id="2672" name="宣花斧" wikiId="" race="森林" speed="3" star="5" cost="20" incrCost="2" at="525" hp="1540" incrAT="40" incrHP="46">
-        <Skill type="裂地" level="0" unlock="0" />
-        <Skill type="裂地" level="0" unlock="0" />
-        <Skill type="裂地" level="0" unlock="0" />
-        <Skill type="战术性撤退" level="0" unlock="5" />
-        <!--Skill type="勇武" level="0" unlock="10" /-->
-    </Card>
-    <Card id="2673" name="凤求凰" wikiId="" race="森林" speed="1" star="5" cost="22" incrCost="2" at="595" hp="1615" incrAT="43" incrHP="50">
+    <Card id="2670" name="凤求凰" wikiId="" race="森林" speed="1" star="5" cost="22" incrCost="2" at="595" hp="1615" incrAT="43" incrHP="50">
         <Skill type="琴音共鸣" level="0" unlock="0" />
         <Skill type="余音袅袅" level="0" unlock="5" />
         <Skill type="疏影横斜" level="0" unlock="10" />
@@ -4810,13 +4796,6 @@
         <Skill type="复活" level="0" unlock="5" />
         <Skill type="送葬之刃" level="6" unlock="10" />
     </Card>
-    <Card id="4445" name="地狱魔龙" wikiId="" race="地狱" speed="3" star="4" cost="15" incrCost="2" at="168" hp="749" incrAT="40" incrHP="30">
-        <Skill type="凋零真言" level="8" unlock="0" summon="true"/>
-        <Skill type="凋零真言" level="8" unlock="0" postcast="true" />
-        <Skill type="狩猎" level="0" unlock="5" />
-        <Skill type="浴火重生" level="0" unlock="10" />
-    </Card>
-
 
     <Card id="4501" name="毁灭之龙" wikiId="31064" race="地狱" speed="4" star="5" cost="14" incrCost="2" at="350" hp="1270" incrAT="34" incrHP="34">
         <Skill type="暴击" level="6" unlock="0" />

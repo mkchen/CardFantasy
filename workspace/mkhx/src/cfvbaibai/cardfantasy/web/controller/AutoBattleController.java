@@ -251,6 +251,7 @@ public class AutoBattleController {
             GameResultStat stat = null;
 
             int selectlevel = 0;
+            int count20 = 0;
             if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
                 selectlevel = count/10;
                 count = count - selectlevel*10;
@@ -262,6 +263,15 @@ public class AutoBattleController {
                     count = 1000;
                 }else if(count == -4){
                     count = 10000;
+                }else if(count == -5){
+                    count = 10;
+                    count20 = 100;
+                }else if(count == -6){
+                    count = 100;
+                    count20 = 1000;
+                }else if(count == -7){
+                    count = 1000;
+                    count20 = 10000;
                 }
             }
             //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
@@ -279,6 +289,9 @@ public class AutoBattleController {
 
 
             if (selectlevel == -100 || selectlevel == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+                if(count20 != 0){   
+                    count = count20;        //排序时按TOP的次数排
+                }
                 while (firstcnt != -1){
                     //取卡牌
                     String thisdeck = subdeck.substring(0, firstcnt+1).replace(" ","");  //第一个取出来的卡牌
@@ -411,7 +424,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-                }else if(selectlevel == -116){      //45星
+                 }else if(selectlevel == -116 || selectlevel == -1160){      //45星
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
@@ -452,12 +465,51 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
                 }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-                }else if(selectlevel == -150){       //装备
+               }else if(selectlevel == -150 || selectlevel == -151){       //精选装备和装备
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
+                }else if(selectlevel == -161){       //星辰远征
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardYZ.txt");
                 }
 
                 //从mycard文件列表中取出卡牌
                 for (int i = 0; i < txturls.size(); i++) {
+                    
+                    String txturl = txturls.get(i); 
+                    cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+                    //将文件中的符文读进list里
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+                    String cardname = null;
+                    while((cardname = br.readLine())!=null){    //使用readLine方法，一次读一行
+                        cardname = cardname.replace('，', ',');
+                       
+                        if(selectlevel == -1160){                                                                           //当为程序可能报错卡牌时
+                            if(cardname.indexOf(',') != -1 && cardname.indexOf("//") != -1){            //程序可能报错卡牌是放在尚未收录中的标记卡牌
+                                cardname = cardname.replace("//","");
+                                sortcards.add(new sortCard(cardname, 0.0));
+                            }
+                        }else{
+                            if(cardname.indexOf("//") == -1){       //当卡牌不为尚未收录的卡牌时
+                                if(cardname.indexOf('-') == 0){                     //当为还是碎片未合成的卡牌时
+                                    cardname = cardname.replace("-","");
+                                }
+                                if(selectlevel == -140 || selectlevel == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
+                                    cardname = "Q" + cardname;
+                                }
+
+                                if(selectlevel == -110 || selectlevel == -120 || selectlevel == -140 || selectlevel == -150){       //当选择类型为精选时
+                                    if(cardname.indexOf(',') != -1){            //当为标记卡牌时
+                                        sortcards.add(new sortCard(cardname, 0.0));
+                                    }
+                                }else{                                                                                              //当选择类型不为精选时
+                                    sortcards.add(new sortCard(cardname, 0.0));
+                                }
+                            }                              
+                        }
+                    }
+                    br.close();    
+                }
+
+                /*for (int i = 0; i < txturls.size(); i++) {
                     
                     String txturl = txturls.get(i); 
                     cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
@@ -485,7 +537,7 @@ public class AutoBattleController {
                         }
                     }
                     br.close();    
-                }
+                }*/
 
 
                 //用list里的符文分别模拟，将获得的分数写进list里
@@ -539,6 +591,62 @@ public class AutoBattleController {
                         return o2.getCnt().compareTo(o1.getCnt());
                     }
                 });
+
+                //当count20不为0时, 表示需要把前20位运行10000次再取排名
+                if(count20 != 0){
+                    int i = 0;
+                    for(sortCard sortcard:sortcards){
+                        String olddeck = deck1;
+                        olddeck = olddeck.replace('，', ',');
+                        olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                        String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
+                        String newdeck = thiscardname +", "+ olddeck;
+                        //进行模拟并取值
+                        //result = null;
+                        //ui = new DummyGameUI();
+                        setup = GameSetup.setupArenaGame(
+                        newdeck, deck2, heroLv1, heroLv2,
+                        p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
+                        firstAttack, deckOrder, vc1, count20, new DummyGameUI());
+                        result = GameLauncher.playArenaGame(setup);
+                        stat = result.getStat();
+                        
+
+                        //result = null;
+                        //ui = new DummyGameUI();
+                        //result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
+                        Double thiscnt = Double.valueOf(stat.getP1Win());
+                        if (!(vc1 instanceof DummyVictoryCondition)) {
+                            thiscnt = Double.valueOf(stat.getConditionMet()) ;
+                        }
+                        thiscnt = thiscnt/10;
+
+                        
+                        //result = GameLauncher.playMapGame(newdeck, map, heroLv, count20, ui);
+                        //Double thiscnt = Double.valueOf(result.getAdvWinCount())/10;
+                        //Double thiscnt = Double.valueOf(result.getAdvWinCount());
+                        sortcard.cnt = thiscnt;
+                        if(thiscnt > bestcnt){
+                            bestcnt = thiscnt;
+                            bestdeck = newdeck;
+                        }
+                    
+                        i++;
+                        if(i>=20){
+                            break;
+                        }
+                    }
+
+                    //list排序
+                    Collections.sort(sortcards, new Comparator<sortCard>() {
+                        @Override
+                        public int compare(sortCard o1, sortCard o2) {
+                            return o2.getCnt().compareTo(o1.getCnt());
+                        }
+                    });
+
+                    count = count20;
+                }
 
                 //从list中将前20的卡牌和分数取出来
                 int i = 0;
@@ -765,6 +873,7 @@ public class AutoBattleController {
             BossGameResult result = null;
 
             int selectlevel = 0;
+            int count20 = 0;
             if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
                 selectlevel = count/10;
                 count = count - selectlevel*10;
@@ -776,6 +885,15 @@ public class AutoBattleController {
                     count = 1000;
                 }else if(count == -4){
                     count = 10000;
+                }else if(count == -5){
+                    count = 10;
+                    count20 = 100;
+                }else if(count == -6){
+                    count = 100;
+                    count20 = 1000;
+                }else if(count == -7){
+                    count = 1000;
+                    count20 = 10000;
                 }
             }
             //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
@@ -795,6 +913,9 @@ public class AutoBattleController {
             
 
             if (selectlevel == -100 || selectlevel == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+                if(count20 != 0){   
+                    count = count20;        //排序时按TOP的次数排
+                }
                 while (firstcnt != -1){
                     //取卡牌
                     String thisdeck = subdeck.substring(0, firstcnt+1).replace(" ","");  //第一个取出来的卡牌
@@ -927,7 +1048,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-                }else if(selectlevel == -116){      //45星
+                 }else if(selectlevel == -116 || selectlevel == -1160){      //45星
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
@@ -968,7 +1089,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
                 }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-                }else if(selectlevel == -150){       //装备
+               }else if(selectlevel == -150 || selectlevel == -151){       //装备
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
                 }
                 
@@ -981,27 +1102,35 @@ public class AutoBattleController {
                     BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
                     String cardname = null;
                     while((cardname = br.readLine())!=null){    //使用readLine方法，一次读一行
-                        if(cardname.indexOf("//") == -1){       //当卡牌不为尚未收录的卡牌时
-                            cardname = cardname.replace('，', ',');
-                            if(cardname.indexOf('-') == 0){                     //当为还是碎片未合成的卡牌时
-                                cardname = cardname.replace("-","");
-                            }
-                            if(selectlevel == -140 || selectlevel == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
-                                cardname = "Q" + cardname;
-                            }
-
-                            if(selectlevel == -110 || selectlevel == -120 || selectlevel == -140 || selectlevel == -150){       //当选择类型为精选时
-                                if(cardname.indexOf(',') != -1){            //当为标记卡牌时
-                                    sortcards.add(new sortCard(cardname, 0.0));
-                                }
-                            }else{                                                                                              //当选择类型不为精选时
+                        cardname = cardname.replace('，', ',');
+                       
+                        if(selectlevel == -1160){                                                                           //当为程序可能报错卡牌时
+                            if(cardname.indexOf(',') != -1 && cardname.indexOf("//") != -1){            //程序可能报错卡牌是放在尚未收录中的标记卡牌
+                                cardname = cardname.replace("//","");
                                 sortcards.add(new sortCard(cardname, 0.0));
                             }
-                            
+                        }else{
+                            if(cardname.indexOf("//") == -1){       //当卡牌不为尚未收录的卡牌时
+                                if(cardname.indexOf('-') == 0){                     //当为还是碎片未合成的卡牌时
+                                    cardname = cardname.replace("-","");
+                                }
+                                if(selectlevel == -140 || selectlevel == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
+                                    cardname = "Q" + cardname;
+                                }
+
+                                if(selectlevel == -110 || selectlevel == -120 || selectlevel == -140 || selectlevel == -150){       //当选择类型为精选时
+                                    if(cardname.indexOf(',') != -1){            //当为标记卡牌时
+                                        sortcards.add(new sortCard(cardname, 0.0));
+                                    }
+                                }else{                                                                                              //当选择类型不为精选时
+                                    sortcards.add(new sortCard(cardname, 0.0));
+                                }
+                            }                              
                         }
                     }
                     br.close();    
-                }    
+                }
+
                 for(sortCard sortcard:sortcards){
                     String olddeck = deck;
                     olddeck = olddeck.replace('，', ',');
@@ -1068,6 +1197,8 @@ public class AutoBattleController {
                         return o2.getCnt().compareTo(o1.getCnt());
                     }
                 });
+
+                
 
                 //从list中将前20的卡牌和分数取出来
                 int i = 0;
@@ -1201,9 +1332,11 @@ public class AutoBattleController {
             writer.append(Utils.getCurrentDateTime() + "<br />");
             writer.append("模拟场次: " + count + "<br />");
 
+
             //-100:卡组排序, -101:15级排序, -110到-129:卡牌选择和符文选择
             //String ttest = "";
             int selectlevel = 0;
+            int count20 = 0;
             if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
                 selectlevel = count/10;
                 count = count - selectlevel*10;
@@ -1215,6 +1348,15 @@ public class AutoBattleController {
                     count = 1000;
                 }else if(count == -4){
                     count = 10000;
+                }else if(count == -5){
+                    count = 10;
+                    count20 = 100;
+                }else if(count == -6){
+                    count = 100;
+                    count20 = 1000;
+                }else if(count == -7){
+                    count = 1000;
+                    count20 = 10000;
                 }
             }
             //ttest = ttest + selectlevel +","+ count;
@@ -1228,6 +1370,9 @@ public class AutoBattleController {
 
 
             if (selectlevel == -100 || selectlevel == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+                if(count20 != 0){   
+                    count = count20;        //排序时按TOP的次数排
+                }
                 //selectlevel = count;
                 //count = 1000;
 
@@ -1412,7 +1557,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-                }else if(selectlevel == -116){      //45星
+                 }else if(selectlevel == -116 || selectlevel == -1160){      //45星
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
@@ -1453,7 +1598,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
                 }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-                }else if(selectlevel == -150){       //装备
+               }else if(selectlevel == -150 || selectlevel == -151){       //装备
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
                 }
                 
@@ -1466,27 +1611,35 @@ public class AutoBattleController {
                     BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
                     String cardname = null;
                     while((cardname = br.readLine())!=null){    //使用readLine方法，一次读一行
-                        if(cardname.indexOf("//") == -1){       //当卡牌不为尚未收录的卡牌时
-                            cardname = cardname.replace('，', ',');
-                            if(cardname.indexOf('-') == 0){                     //当为还是碎片未合成的卡牌时
-                                cardname = cardname.replace("-","");
-                            }
-                            if(selectlevel == -140 || selectlevel == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
-                                cardname = "Q" + cardname;
-                            }
-
-                            if(selectlevel == -110 || selectlevel == -120 || selectlevel == -140 || selectlevel == -150){       //当选择类型为精选时
-                                if(cardname.indexOf(',') != -1){            //当为标记卡牌时
-                                    sortcards.add(new sortCard(cardname, 0.0));
-                                }
-                            }else{                                                                                              //当选择类型不为精选时
+                        cardname = cardname.replace('，', ',');
+                       
+                        if(selectlevel == -1160){                                                                           //当为程序可能报错卡牌时
+                            if(cardname.indexOf(',') != -1 && cardname.indexOf("//") != -1){            //程序可能报错卡牌是放在尚未收录中的标记卡牌
+                                cardname = cardname.replace("//","");
                                 sortcards.add(new sortCard(cardname, 0.0));
                             }
-                            
+                        }else{
+                            if(cardname.indexOf("//") == -1){       //当卡牌不为尚未收录的卡牌时
+                                if(cardname.indexOf('-') == 0){                     //当为还是碎片未合成的卡牌时
+                                    cardname = cardname.replace("-","");
+                                }
+                                if(selectlevel == -140 || selectlevel == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
+                                    cardname = "Q" + cardname;
+                                }
+
+                                if(selectlevel == -110 || selectlevel == -120 || selectlevel == -140 || selectlevel == -150){       //当选择类型为精选时
+                                    if(cardname.indexOf(',') != -1){            //当为标记卡牌时
+                                        sortcards.add(new sortCard(cardname, 0.0));
+                                    }
+                                }else{                                                                                              //当选择类型不为精选时
+                                    sortcards.add(new sortCard(cardname, 0.0));
+                                }
+                            }                              
                         }
                     }
                     br.close();    
                 }
+
 
 
 
@@ -1547,6 +1700,52 @@ public class AutoBattleController {
                         return o1.getCnt().compareTo(o2.getCnt());
                     }
                 });
+
+                //当count20不为0时, 表示需要把前20位运行10000次再取排名
+                if(count20 != 0){
+                    int i = 0;
+                    for(sortCard sortcard:sortcards){
+                        String olddeck = deck;
+                        olddeck = olddeck.replace('，', ',');
+                        olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                        String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
+                        String newdeck = thiscardname +", "+ olddeck;
+                        //进行模拟并取值
+                        result = null;
+                        GameUI ui = new DummyGameUI();
+                        result = GameLauncher.playLilithGame(
+                            newdeck, lilithName, heroLv, gameType, 
+                                    targetRemainingGuardCount, remainingHP, eventCardNames, count20, ui);
+
+                        //sortcards.add(new sortCard(thisdeck,result.getAvgBattleCount()));
+                        //sortcard.cnt = result.getAvgBattleCount();
+                        Double thiscnt = result.getAvgBattleCount();
+                        //ui = new DummyGameUI();
+                        //result = GameLauncher.playMapGame(newdeck, map, heroLv, count20, ui);
+                        //Double thiscnt = Double.valueOf(result.getAdvWinCount())/10;
+                        //Double thiscnt = Double.valueOf(result.getAdvWinCount());
+                        sortcard.cnt = thiscnt;
+                        if(thiscnt > bestcnt){
+                            bestcnt = thiscnt;
+                            bestdeck = newdeck;
+                        }
+                    
+                        i++;
+                        if(i>=20){
+                            break;
+                        }
+                    }
+
+                    //list排序
+                    Collections.sort(sortcards, new Comparator<sortCard>() {
+                        @Override
+                        public int compare(sortCard o1, sortCard o2) {
+                            return o1.getCnt().compareTo(o2.getCnt());
+                        }
+                    });
+
+                    count = count20;
+                }
 
                 //从list中将前20的卡牌和分数取出来
                 int i = 0;
@@ -1886,7 +2085,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
                 }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-                }else if(selectlevel == -150){       //装备
+               }else if(selectlevel == -150 || selectlevel == -151){       //装备
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
                 }
                 
@@ -2056,6 +2255,140 @@ public class AutoBattleController {
         }
     }
 
+/*
+    public List<sortCard> getMyCard(int selectlevel){
+        List<sortCard> sortcards = new ArrayList<>();
+
+        InputStream cardFWStream;
+        List<String> txturls=new ArrayList<>();
+
+        //从文件中读取出卡牌列表
+        if(selectlevel == -110){            //精选345
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+            //txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
+       
+        }else if(selectlevel == -120 || selectlevel == -125){      //符文精选或全符文时
+
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+
+        }else if(selectlevel == -111 ){             
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard1.txt");
+        }else if(selectlevel == -112){
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard2.txt");
+        }else if(selectlevel == -113){
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
+        }else if(selectlevel == -114){
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
+        }else if(selectlevel == -115){
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
+        }else if(selectlevel == -116 || selectlevel == -1160){      //45星
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
+        }else if(selectlevel == -121){       //水
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
+            
+        }else if(selectlevel == -122){       //风
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
+        }else if(selectlevel == -123){       //火
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
+        }else if(selectlevel == -124){       //土
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
+        }else if(selectlevel == -131){       //王国
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
+        }else if(selectlevel == -132){       //森林
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
+        }else if(selectlevel == -133){       //蛮荒
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
+        }else if(selectlevel == -134){       //地狱
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
+        }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
+       }else if(selectlevel == -150 || selectlevel == -151){       //装备
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
+        }
+        
+        //从mycard文件列表中取出卡牌
+        for (int i = 0; i < txturls.size(); i++) {
+            
+            String txturl = txturls.get(i); 
+            cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+            //将文件中的符文读进list里
+            BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+            String cardname = null;
+            while((cardname = br.readLine())!=null){    //使用readLine方法，一次读一行
+                cardname = cardname.replace('，', ',');
+               
+                if(selectlevel == -1160){                                                                           //当为程序可能报错卡牌时
+                    if(cardname.indexOf(',') != -1 && cardname.indexOf("//") != -1){            //程序可能报错卡牌是放在尚未收录中的标记卡牌
+                        cardname = cardname.replace("//","");
+                        sortcards.add(new sortCard(cardname, 0.0));
+                    }
+                }else{
+                    if(cardname.indexOf("//") == -1){       //当卡牌不为尚未收录的卡牌时
+                        if(cardname.indexOf('-') == 0){                     //当为还是碎片未合成的卡牌时
+                            cardname = cardname.replace("-","");
+                        }
+                        if(selectlevel == -140 || selectlevel == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
+                            cardname = "Q" + cardname;
+                        }
+
+                        if(selectlevel == -110 || selectlevel == -120 || selectlevel == -140 || selectlevel == -150){       //当选择类型为精选时
+                            if(cardname.indexOf(',') != -1){            //当为标记卡牌时
+                                sortcards.add(new sortCard(cardname, 0.0));
+                            }
+                        }else{                                                                                              //当选择类型不为精选时
+                            sortcards.add(new sortCard(cardname, 0.0));
+                        }
+                    }                              
+                }
+            }
+            br.close();    
+        }
+
+        return sortcards;
+
+    }   */
+
     @RequestMapping(value = "/PlayDungeons1MatchGame")
     public void playDungeons1MatchGame(HttpServletRequest request, HttpServletResponse response,
                                   @RequestParam("fa") int firstAttack, @RequestParam("do") int deckOrder,
@@ -2146,6 +2479,7 @@ public class AutoBattleController {
             MapGameResult result = null;
 
             int selectlevel = 0;
+            int count20 = 0;
             if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
                 selectlevel = count/10;
                 count = count - selectlevel*10;
@@ -2157,6 +2491,15 @@ public class AutoBattleController {
                     count = 1000;
                 }else if(count == -4){
                     count = 10000;
+                }else if(count == -5){
+                    count = 10;
+                    count20 = 100;
+                }else if(count == -6){
+                    count = 100;
+                    count20 = 1000;
+                }else if(count == -7){
+                    count = 1000;
+                    count20 = 10000;
                 }
             }
             //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
@@ -2174,6 +2517,9 @@ public class AutoBattleController {
             //String ttest = "";
 
             if (selectlevel == -100 || selectlevel == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+                if(count20 != 0){   
+                    count = count20;        //排序时按TOP的次数排
+                }
                 while (firstcnt != -1){
                     //取卡牌
                     String thisdeck = subdeck.substring(0, firstcnt+1).replace(" ","");  //第一个取出来的卡牌
@@ -2287,7 +2633,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-                }else if(selectlevel == -116){      //45星
+                 }else if(selectlevel == -116 || selectlevel == -1160){      //45星
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
@@ -2341,27 +2687,35 @@ public class AutoBattleController {
                     BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
                     String cardname = null;
                     while((cardname = br.readLine())!=null){    //使用readLine方法，一次读一行
-                        if(cardname.indexOf("//") == -1){       //当卡牌不为尚未收录的卡牌时
-                            cardname = cardname.replace('，', ',');
-                            if(cardname.indexOf('-') == 0){                     //当为还是碎片未合成的卡牌时
-                                cardname = cardname.replace("-","");
-                            }
-                            if(selectlevel == -140 || selectlevel == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
-                                cardname = "Q" + cardname;
-                            }
-
-                            if(selectlevel == -110 || selectlevel == -120 || selectlevel == -140 || selectlevel == -150){       //当选择类型为精选时
-                                if(cardname.indexOf(',') != -1){            //当为标记卡牌时
-                                    sortcards.add(new sortCard(cardname, 0.0));
-                                }
-                            }else{                                                                                              //当选择类型不为精选时
+                        cardname = cardname.replace('，', ',');
+                       
+                        if(selectlevel == -1160){                                                                           //当为程序可能报错卡牌时
+                            if(cardname.indexOf(',') != -1 && cardname.indexOf("//") != -1){            //程序可能报错卡牌是放在尚未收录中的标记卡牌
+                                cardname = cardname.replace("//","");
                                 sortcards.add(new sortCard(cardname, 0.0));
                             }
-                            
+                        }else{
+                            if(cardname.indexOf("//") == -1){       //当卡牌不为尚未收录的卡牌时
+                                if(cardname.indexOf('-') == 0){                     //当为还是碎片未合成的卡牌时
+                                    cardname = cardname.replace("-","");
+                                }
+                                if(selectlevel == -140 || selectlevel == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
+                                    cardname = "Q" + cardname;
+                                }
+
+                                if(selectlevel == -110 || selectlevel == -120 || selectlevel == -140 || selectlevel == -150){       //当选择类型为精选时
+                                    if(cardname.indexOf(',') != -1){            //当为标记卡牌时
+                                        sortcards.add(new sortCard(cardname, 0.0));
+                                    }
+                                }else{                                                                                              //当选择类型不为精选时
+                                    sortcards.add(new sortCard(cardname, 0.0));
+                                }
+                            }                              
                         }
                     }
                     br.close();    
                 }
+
 
                 //用list里的符文分别模拟，将获得的分数写进list里
                 for(sortCard sortcard:sortcards){
@@ -2400,6 +2754,45 @@ public class AutoBattleController {
                         return o2.getCnt().compareTo(o1.getCnt());
                     }
                 });
+
+                //当count20不为0时, 表示需要把前20位运行10000次再取排名
+                if(count20 != 0){
+                    int i = 0;
+                    for(sortCard sortcard:sortcards){
+                        String olddeck = deck;
+                        olddeck = olddeck.replace('，', ',');
+                        olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                        String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
+                        String newdeck = thiscardname +", "+ olddeck;
+                        //进行模拟并取值
+                        result = null;
+                        ui = new DummyGameUI();
+                        result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,newdeck, map, heroLv, count20,rule, ui);
+                        //result = GameLauncher.playMapGame(newdeck, map, heroLv, count20, ui);
+                        Double thiscnt = Double.valueOf(result.getAdvWinCount())/10;
+                        //Double thiscnt = Double.valueOf(result.getAdvWinCount());
+                        sortcard.cnt = thiscnt;
+                        if(thiscnt > bestcnt){
+                            bestcnt = thiscnt;
+                            bestdeck = newdeck;
+                        }
+                    
+                        i++;
+                        if(i>=20){
+                            break;
+                        }
+                    }
+
+                    //list排序
+                    Collections.sort(sortcards, new Comparator<sortCard>() {
+                        @Override
+                        public int compare(sortCard o1, sortCard o2) {
+                            return o2.getCnt().compareTo(o1.getCnt());
+                        }
+                    });
+
+                    count = count20;
+                }
 
                 //从list中将前20的卡牌和分数取出来
                 int i = 0;

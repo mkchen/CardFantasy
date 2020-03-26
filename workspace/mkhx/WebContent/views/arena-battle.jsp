@@ -53,6 +53,9 @@
                     <option value="2" selected="selected">100次</option>
                     <option value="3">1000次</option>
                     <option value="4">10000次</option>
+                    <option value="5">TOP百次</option>
+                    <option value="6">TOP千次</option>
+                    <option value="7">TOP万次</option>
                 </select>
                 <a id="select-auto-massive-game-button" class="battle-button" data-role="button" data-mini="true">强度选卡</a>
                 <select id="select-auto-game-level" data-mini="true" data-native-menu="true">
@@ -63,6 +66,7 @@
                     <option value="-114">4星</option>
                     <option value="-115">5星</option>
                     <option value="-116">45星</option>
+                    <option value="-1160">45星错</option>
                     <option value="-131">王国</option>
                     <option value="-132">森林</option>
                     <option value="-133">蛮荒</option>
@@ -77,6 +81,7 @@
                     <option value="-141">契约</option>
                     <option value="-150">精选装备</option>
                     <option value="-151">装备</option>
+                    <option value="-161">星辰远征</option>
             </select>
                 <a data-role="button" data-mini="true" data-type="bug" href="#">提BUG</a>
             </div>
