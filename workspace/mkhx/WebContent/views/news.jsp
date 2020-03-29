@@ -41,6 +41,9 @@
             <div data-role="collapsible" data-collapsed="false" data-mini="true">
                 <h3>更新日志</h3>
                 <ul class="news-content">
+                    <li>2020-03-30<x>欢笑，波波</x><ul>
+                        <li>添加诅咒装备【恶魔新生】，【围攻】，通过装备模块模拟（Z-hp0+围攻1,后面的数字表示发动次数（层数+1,封顶为6,相关））</li>
+                    </ul></li>
                     <li>2020-03-15<x>欢笑，波波</x><ul>
                         <li>添加卡牌【紫电】，【青冥】，【百里】</li>
                         <li>修复技能【黄天太平】一段触发后不触发二段的问题，感谢<x>！！！</x>提供的帮助</li>

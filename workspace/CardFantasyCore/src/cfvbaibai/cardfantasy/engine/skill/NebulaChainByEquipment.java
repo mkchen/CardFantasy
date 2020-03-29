@@ -1,54 +1,23 @@
 package cfvbaibai.cardfantasy.engine.skill;
 
-import java.util.List;
-
+import cfvbaibai.cardfantasy.GameUI;
 import cfvbaibai.cardfantasy.data.Skill;
 import cfvbaibai.cardfantasy.engine.*;
 
+import java.util.List;
+
 public final class NebulaChainByEquipment {
-    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, EntityInfo attacker) throws HeroDieSignal {
-        //if (attacker.hasUsed(skillUseInfo)) {
-        //    return;
-        //}
-        //attacker.setUsed(skillUseInfo);
+    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, EntityInfo attacker,Player defender) throws HeroDieSignal {
+        GameUI ui = resolver.getStage().getUI();
         Skill skill = skillUseInfo.getSkill();
-        int impact = skill.getLevel();
-
-        for(int i=0;i<impact;i++) {
-            List<CardInfo> allDeckCards = attacker.getOwner().getDeck().toList();
-            CardInfo target = null;
-            for (CardInfo card : allDeckCards) {
-                if (target == attacker) {
-                    continue;
-                }
-                if (target == null || card.getSummonDelay() > target.getSummonDelay()) {
-                    target = card;
-                }
+        int level = skill.getImpact();
+        for(int i=0;i<level;i++) {
+            if (SummonStopSkillUseInfoList.explodeEquipment(resolver, attacker, defender)) {
+                continue;
             }
-            if (target == null) {
-                // No card in deck.
-                return;
-            }
-            resolver.getStage().getUI().useSkill(attacker, target, skillUseInfo.getSkill(), true);
-            resolver.summonCard(attacker.getOwner(), target, null, false, skillUseInfo.getSkill(),0);
-            CardStatusItem item = CardStatusItem.weak(skillUseInfo);
-            target.addStatus(item);
-        }
-    }
-
-    public static void applyMult(SkillUseInfo skillUseInfo, SkillResolver resolver, CardInfo attacker) throws HeroDieSignal {
-        if (attacker.hasUsed(skillUseInfo)) {
-            return;
-        }
-        attacker.setUsed(skillUseInfo);
-        int impact = skillUseInfo.getSkill().getImpact();
-        for (int i = 0; i < impact; i++) {
-            List<CardInfo> allDeckCards = attacker.getOwner().getDeck().toList();
             CardInfo target = null;
+            List<CardInfo> allDeckCards = attacker.getOwner().getDeck().toList();
             for (CardInfo card : allDeckCards) {
-                if (target == attacker) {
-                    continue;
-                }
                 if (target == null || card.getSummonDelay() > target.getSummonDelay()) {
                     target = card;
                 }
@@ -63,4 +32,8 @@ public final class NebulaChainByEquipment {
             target.addStatus(item);
         }
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> c7025d55... 添加装备【围攻】【恶魔重生】
 }
