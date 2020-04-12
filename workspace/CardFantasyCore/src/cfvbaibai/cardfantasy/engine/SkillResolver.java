@@ -1132,8 +1132,8 @@ public class SkillResolver {
             } else if (skillUseInfo.getType() == SkillType.神圣放逐) {
                 ReturnToHandAndDelay.apply(this, skillUseInfo.getSkill(), attacker, defender, 1, 1);
             } else if (skillUseInfo.getType() == SkillType.逆羽罡风) {
-                RegressionSoul.apply(this, skillUseInfo.getAttachedUseInfo2(), attacker, defender);
                 UnderworldCall.apply(this, skillUseInfo.getAttachedUseInfo1().getSkill(), attacker, defender, 3);
+                RegressionSoul.apply(this, skillUseInfo.getAttachedUseInfo2(), attacker, defender);
             } else if (skillUseInfo.getType() == SkillType.原素召唤) {
                 Summon.apply(this, skillUseInfo, attacker, SummonType.Normal, 2, "网页版原素侍卫", "网页版原素将军");
             } else if (skillUseInfo.getType() == SkillType.小飞侠) {

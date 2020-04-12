@@ -20,14 +20,19 @@ public final class AddFiledCardMultSkillByEquipment {
         CardSkill cardSkill1 = null;
         int victimCount = skill.getImpact();
         cardSkill1 = new CardSkill(addSkill1.getType(), addSkill1.getLevel(), 0, false, false, false, false);
-        resolver.getStage().getUI().useSkill(attacker, skill, true);
-        List<CardInfo> addCard = random.pickRandom(attacker.getOwner().getField().toList(), victimCount, true, null);
-        for (CardInfo thisCard : addCard) {
-            SkillUseInfo thisSkillUserInfo1=null;
-            if(cardSkill1!=null&&!thisCard.containsUsableSkill(cardSkill1.getType())){
-                thisSkillUserInfo1 = new SkillUseInfo(thisCard,cardSkill1);
-                thisSkillUserInfo1.setGiveSkill(2);
-                thisCard.addSkill(thisSkillUserInfo1);
+        for (int i=0;i<victimCount;i++) {
+            resolver.getStage().getUI().useSkill(attacker, skill, true);
+            List<CardInfo> addCard = random.pickRandom(attacker.getOwner().getField().toList(), 1, true, null);
+            if(addCard.size()==0){
+                break;
+            }
+            for(CardInfo thisCard:addCard) {
+                SkillUseInfo thisSkillUserInfo1 = null;
+                if (cardSkill1 != null && !thisCard.containsUsableSkill(cardSkill1.getType())) {
+                    thisSkillUserInfo1 = new SkillUseInfo(thisCard, cardSkill1);
+                    thisSkillUserInfo1.setGiveSkill(2);
+                    thisCard.addSkill(thisSkillUserInfo1);
+                }
             }
         }
     }
