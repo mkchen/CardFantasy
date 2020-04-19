@@ -2166,7 +2166,7 @@ public class SkillResolver {
                 } else if (deadCardSkillUseInfo.getType() == SkillType.归魂) {
                     RegressionSoul.apply(this, deadCardSkillUseInfo, deadCard, opponent);
                 } else if (deadCardSkillUseInfo.getType() == SkillType.时光倒流) {
-                    TimeBack.apply(deadCardSkillUseInfo, this, deadCard.getOwner(), opponent);
+                    TimeBack.apply(deadCardSkillUseInfo, this, deadCard, deadCard.getOwner(), opponent);
                 } else if (deadCardSkillUseInfo.getType() == SkillType.召唤炎魔) {
                     Summon.apply(this, deadCardSkillUseInfo, deadCard, SummonType.Normal, 1, "炎魔");
                 } else if (deadCardSkillUseInfo.getType() == SkillType.全体阻碍) {
@@ -3069,7 +3069,7 @@ public class SkillResolver {
             if (skillUseInfo.getType() == SkillType.魔族之血 || skillUseInfo.getType() == SkillType.邪甲术 || skillUseInfo.getType() == SkillType.不朽原核
                     || skillUseInfo.getType() == SkillType.白袍银甲 || skillUseInfo.getType() == SkillType.魔王之血 || skillUseInfo.getType() == SkillType.魔神加护
                     || skillUseInfo.getType() == SkillType.嗜血潜能 || skillUseInfo.getType() == SkillType.灵木之体 || skillUseInfo.getType() == SkillType.神赐之躯
-                    || skillUseInfo.getType() == SkillType.异变 || skillUseInfo.getType() == SkillType.魔女之躯 || skillUseInfo.getType() == SkillType.坚不可摧) {
+                    || skillUseInfo.getType() == SkillType.异变 || skillUseInfo.getType() == SkillType.魔女之息 || skillUseInfo.getType() == SkillType.坚不可摧) {
 
                 //减伤技能只对敌方造成的伤害生效
                 if (attacker.getOwner() == defender.getOwner()) {
@@ -5080,25 +5080,27 @@ public class SkillResolver {
             }
             for (SkillUseInfo skillUseInfo : card.getAllUsableSkills()) {
                 if (skillUseInfo.getType() == SkillType.时光倒流 && !skillUseInfo.getSkill().isDeathSkill() || skillUseInfo.getType() == SkillType.星座能量平衡 && !skillUseInfo.getSkill().isDeathSkill()) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (getStage().hasUsed(skillUseInfo) && getStage().hasPlayerUsed(skillUseInfo.getOwner().getOwner())) {
+                    if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            if (getStage().hasUsed(skillUseInfo) && getStage().hasPlayerUsed(skillUseInfo.getOwner().getOwner())) {
+                                continue;
+                            } else {
+//                            getStage().setUsed(skillUseInfo, true);
+                                card.setUsed(skillUseInfo);
+                            }
                             continue;
-                        } else {
-                            getStage().setUsed(skillUseInfo, true);
-                            card.getOwner().addSummonStopSkillUseInfoList(skillUseInfo);
                         }
-                        continue;
+                        TimeBack.apply(skillUseInfo, this, card, myField.getOwner(), opField.getOwner());
                     }
-                    TimeBack.apply(skillUseInfo, this, myField.getOwner(), opField.getOwner());
                 } else if (skillUseInfo.getType() == SkillType.献祭 || skillUseInfo.getType() == SkillType.血祭) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (!card.hasUsed(skillUseInfo)) {
+                    if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
                             card.setUsed(skillUseInfo);
+                            continue;
                         }
-                        continue;
-                    }
-                    if (!FailureSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        Sacrifice.apply(this, skillUseInfo, card, summonSkill);
+                        if (!FailureSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            Sacrifice.apply(this, skillUseInfo, card, summonSkill);
+                        }
                     }
                 }
                 //调整侵蚀一段降临发动
@@ -5110,79 +5112,79 @@ public class SkillResolver {
 //                    Erode.apply(this, skillUseInfo.getAttachedUseInfo1(), card, opField.getOwner(), summonSkill);
 //                }
                 else if (skillUseInfo.getType() == SkillType.复活 && skillUseInfo.getSkill().isSummonSkill() && isSummoning) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (!card.hasUsed(skillUseInfo)) {
-                            card.setUsed(skillUseInfo);
-                        }
-                        continue;
-                    }
                     if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            if (!card.hasUsed(skillUseInfo)) {
+                                card.setUsed(skillUseInfo);
+                            }
+                            continue;
+                        }
                         Revive.apply(this, skillUseInfo, card);
                         card.setUsed(skillUseInfo);
                     }
                 } else if (skillUseInfo.getType() == SkillType.荣耀降临 && isSummoning) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (!card.hasUsed(skillUseInfo)) {
-                            card.setUsed(skillUseInfo);
-                        }
-                        continue;
-                    }
                     if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            if (!card.hasUsed(skillUseInfo)) {
+                                card.setUsed(skillUseInfo);
+                            }
+                            continue;
+                        }
                         Revive.apply(this, skillUseInfo.getAttachedUseInfo1(), card);
                         card.setUsed(skillUseInfo);
                     }
                 } else if (skillUseInfo.getType() == SkillType.返生术 && isSummoning) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (!card.hasUsed(skillUseInfo)) {
-                            card.setUsed(skillUseInfo);
-                        }
-                        continue;
-                    }
                     if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            if (!card.hasUsed(skillUseInfo)) {
+                                card.setUsed(skillUseInfo);
+                            }
+                            continue;
+                        }
                         Revive.apply(this, skillUseInfo, card);
                         card.setUsed(skillUseInfo);
                     }
                 } else if (skillUseInfo.getType() == SkillType.荆棘守护 && isSummoning) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (!card.hasUsed(skillUseInfo)) {
-                            card.setUsed(skillUseInfo);
-                        }
-                        continue;
-                    }
                     if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            if (!card.hasUsed(skillUseInfo)) {
+                                card.setUsed(skillUseInfo);
+                            }
+                            continue;
+                        }
                         Revive.apply(this, skillUseInfo, card);
                         card.setUsed(skillUseInfo);
                     }
                 } else if (skillUseInfo.getType() == SkillType.蚀月之光 && isSummoning) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (!card.hasUsed(skillUseInfo)) {
-                            card.setUsed(skillUseInfo);
-                        }
-                        continue;
-                    }
                     if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            if (!card.hasUsed(skillUseInfo)) {
+                                card.setUsed(skillUseInfo);
+                            }
+                            continue;
+                        }
                         Revive.apply(this, skillUseInfo, card);
                         card.setUsed(skillUseInfo);
                     }
                 } else if (skillUseInfo.getType() == SkillType.灵魂献祭 && isSummoning) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (!card.hasUsed(skillUseInfo)) {
-                            card.setUsed(skillUseInfo);
-                        }
-                        continue;
-                    }
                     if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            if (!card.hasUsed(skillUseInfo)) {
+                                card.setUsed(skillUseInfo);
+                            }
+                            continue;
+                        }
                         Revive.apply(this, skillUseInfo, card);
                         Sacrifice.apply(this, skillUseInfo, card, summonSkill);
                     }
                 } else if (skillUseInfo.getType() == SkillType.制衡) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (!card.hasUsed(skillUseInfo)) {
-                            card.setUsed(skillUseInfo);
-                        }
-                        continue;
-                    }
                     if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            if (!card.hasUsed(skillUseInfo)) {
+                                card.setUsed(skillUseInfo);
+                            }
+                            continue;
+                        }
                         Sacrifice.apply(this, skillUseInfo, card, summonSkill);
                         if (isSummoning) {
                             Revive.apply(this, skillUseInfo, card);
@@ -5190,24 +5192,24 @@ public class SkillResolver {
                         }
                     }
                 } else if (skillUseInfo.getType() == SkillType.圣翼军团 && isSummoning) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (!card.hasUsed(skillUseInfo)) {
-                            card.setUsed(skillUseInfo);
-                        }
-                        continue;
-                    }
                     if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            if (!card.hasUsed(skillUseInfo)) {
+                                card.setUsed(skillUseInfo);
+                            }
+                            continue;
+                        }
                         Revive.apply(this, skillUseInfo, card);
                         card.setUsed(skillUseInfo);
                     }
                 } else if (skillUseInfo.getType() == SkillType.圣光复活) {
-                    if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
-                        if (!card.hasUsed(skillUseInfo)) {
-                            card.setUsed(skillUseInfo);
-                        }
-                        continue;
-                    }
                     if (!card.hasUsed(skillUseInfo)) {
+                        if (SummonStopSkillUseInfoList.explode(this, card, opField.getOwner())) {
+                            if (!card.hasUsed(skillUseInfo)) {
+                                card.setUsed(skillUseInfo);
+                            }
+                            continue;
+                        }
                         if (isSummoning) {
                             Revive.apply(this, skillUseInfo, card);
                             Revive.apply(this, skillUseInfo, card);

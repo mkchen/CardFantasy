@@ -13,9 +13,12 @@ import cfvbaibai.cardfantasy.engine.SkillResolver;
 import cfvbaibai.cardfantasy.engine.SkillUseInfo;
 
 public class TimeBack {
-    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, Player myHero, Player opHero) throws HeroDieSignal {
+    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver,CardInfo attackCard, Player myHero, Player opHero) throws HeroDieSignal {
         if (resolver.getStage().hasUsed(skillUseInfo)&&resolver.getStage().hasPlayerUsed(skillUseInfo.getOwner().getOwner())) {
             return;
+        }
+        if (attackCard.hasUsed(skillUseInfo)) {
+            return ;
         }
         GameUI ui = resolver.getStage().getUI();
         CardInfo caster = (CardInfo)skillUseInfo.getOwner();

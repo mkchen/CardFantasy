@@ -6667,7 +6667,7 @@
         <Skill type="死亡之舞" level="0" unlock="10" />
     </Card>
     <Card id="6114" name="暗堕之矢" wikiId="" race="魔族" speed="4" star="5" cost="20" incrCost="2" at="650" hp="1850" incrAT="50" incrHP="50">
-        <Skill type="魔女之躯" level="0" unlock="0" />
+        <Skill type="魔女之息" level="0" unlock="0" />
         <Skill type="逆转之刃" level="0" unlock="5" />
         <Skill type="暗影奇袭" level="0" unlock="10" />
     </Card>

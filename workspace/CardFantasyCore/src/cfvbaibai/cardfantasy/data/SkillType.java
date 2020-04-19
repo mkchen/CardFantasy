@@ -540,7 +540,7 @@ public enum SkillType {
     魔王之血(2000,0,SkillTag.沉默无效),
     神赐之躯(1000,0),
     无常索命(700,0,SkillType.灵魂消散,0,null,0, SkillTag.永久, SkillTag.基础攻击加成, SkillTag.抗不屈),
-    魔女之躯(1000,0),
+    魔女之息(1000,0),
     坚不可摧(2000,0,1,0),
 
     回魂(1),
@@ -712,7 +712,7 @@ public enum SkillType {
     热血战士(0,SkillTag.魔族天赋),
     扼杀(0),
     追魂(0,0,0,10),
-    义绝(90,0,0,10),
+    义绝(90,0,50,0),
     九转秘术(0, 0),
     九转禁术(0, 0,SkillTag.召唤),
     勤能补拙(170, 0,50,0, SkillTag.永久, SkillTag.基础攻击加成),
@@ -1659,7 +1659,7 @@ public enum SkillType {
     //装备围攻(0,0),
     //知人善任(3,0,SkillType.司命,0,SkillType.善任,0),
     装备雷神之锤(1000,0,3,0, SkillTag.抗免疫),
-    装备恶魔重生(0,1,SkillType.,0, null,0),
+    装备恶魔重生(0,1,SkillType.重整,0, null,0),
     装备围攻(0,1);
 
 

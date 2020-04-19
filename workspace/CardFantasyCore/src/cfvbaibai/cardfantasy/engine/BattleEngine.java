@@ -557,7 +557,7 @@ public class BattleEngine {
                         || skillUseInfo.getType() == SkillType.喵喵喵|| skillUseInfo.getType() == SkillType.蔑视
                         || skillUseInfo.getType() == SkillType.龙之守护 || skillUseInfo.getType() == SkillType.守护之翼
                         || skillUseInfo.getType()==SkillType.百里
-                        || skillUseInfo.getType() == SkillType.战意侵蚀 || skillUseInfo.getType() == SkillType.魔女之躯)
+                        || skillUseInfo.getType() == SkillType.战意侵蚀 || skillUseInfo.getType() == SkillType.魔女之息)
                 {
                     skill = skillUseInfo.getSkill();
                 }
@@ -753,7 +753,7 @@ public class BattleEngine {
                             || skillUseInfo.getType()==SkillType.龙之守护 || skillUseInfo.getType()==SkillType.守护之翼
                             || skillUseInfo.getType()==SkillType.百里
                             || skillUseInfo.getType()==SkillType.战意侵蚀
-                            || skillUseInfo.getType() == SkillType.魔女之躯) {
+                            || skillUseInfo.getType() == SkillType.魔女之息) {
                         if (!card.getStatus().containsStatus(CardStatusType.不屈)) {
                             return card;
                         }
