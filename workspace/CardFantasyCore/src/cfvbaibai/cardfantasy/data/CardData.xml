@@ -6599,7 +6599,7 @@
     </Card>
     <Card id="5738" name="试炼五毒蛇帝" wikiId="" race="魔神" speed="3" star="5" cost="99" incrCost="0" at="10000" hp="20000" incrAT="0" incrHP="0">
         <Skill type="免疫" level="0" unlock="10" />
-        <Skill type="魔女之躯" level="0" unlock="10" />
+        <Skill type="魔女之息" level="0" unlock="10" />
         <Skill type="智慧之光" level="0" unlock="10" />
         <Skill type="恻隐" level="0" unlock="10" />
     </Card>
