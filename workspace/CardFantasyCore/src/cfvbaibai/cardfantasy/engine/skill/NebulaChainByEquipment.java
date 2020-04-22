@@ -32,8 +32,4 @@ public final class NebulaChainByEquipment {
             target.addStatus(item);
         }
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> c7025d55... 添加装备【围攻】【恶魔重生】
 }
