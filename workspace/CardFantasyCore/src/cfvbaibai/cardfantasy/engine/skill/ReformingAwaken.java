@@ -10,7 +10,7 @@ import java.util.List;
 public class ReformingAwaken {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card,Player defender,String cardName) throws HeroDieSignal{
         if (card == null || card.isDead())  {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!ReformingAwaken"+skillUseInfo.getSkill().getType() + card.getShortDesc());
         }
         int number = skillUseInfo.getSkillNumber();
         if(number==0)

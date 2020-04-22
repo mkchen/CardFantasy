@@ -31,11 +31,17 @@ public abstract class VictoryCondition {
         } else if (desc.startsWith("Round:")) {
             int maxRound = Integer.parseInt(desc.substring(6));
             return new RoundVictoryCondition(maxRound);
+        } else if (desc.startsWith("MyAllCardRound:")) {
+            int maxRound = Integer.parseInt(desc.substring(15));
+            return new AllCardRoundVictoryCondition(maxRound);
         } else if (desc.equals("EnemyHeroDie")) {
             return new EnemyHeroDieVictoryCondition();
         } else if (desc.startsWith("MyDeadCard:")) {
             int maxDeadCard = Integer.parseInt(desc.substring(11));
             return new MaxDeadCardVictoryCondition(maxDeadCard);
+        } else if (desc.startsWith("MyAllCardHP:")) {
+            int hpThreshold = Integer.parseInt(desc.substring(12));
+            return new AllCardHPVictoryCondition(hpThreshold);
         } else if (desc.startsWith("CardOfStar:")) {
             String rest = desc.substring(11);
             String[] parts = rest.split(":");
@@ -110,6 +116,49 @@ class HeroHPVictoryCondition extends VictoryCondition {
         return "胜利时，己方英雄生命值不低于" + threshold + "%";
     }
 }
+class AllCardHPVictoryCondition extends VictoryCondition {
+    //private int maxDeadCard;
+    private int threshold;
+    
+    public AllCardHPVictoryCondition(int threshold) {
+        this.threshold = threshold;
+        //this.maxDeadCard = maxDeadCard;
+    }
+    
+    @Override
+    public boolean meetCriteria(GameResult result) {
+        Player winner = result.getWinner();
+        return winner.getHP() * 100 / winner.getMaxHP() >= threshold && winner.getGrave().size() < 1;
+
+    }
+
+    @Override
+    public String getDescription() {
+        return "胜利时，己方英雄生命值不低于"+ threshold +"%，并且己方无卡牌阵亡";
+    }
+}
+class AllCardRoundVictoryCondition extends VictoryCondition {
+    //private int maxDeadCard;
+    private int maxRound;
+    
+    public AllCardRoundVictoryCondition(int maxRound) {
+        this.maxRound = maxRound;
+    }
+    
+    @Override
+    public boolean meetCriteria(GameResult result) {
+        Player winner = result.getWinner();
+        return winner.getHP() * 100 / winner.getMaxHP() >= 80 && winner.getGrave().size() < 1 && result.getRound() < this.maxRound;
+
+    }
+
+    @Override
+    public String getDescription() {
+        return maxRound + "回合数内取得胜利，并且胜利时，己方英雄生命值不低于80%，己方无卡牌阵亡";
+    }
+}
+
+
 
 class RoundVictoryCondition extends VictoryCondition {
     private int maxRound;

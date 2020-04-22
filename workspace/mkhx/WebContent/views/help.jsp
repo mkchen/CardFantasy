@@ -24,6 +24,8 @@
                     <tr><td>胜利时，己方英雄生命值不低于X%</td><td>MyHeroHP:X</td><td>MyHeroHP:80</td></tr>
                     <tr><td>X回合数内取得胜利</td><td>Round:X</td><td>Round:48</td></tr>
                     <tr><td>己方阵亡卡牌小于X张</td><td>MyDeadCard:X</td><td>MyDeadCard:3</td></tr>
+                    <tr><td>全卡血不低于百分之X</td><td>MyAllCardHP:X</td><td>MyAllCardHP:100</td></tr>
+                    <tr><td>全卡80血，X回合数内取得胜利</td><td>MyAllCardRound:X</td><td>MyAllCardRound:100</td></tr>
                     <tr><td>卡组中S星卡牌不小于X张</td><td>CardOfStar:S:X</td><td>CardOfStar:5:3</td></tr>
                     <tr><td>卡组中R种族卡牌不小于X张</td><td>CardOfRace:R:X</td><td>CardOfRace:K:3</td></tr>
                     <tr><td colspan="3" style="padding-left: 10px">种族写法: 王国=K, 森林=F, 蛮荒=S, 地狱=H</td></tr>

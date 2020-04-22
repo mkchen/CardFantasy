@@ -649,6 +649,7 @@ var allLayerAddition=function(){
     allObj['128']=layerAddition(396,300,300);
     allObj['129']=layerAddition(418,330,330);
     allObj['130']=layerAddition(440,360,360);
+    allObj['-1']=layerAddition(171,100,100);
     return allObj;
 };
 

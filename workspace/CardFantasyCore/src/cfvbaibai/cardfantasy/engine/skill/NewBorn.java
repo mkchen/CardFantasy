@@ -13,7 +13,7 @@ import cfvbaibai.cardfantasy.Randomizer;
 public class NewBorn {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card,Player defender,int victimCount) throws HeroDieSignal{
         if (card == null || card.isDead())  {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!NewBorn");
         }
         Skill skill = skillUseInfo.getSkill();
         StageInfo stage = resolver.getStage();

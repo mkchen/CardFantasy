@@ -13,7 +13,7 @@ import java.util.List;
 public class Reforming {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card,Player attacker) throws HeroDieSignal{
         if (card == null || card.isDead())  {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!Reforming"+skillUseInfo.getSkill().getType() + card.getShortDesc());
         }
         int number = skillUseInfo.getSkillNumber();
         if(number==0)

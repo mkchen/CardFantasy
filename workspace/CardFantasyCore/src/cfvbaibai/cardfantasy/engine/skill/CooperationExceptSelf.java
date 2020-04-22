@@ -14,7 +14,7 @@ import java.util.List;
 public final class CooperationExceptSelf {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card,String conCard,boolean flag) {
         if (card == null || card.isDead()) {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!CooperationExceptSelf");
         }
         Skill skill = skillUseInfo.getSkill();
 

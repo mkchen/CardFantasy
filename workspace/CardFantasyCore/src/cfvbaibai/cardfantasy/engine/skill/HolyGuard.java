@@ -14,7 +14,7 @@ import cfvbaibai.cardfantasy.engine.Field;
 public class HolyGuard {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card) {
         if (card == null || card.isDead()) {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!HolyGuard");
         }
         Skill skill = skillUseInfo.getSkill();
         int impact = skill.getImpact();

@@ -11,22 +11,22 @@
                             <td>
                                 <select name="dungeons-id" id="dungeons-id" class="dungeons-select" data-mini="true" data-native-menu="true">
                                     <optgroup label="地下城">
-                                        <option value="d-11">十二星座关90</option>
-                                        <option value="d-12">免疫神风关90</option>
-                                        <option value="d-13">传送圣枪关90</option>
-                                        <option value="d-14">传送叹惋关90</option>
-                                        <option value="d-15">转生龙灵关90</option>
-                                        <option value="d-16">免疫森主关90</option>
-                                        <option value="d-1">涅盘魅魔关</option>
-                                        <option value="d-2">洪荒青龙关</option>
-                                        <option value="d-3">不动朱雀关</option>
-                                        <option value="d-4">三国英魂关</option>
-                                        <option value="d-5">遗回银喵关</option>
-                                        <option value="d-6">镜面仲颖关</option>
-                                        <option value="d-7">制衡炼金关</option>
-                                        <option value="d-8">狼顾魂乐关</option>
-                                        <option value="d-9">传送兽王关</option>
-                                        <option value="d-10">鬼才镜姬关</option>
+                                        <option value="d-1">十二星座关90</option>
+                                        <option value="d-2">免疫神风关90</option>
+                                        <option value="d-3">传送圣枪关90</option>
+                                        <option value="d-4">传送叹惋关90</option>
+                                        <option value="d-5">转生龙灵关90</option>
+                                        <option value="d-6">免疫森主关90</option>
+                                        <option value="d-7">涅盘魅魔关</option>
+                                        <option value="d-8">洪荒青龙关</option>
+                                        <option value="d-9">不动朱雀关</option>
+                                        <option value="d-10">三国英魂关</option>
+                                        <option value="d-11">遗回银喵关</option>
+                                        <option value="d-12">镜面仲颖关</option>
+                                        <option value="d-13">制衡炼金关</option>
+                                        <option value="d-14">狼顾魂乐关</option>
+                                        <option value="d-15">传送兽王关</option>
+                                        <option value="d-16">鬼才镜姬关</option>
                                         <option value="d-17">原素家族关111</option>
                                         <option value="d-18">晴空风樱关111</option>
                                         <option value="d-19">绯炎厨娘关111</option>
@@ -49,6 +49,10 @@
                                         <option value="d-36">日本妖怪关121</option>
                                         <option value="d-37">中国妖怪关121(s)</option>
                                         <option value="d-38">中国妖怪关121(n)</option>
+                                        <option value="d-110">地下城110</option>
+                                        <option value="d-110m">地下城110全灭</option>
+                                        <option value="d-120">地下城120</option>
+                                        <option value="d-11020">地下城110和120层</option>
                                     </optgroup>
                                     <optgroup label="噩梦1图">
                                         <option value="1-1">1-1 森林入口</option>
@@ -100,6 +104,23 @@
                                         <option value="5-8">5-8 灼热小径</option>
                                         <option value="5-9">5-H 焦炭遗迹</option>
                                     </optgroup>
+                                    <optgroup label="星辰远征">
+                                        <option value="Y-1">远征第一层</option>
+                                        <option value="Y-2">远征第二层</option>
+                                        <option value="Y-3">远征第三层</option>
+                                        <option value="Y-4">远征第四层</option>
+                                        <option value="Y-5">远征第五层</option>
+                                        <option value="Y-6">远征第六层</option>
+                                        <option value="Y-7">远征第七层</option>
+                                        <option value="Y-8">远征第八层</option>
+                                        <option value="Y-9">远征第九层</option>
+                                        <option value="Y-10">远征第十层</option>
+                                        <option value="Y-11">远征第十一层</option>
+                                        <option value="Y-12">远征第十二层</option>
+                                        <option value="Y-13">远征第十三层</option>
+                                        <option value="Y-14">远征第十四层</option>
+                                        <option value="Y-15">远征第十五层</option>
+                                    </optgroup>
                                 </select>
                             </td>
                         </tr>
@@ -118,6 +139,7 @@
                             <td>
                                 <select name="layer-select" id="layer-select" class="layer-select"  data-mini="true" data-native-menu="true">
                                     <option value="0" selected="selected">不选择层数/地图</option>
+                                    <option value="-1">星辰远征</option>
                                     <option value="1">噩梦地图1图</option>
                                     <option value="2">噩梦地图2图</option>
                                     <option value="3">噩梦地图3图</option>
@@ -231,8 +253,10 @@
                     <option value="-125">全符文</option>
                     <option value="-140">精选契约</option>
                     <option value="-141">契约</option>
-                    <option value="-150">精选装备</option>
-                    <option value="-151">装备</option>
+                    
+                    <option value="-151">武器</option>
+                <option value="-152">防具</option>
+                <option value="-153">饰品</option>
                 </select>
                 <a data-role="button" data-mini="true" data-type="bug" href="#">提BUG</a>
             </div>

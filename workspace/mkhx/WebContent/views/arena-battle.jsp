@@ -79,8 +79,10 @@
                     <option value="-125">全符文</option>
                     <option value="-140">精选契约</option>
                     <option value="-141">契约</option>
-                    <option value="-150">精选装备</option>
-                    <option value="-151">装备</option>
+                    
+                    <option value="-151">武器</option>
+                <option value="-152">防具</option>
+                <option value="-153">饰品</option>
                     <option value="-161">星辰远征</option>
             </select>
                 <a data-role="button" data-mini="true" data-type="bug" href="#">提BUG</a>

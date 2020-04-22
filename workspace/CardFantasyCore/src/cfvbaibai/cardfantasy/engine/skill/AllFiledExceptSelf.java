@@ -13,7 +13,7 @@ import java.util.List;
 public final class AllFiledExceptSelf {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card, Skill addSkill) {
         if (card == null || card.isDead()) {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!AllFiledExceptSelf");
         }
         Skill skill = skillUseInfo.getSkill();
         CardSkill cardSkill = new CardSkill(addSkill.getType(), addSkill.getLevel(), 0, false, false, false, false);

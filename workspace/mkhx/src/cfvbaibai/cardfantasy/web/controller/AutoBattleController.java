@@ -465,8 +465,12 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
                 }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-               }else if(selectlevel == -150 || selectlevel == -151){       //精选装备和装备
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
+                }else if(selectlevel == -151){       //装备武器
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBWQ.txt");
+                }else if(selectlevel == -152){       //装备防具
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBFJ.txt");
+                }else if(selectlevel == -153){       //装备饰品
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBSP.txt");
                 }else if(selectlevel == -161){       //星辰远征
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardYZ.txt");
                 }
@@ -652,7 +656,11 @@ public class AutoBattleController {
                 int i = 0;
                 for(sortCard sortcard:sortcards){
                     cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
-                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+                    Double thiscnt = sortcard.cnt;
+                    if(count20 != 0){   
+                        thiscnt = thiscnt * 10;
+                    }
+                    cardswithcnt = cardswithcnt +"("+ thiscnt.toString() +"),";
 
                     i++;
                     if(i>=20){
@@ -1089,8 +1097,12 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
                 }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-               }else if(selectlevel == -150 || selectlevel == -151){       //装备
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
+               }else if(selectlevel == -151){ //装备
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBWQ.txt");
+                }else if(selectlevel == -152){       //装备防具
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBFJ.txt");
+                }else if(selectlevel == -153){       //装备饰品
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBSP.txt");
                 }
                 
                 //从mycard文件列表中取出卡牌
@@ -1204,7 +1216,12 @@ public class AutoBattleController {
                 int i = 0;
                 for(sortCard sortcard:sortcards){
                     cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
-                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+                    Double thiscnt = sortcard.cnt;
+                    if(count20 != 0){   
+                        thiscnt = thiscnt * 10;
+                    }
+                    cardswithcnt = cardswithcnt +"("+ thiscnt.toString() +"),";
+                    //cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
 
                     i++;
                     if(i>=20){
@@ -1598,8 +1615,12 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
                 }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-               }else if(selectlevel == -150 || selectlevel == -151){       //装备
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
+               }else if(selectlevel == -151){ //装备
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBWQ.txt");
+                }else if(selectlevel == -152){       //装备防具
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBFJ.txt");
+                }else if(selectlevel == -153){       //装备饰品
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBSP.txt");
                 }
                 
                 //从mycard文件列表中取出卡牌
@@ -1753,7 +1774,12 @@ public class AutoBattleController {
                     //System.out.println(student.cardname);
                     //System.out.println(student.cnt.toString());
                     cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
-                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+                    Double thiscnt = sortcard.cnt;
+                    //if(count20 != 0){   
+                    //    thiscnt = thiscnt * 10;
+                    //}
+                    cardswithcnt = cardswithcnt +"("+ thiscnt.toString() +"),";
+                    //cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
 
                     //cardsnocnt = cardsnocnt + sortcard.cardname +" ";
                     //ttest = ttest +"读取符文循环，";
@@ -2085,8 +2111,12 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
                 }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-               }else if(selectlevel == -150 || selectlevel == -151){       //装备
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
+               }else if(selectlevel == -151){ //装备
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBWQ.txt");
+                }else if(selectlevel == -152){       //装备防具
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBFJ.txt");
+                }else if(selectlevel == -153){       //装备饰品
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBSP.txt");
                 }
                 
                 //从mycard文件列表中取出卡牌
@@ -2208,7 +2238,12 @@ public class AutoBattleController {
                 int i = 0;
                 for(sortCard sortcard:sortcards){
                     cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
-                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+                    Double thiscnt = sortcard.cnt;
+                    if(count20 != 0){   
+                        thiscnt = thiscnt * 10;
+                    }
+                    cardswithcnt = cardswithcnt +"("+ thiscnt.toString() +"),";
+                    //cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
 
                     i++;
                     if(i>=20){
@@ -2343,8 +2378,10 @@ public class AutoBattleController {
             txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
         }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
             txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-       }else if(selectlevel == -150 || selectlevel == -151){       //装备
-            txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
+       }else if(selectlevel == -151){ //装备
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardZBWQ.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBFJ.txt");
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBSP.txt");
         }
         
         //从mycard文件列表中取出卡牌
@@ -2674,8 +2711,12 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
                 }else if(selectlevel == -140 || selectlevel == -141){       //精选契约和契约
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-                }else if(selectlevel == -150 || selectlevel == -151){       //精选装备和装备
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZB.txt");
+                }else if(selectlevel == -151){      //装备武器
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBWQ.txt");
+                }else if(selectlevel == -152){       //装备防具
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBFJ.txt");
+                }else if(selectlevel == -153){       //装备饰品
+                    txturls.add("cfvbaibai/cardfantasy/data/MyCardZBSP.txt");
                 }
                 
                 //从mycard文件列表中取出卡牌
@@ -2798,7 +2839,12 @@ public class AutoBattleController {
                 int i = 0;
                 for(sortCard sortcard:sortcards){
                     cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
-                    cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
+                    Double thiscnt = sortcard.cnt;
+                    if(count20 != 0){   
+                        thiscnt = thiscnt * 10;
+                    }
+                    cardswithcnt = cardswithcnt +"("+ thiscnt.toString() +"),";
+                    //cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
 
                     i++;
                     if(i>=20){

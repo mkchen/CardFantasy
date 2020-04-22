@@ -16,7 +16,7 @@ public final class CoefficientThreeBuff {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card,CardInfo summonCard, Race race,
                              SkillEffectType effectType) {
         if (card == null || card.isDead()) {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!CoefficientThreeBuff");
         }
         Skill skill = skillUseInfo.getSkill();
         int impact = skill.getImpact();

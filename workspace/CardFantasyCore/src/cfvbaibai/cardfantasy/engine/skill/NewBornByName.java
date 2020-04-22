@@ -13,7 +13,7 @@ import java.util.List;
 public class NewBornByName {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card,Player defender,int victimCount,String cardName) throws HeroDieSignal{
         if (card == null || card.isDead())  {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!NewBornByName");
         }
         Skill skill = skillUseInfo.getSkill();
         StageInfo stage = resolver.getStage();

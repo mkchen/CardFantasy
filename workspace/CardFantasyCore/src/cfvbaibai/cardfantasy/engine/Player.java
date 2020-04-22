@@ -198,7 +198,7 @@ public class Player extends EntityInfo {
         {
             if(addSkillUserInfo == skillUseInfo)
             {
-                throw new CardFantasyRuntimeException("skillUseInfo is reused");
+                throw new CardFantasyRuntimeException("skillUseInfo is reused，addCounterAttackHero"+ skillUseInfo.getType() +","+ skillUseInfo.getOwner().getShortDesc());
             }
         }
         this.counterAttackHero.add(skillUseInfo);
@@ -217,7 +217,7 @@ public class Player extends EntityInfo {
         {
             if(addSkillUserInfo == skillUseInfo)
             {
-                throw new CardFantasyRuntimeException("skillUseInfo is reused");
+                throw new CardFantasyRuntimeException("skillUseInfo is reused，addImpregnableDefenseHero"+ skillUseInfo.getType() +","+ skillUseInfo.getOwner().getShortDesc());
             }
         }
         this.impregnableDefenseHero.add(skillUseInfo);
@@ -236,7 +236,7 @@ public class Player extends EntityInfo {
         {
             if(addSkillUserInfo == skillUseInfo)
             {
-                throw new CardFantasyRuntimeException("skillUseInfo is reused");
+                throw new CardFantasyRuntimeException("skillUseInfo is reused，addFailureSkillUseInfoList"+ skillUseInfo.getType() +","+ skillUseInfo.getOwner().getShortDesc());
             }
         }
         this.failureSkillUseInfoList.add(skillUseInfo);
@@ -255,7 +255,7 @@ public class Player extends EntityInfo {
         {
             if(addSkillUserInfo == skillUseInfo)
             {
-                throw new CardFantasyRuntimeException("skillUseInfo is reused");
+                throw new CardFantasyRuntimeException("skillUseInfo is reused，addSummonStopSkillUseInfoList"+ skillUseInfo.getType() +","+ skillUseInfo.getOwner().getShortDesc());
             }
         }
         this.summonStopSkillUseInfoList.add(skillUseInfo);

@@ -716,6 +716,7 @@ public enum SkillType {
     九转秘术(0, 0),
     九转禁术(0, 0,SkillTag.召唤),
     勤能补拙(170, 0,50,0, SkillTag.永久, SkillTag.基础攻击加成),
+    净魂斩(0,0,50,0,SkillType.镜面,0,null,0),
 
     法力侵蚀(0, 20, 3, 0, SkillTag.抗免疫),
     核弹头(550, 0, 3, 0, SkillTag.抗免疫),
@@ -781,6 +782,7 @@ public enum SkillType {
 
     英雄杀手(0, 15, SkillTag.额外攻击加成),
     超级英雄杀手(2000, 0, SkillTag.额外攻击加成),
+    恻隐(-90, 0, SkillTag.额外攻击加成),
     陷阵(90,0, SkillTag.额外攻击加成,SkillTag.魔王无效,SkillTag.抗免疫),
 
     不屈(0, 0),
@@ -804,6 +806,7 @@ public enum SkillType {
     武形印记(0, 200,SkillTag.魔王无效),
     霜火炸弹(0, 200,SkillTag.魔王无效),
     黑之诅咒(0, 1000,SkillTag.魔王无效),
+    恶龙诅咒(0, 1500,SkillTag.魔王无效),
     破片手雷(1450, 0,SkillTag.魔王无效),
     爆裂巫术(800, 0,SkillTag.魔王无效),
     煮豆燃萁(5000, 0, SkillTag.魔王无效),
@@ -1199,6 +1202,7 @@ public enum SkillType {
     流星(SkillType.祈愿,1,SkillType.全体加速,1),
     风驰电掣(1,0),
     霜火交织(SkillType.霜火,0,SkillType.圣炎,0),
+    热情似火(SkillType.镜面,0,SkillType.圣炎,0),
     冥界三重奏(SkillType.侧击,0,SkillType.夹击,0),
     云雾缭绕(3,0, SkillType.侧击,0,SkillType.夹击,0,SkillTag.抗免疫,SkillTag.魔王无效),
     猛禽(SkillType.归魂,1,SkillType.加速,2),
@@ -1500,6 +1504,8 @@ public enum SkillType {
     厄运缠身(5,0,80,0, SkillTag.抗免疫,SkillTag.魔王无效),
     厄运降临(3,0,60,0, SkillTag.抗免疫,SkillTag.魔王无效),
     古神的低语(3,0,50,0, SkillTag.抗免疫,SkillTag.魔王无效),
+    深渊之力(5,0,0,0, SkillTag.抗免疫,SkillTag.魔王无效),
+    英雄冢(1,0,0,0, SkillTag.抗免疫,SkillTag.魔王无效),
     古神的低语伪(1,0,30,0, SkillTag.抗免疫,SkillTag.魔王无效),
     寄生(0, SkillTag.魔王无效, SkillTag.召唤),
     庚子守护(0, SkillTag.魔王无效, SkillTag.召唤),
@@ -1512,6 +1518,7 @@ public enum SkillType {
     审判之印(4,0, SkillTag.抗免疫,SkillTag.魔王无效),
     永生的诅咒(100,0, SkillTag.抗免疫,SkillTag.魔王无效),
     血魂之咒(3,0, SkillTag.抗免疫,SkillTag.魔王无效),
+    龙吼(3,0, SkillTag.抗免疫,SkillTag.魔王无效),
     锁魂(5,0, SkillTag.抗免疫,SkillTag.魔王无效),
     离魂芳印(2,0,1,0,SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
     深海巨口(2,0,2,0,SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
@@ -1565,6 +1572,7 @@ public enum SkillType {
     蚀月之光(3,0,SkillTag.复活),
     天罡咒(500,0, SkillTag.抗免疫, SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
     烟灭(1000,0),
+    恶龙领域(600,0),
     灰飞烟灭(850, 0, 3, 0,SkillType.烟灭,0,null,0, SkillTag.抗免疫),
     王者之风(1000,0),
     圣灵领域(700,0),
@@ -1647,7 +1655,10 @@ public enum SkillType {
     装备饮魂(200,100,0,1),
     装备恶魔诅咒(2000,0,0,1),
     装备瘟疫蔓延(0,1,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
+    装备恶魔重生(0,1,SkillType.重整,0,null,0),
+    装备围攻(0,0),
     装备雷神之锤(1000,0,3,0, SkillTag.抗免疫);
+    //知人善任(3,0,SkillType.司命,0,SkillType.善任,0),
 
 
     // 以下全部技能皆为待更新的空技能，请在更新之后将其移动到上面适合的位置

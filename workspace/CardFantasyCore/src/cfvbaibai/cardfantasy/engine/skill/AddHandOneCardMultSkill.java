@@ -18,7 +18,7 @@ import java.util.List;
 public final class AddHandOneCardMultSkill {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card, Skill addSkill1,Skill addSkill2,Skill addSkill3) {
         if (card == null) {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!AddHandOneCardMultSkill");
         }
         Skill skill = skillUseInfo.getSkill();
         CardSkill cardSkill1 = null;

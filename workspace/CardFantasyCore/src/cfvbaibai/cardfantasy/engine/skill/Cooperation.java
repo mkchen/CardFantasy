@@ -14,7 +14,7 @@ import java.util.List;
 public final class Cooperation {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card,String conCard,boolean flag) {
         if (card == null || card.isDead()) {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!Cooperation,"+card.getName()+","+skillUseInfo.getType());
         }
         Skill skill = skillUseInfo.getSkill();
 
@@ -54,7 +54,7 @@ public final class Cooperation {
 
     public static void applyVague(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card,String conCard,boolean flag) {
         if (card == null || card.isDead()) {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!applyVague");
         }
         Skill skill = skillUseInfo.getSkill();
 

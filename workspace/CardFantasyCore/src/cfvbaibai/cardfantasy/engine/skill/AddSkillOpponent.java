@@ -13,7 +13,7 @@ import java.util.List;
 public class AddSkillOpponent {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card, Skill addSkill,int number,Player defenderHero,int skillType)throws HeroDieSignal {
         if (card == null || card.isDead()) {
-            throw new CardFantasyRuntimeException("card should not be null or dead!");
+            throw new CardFantasyRuntimeException("card should not be null or dead!AddSkillOpponent");
         }
         Skill skill = skillUseInfo.getSkill();
         boolean precastSkill =false;

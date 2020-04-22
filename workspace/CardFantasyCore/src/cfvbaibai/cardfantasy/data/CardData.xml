@@ -1611,6 +1611,16 @@
         <Skill type="镜面" level="0" unlock="10" />
         <Skill type="不灭" level="6" unlock="10" />
     </Card>
+    <Card id="117062" name="南山唤龙热情似火" wikiId="" race="王国" speed="3" star="5" cost="18" incrCost="2" at="580" hp="1630" incrAT="46" incrHP="48">
+        <Skill type="神兽降世" level="0" unlock="0" summon="true" />
+        <Skill type="铁壁" level="4" unlock="5" />
+        <Skill type="祈福" level="7" unlock="5" death="true" />
+        <Skill type="镜面" level="0" unlock="10" />
+        <Skill type="不灭" level="6" unlock="10" />
+        <Skill type="免疫" level="0" unlock="15" />
+        <Skill type="圣炎" level="0" unlock="15" summon="true"/>
+    </Card>
+
     <Card id="11707" name="黄金镖客" wikiId="" race="王国" speed="3" star="5" cost="18" incrCost="2" at="580" hp="1580" incrAT="40" incrHP="40">
         <Skill type="星云锁链" level="0" unlock="0" />
         <Skill type="祈愿" level="2" unlock="0" />
@@ -1646,6 +1656,11 @@
         <Skill type="星云锁链" level="0" unlock="0" />
         <Skill type="风驰电掣" level="0" unlock="5" />
         <Skill type="妖力驱散" level="0" unlock="10" />
+    </Card>
+    <Card id="17101" name="深渊飞龙" wikiId="" race="王国" speed="3" star="5" cost="20" incrCost="2" at="580" hp="1580" incrAT="48" incrHP="47">
+        <Skill type="深渊之力" level="0" unlock="0" />
+        <Skill type="恶龙领域" level="0" unlock="5" />
+        <Skill type="恶龙诅咒" level="0" unlock="10" />
     </Card>
 
 
@@ -2101,6 +2116,19 @@
         <Skill type="水流护甲" level="4" unlock="5" />
         <Skill type="月神的触碰" level="5" unlock="10" />
     </Card>
+    <Card id="24441" name="迷雾之森" wikiId="" race="森林" speed="3" star="4" cost="15" incrCost="2" at="410" hp="1480" incrAT="34" incrHP="34">
+        <!--Skill type="雷神降临" level="6" unlock="0" />
+        <Skill type="盘踞之物" level="4" unlock="5" /-->
+        <Skill type="破军" level="5" unlock="10" />
+        <Skill type="不屈" level="0" unlock="10" />
+    </Card>
+    <Card id="2445" name="安乐少女" wikiId="" race="森林" speed="4" star="3" cost="15" incrCost="2" at="455" hp="1305" incrAT="27" incrHP="34">
+        <Skill type="盘球大师" level="0" unlock="0" />
+        <Skill type="凋零真言" level="6" unlock="0" />
+        <Skill type="月神的护佑" level="7" unlock="5" />
+        <Skill type="英雄冢" level="0" unlock="10" />
+    </Card>
+
 
     <Card id="2501" name="金属巨龙" wikiId="31004" race="森林" speed="4" star="5" cost="14" incrCost="3" at="355" hp="1480" incrAT="30" incrHP="23">
         <Skill type="暴击" level="6" unlock="0" />
@@ -3003,6 +3031,21 @@
         <Skill type="护体之刃" level="0" unlock="0" />
         <Skill type="浴火重生" level="0" unlock="5" />
         <Skill type="祈福" level="5" unlock="10" postcast="true"/>
+    </Card>
+    <Card id="12676" name="徒壁幼龙" wikiId="" race="森林" speed="3" star="5" cost="20" incrCost="2" at="570" hp="1560" incrAT="48" incrHP="45">
+        <Skill type="龙吼" level="0" unlock="0" />
+        <Skill type="无尽华尔兹" level="0" unlock="5" />
+        <Skill type="圣炎" level="0" unlock="10"/>
+    </Card>
+    <Card id="12677" name="除魔治愈师" wikiId="" race="森林" speed="3" star="5" cost="18" incrCost="2" at="540" hp="1600" incrAT="45" incrHP="44">
+        <Skill type="祈福" level="3" unlock="0" />
+        <Skill type="甘露" level="0" unlock="0" />
+        <Skill type="甘霖" level="8" unlock="0" />
+        <Skill type="甘霖" level="8" unlock="0" />
+        <Skill type="免疫" level="0" unlock="5" />
+        <Skill type="水流护甲" level="10" unlock="5" />
+        <Skill type="金身" level="5" unlock="10"/>
+        <Skill type="守护" level="10" unlock="10"/>
     </Card>
 
 
@@ -5690,6 +5733,13 @@
         <Skill type="邪龙领域" level="8" unlock="5" />
         <Skill type="神赐之躯" level="0" unlock="10" />
     </Card>
+    <Card id="46722" name="金属巨龙霜净魂斩" wikiId="" race="地狱" speed="3" star="5" cost="21" incrCost="2" at="575" hp="1600" incrAT="45" incrHP="45">
+        <Skill type="破坏之爪" level="0" unlock="0"  />
+        <Skill type="邪龙领域" level="8" unlock="5" />
+        <Skill type="神赐之躯" level="0" unlock="10" />
+        <Skill type="追魂" level="8" unlock="15" />
+        <Skill type="镜面" level="0" unlock="15" />
+    </Card>
     <Card id="4673" name="邪恶巨龙" wikiId="" race="地狱" speed="3" star="5" cost="19" incrCost="2" at="500" hp="1560" incrAT="43" incrHP="40">
         <Skill type="恶魔印记" level="0" unlock="0"  />
         <Skill type="邪龙之怒" level="0" unlock="5" />
@@ -6537,6 +6587,23 @@
         <Skill type="守护" level="8" unlock="10"/>
     </Card>
 
+    <Card id="5737" name="试炼天启骑士" wikiId="" race="魔神" speed="3" star="5" cost="99" incrCost="0" at="10000" hp="20000" incrAT="0" incrHP="0">
+        <Skill type="圣炎" level="0" unlock="10" />
+        <Skill type="圣炎" level="0" unlock="10" />
+        <Skill type="圣炎" level="0" unlock="10" />
+        <Skill type="圣炎" level="0" unlock="10" />
+        <Skill type="圣炎" level="0" unlock="10" />
+        <Skill type="免疫" level="0" unlock="10" />
+        <Skill type="腐化之地" level="0" unlock="10" />
+        <Skill type="恻隐" level="0" unlock="10" />
+    </Card>
+    <Card id="5738" name="试炼五毒蛇帝" wikiId="" race="魔神" speed="3" star="5" cost="99" incrCost="0" at="10000" hp="20000" incrAT="0" incrHP="0">
+        <Skill type="免疫" level="0" unlock="10" />
+        <Skill type="魔女之躯" level="0" unlock="10" />
+        <Skill type="智慧之光" level="0" unlock="10" />
+        <Skill type="恻隐" level="0" unlock="10" />
+    </Card>
+
     <!-- 魔族卡 -->
     <Card id="6101" name="终焉使者" wikiId="" race="魔族" speed="3" star="5" cost="19" incrCost="2" at="690" hp="1560" incrAT="41" incrHP="63">
         <Skill type="觉醒天崩地裂" level="0" unlock="0" />
@@ -6553,7 +6620,7 @@
         <Skill type="原素裂变" level="0" unlock="5" />
         <Skill type="不灭原核" level="0" unlock="10" />
     </Card>
-    <Card id="6104" name="小栗丸" wikiId="" race="魔族" speed="3" star="4" cost="17" incrCost="2" at="345" hp="1650" incrAT="33" incrHP="28">
+    <Card id="6104" name="小栗丸" wikiId="" race="魔族" speed="3" star="4" cost="17" incrCost="0" at="345" hp="1650" incrAT="33" incrHP="28">
         <Skill type="御魔屏障" level="0" unlock="0" />
         <Skill type="灵王的轰击" level="8" unlock="5" />
         <Skill type="栗子军团" level="0" unlock="10"/>
