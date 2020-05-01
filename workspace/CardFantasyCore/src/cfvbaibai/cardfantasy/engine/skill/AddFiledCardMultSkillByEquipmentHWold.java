@@ -15,7 +15,7 @@ import cfvbaibai.cardfantasy.engine.*;
 
 import java.util.List;
 
-public final class AddFiledCardMultSkillByEquipmentHW {
+public final class AddFiledCardMultSkillByEquipmentHWold {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, EntityInfo card, Skill addSkill1,Skill addSkill2,Skill addSkill3) {
         if (card == null) {
             throw new CardFantasyRuntimeException("card should not be null!");

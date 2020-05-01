@@ -34,6 +34,14 @@ public abstract class Skill implements Comparable<Skill> {
         return this.level;
     }
 
+    public void setLevel(int v) {
+        this.level = v;
+    }
+
+    public void incLevel(int v) {
+        this.level += v;
+    }
+
     public int getImpact() {
         return this.type.getImpact(this.level);
     }

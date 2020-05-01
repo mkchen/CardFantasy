@@ -139,6 +139,8 @@ public final class DeckBuilder {
                 parseAndAddIndenture(deck, desc.substring(1));
             } else if (desc.length() > 1 && desc.charAt(0) == 'Z') {
                 parseAndAddEquipment(deck, desc.substring(1));
+            } else if (desc.length() > 1 && (desc.indexOf("WQ") == 0 || desc.indexOf("FJ") == 0 || desc.indexOf("SP") == 0)) {
+                parseAndAddEquipment(deck, desc.substring(2));
             } else {
                 if (!parseAndAddCard(deck, desc)) {
                     if (!parseAndAddRune(deck, desc)) {
@@ -224,7 +226,7 @@ public final class DeckBuilder {
         String cardDesc = desc;
         Matcher matcher = CARD_PATTERN.matcher(cardDesc);
         if (!matcher.matches()) {
-            throw new DeckBuildRuntimeException("无效的卡牌: " + desc);
+            throw new DeckBuildRuntimeException("无效的卡牌1: " + desc);
         }
         String cardName = matcher.group("CardName");
         String cardLevelText = matcher.group("CardLevel");
@@ -233,7 +235,7 @@ public final class DeckBuilder {
             try {
                 cardLevel = Integer.parseInt(cardLevelText);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌2: " + desc, e);
             }
         }
         String extraSkillName = matcher.group("ExtraSkillName");
@@ -242,7 +244,7 @@ public final class DeckBuilder {
             try {
                 extraSkillType = SkillType.valueOf(extraSkillName);
             } catch (IllegalArgumentException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌3: " + desc, e);
             }
         }
         if (extraSkillType != null && cardLevelText == null) {
@@ -254,7 +256,7 @@ public final class DeckBuilder {
             try {
                 extraSkillLevel = Integer.parseInt(extraSkillLevelText);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌4: " + desc, e);
             }
         }
         if (extraSkillLevel < 0 || extraSkillLevel > 10) {
@@ -266,7 +268,7 @@ public final class DeckBuilder {
             try {
                 hp = Integer.parseInt(hpText);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌5: " + desc, e);
             }
         }
         if (hp <= 0&&hp!=-1 ) {
@@ -278,7 +280,7 @@ public final class DeckBuilder {
             try {
                 at = Integer.parseInt(atText);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌7: " + desc, e);
             }
         }
         if (at <= 0&&at!=-1 ) {
@@ -315,7 +317,7 @@ public final class DeckBuilder {
             try {
                 count = Integer.parseInt(countText);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌8: " + desc, e);
             }
         }
 
@@ -342,7 +344,7 @@ public final class DeckBuilder {
             try {
                 skillType1 = SkillType.valueOf(skillName1);
             } catch (IllegalArgumentException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌9: " + desc, e);
             }
         }
 
@@ -352,7 +354,7 @@ public final class DeckBuilder {
             try {
                 skillType2 = SkillType.valueOf(skillName2);
             } catch (IllegalArgumentException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌10: " + desc, e);
             }
         }
 
@@ -362,7 +364,7 @@ public final class DeckBuilder {
             try {
                 skillType3 = SkillType.valueOf(skillName3);
             } catch (IllegalArgumentException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌11: " + desc, e);
             }
         }
 
@@ -372,7 +374,7 @@ public final class DeckBuilder {
             try {
                 delay = Integer.parseInt(delayText);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌12: " + desc, e);
             }
         }
 
@@ -382,7 +384,7 @@ public final class DeckBuilder {
             try {
                 skillLevel1 = Integer.parseInt(skillLevelText1);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌13: " + desc, e);
             }
         }
 
@@ -392,7 +394,7 @@ public final class DeckBuilder {
             try {
                 skillLevel2 = Integer.parseInt(skillLevelText2);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌14: " + desc, e);
             }
         }
 
@@ -402,7 +404,7 @@ public final class DeckBuilder {
             try {
                 skillLevel3 = Integer.parseInt(skillLevelText3);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌15: " + desc, e);
             }
         }
 
@@ -485,7 +487,7 @@ public final class DeckBuilder {
             try {
                 count = Integer.parseInt(countText);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌16: " + desc, e);
             }
         }
         if(count == 0){
@@ -498,7 +500,7 @@ public final class DeckBuilder {
             try {
                 cardLevel = Integer.parseInt(cardLevelText);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌17: " + desc, e);
             }
         }
         String extraSkillName = matcher.group("ExtraSkillName");
@@ -507,7 +509,7 @@ public final class DeckBuilder {
             try {
                 extraSkillType = SkillType.valueOf(extraSkillName);
             } catch (IllegalArgumentException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌18: " + desc, e);
             }
         }
         if (extraSkillType != null && cardLevelText == null) {
@@ -519,7 +521,7 @@ public final class DeckBuilder {
             try {
                 extraSkillLevel = Integer.parseInt(extraSkillLevelText);
             } catch (NumberFormatException e) {
-                throw new DeckBuildRuntimeException("无效的卡牌: " + desc, e);
+                throw new DeckBuildRuntimeException("无效的卡牌19: " + desc, e);
             }
         }
         if (extraSkillLevel < 0 || extraSkillLevel > 10) {
@@ -599,7 +601,7 @@ public final class DeckBuilder {
         String equipmentDesc = desc;
         Matcher matcher = EQUIPMENT_PATTERN.matcher(equipmentDesc);
         if (!matcher.matches()) {
-            throw new DeckBuildRuntimeException("无效的装备: " + desc);
+            throw new DeckBuildRuntimeException("无效的装备1: " + desc);
         }
         String countText = matcher.group("Count");
         int count = 1;

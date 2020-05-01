@@ -716,8 +716,8 @@ public enum SkillType {
     九转秘术(0, 0),
     九转禁术(0, 0,SkillTag.召唤),
     勤能补拙(170, 0,50,0, SkillTag.永久, SkillTag.基础攻击加成),
-    净魂斩(0,0,50,0,SkillType.镜面,0,null,0),
-
+    净魂斩(0,0,50,0,SkillTag.抗沉默),
+    
     法力侵蚀(0, 20, 3, 0, SkillTag.抗免疫),
     核弹头(550, 0, 3, 0, SkillTag.抗免疫),
     破魔手(0, 20, 3, 0, SkillTag.抗免疫),
@@ -1202,7 +1202,7 @@ public enum SkillType {
     流星(SkillType.祈愿,1,SkillType.全体加速,1),
     风驰电掣(1,0),
     霜火交织(SkillType.霜火,0,SkillType.圣炎,0),
-    热情似火(SkillType.镜面,0,SkillType.圣炎,0),
+    热情似火(null,0,SkillType.圣炎,0,SkillTag.抗沉默),
     冥界三重奏(SkillType.侧击,0,SkillType.夹击,0),
     云雾缭绕(3,0, SkillType.侧击,0,SkillType.夹击,0,SkillTag.抗免疫,SkillTag.魔王无效),
     猛禽(SkillType.归魂,1,SkillType.加速,2),

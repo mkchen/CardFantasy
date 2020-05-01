@@ -5737,8 +5737,8 @@
         <Skill type="破坏之爪" level="0" unlock="0"  />
         <Skill type="邪龙领域" level="8" unlock="5" />
         <Skill type="神赐之躯" level="0" unlock="10" />
-        <Skill type="追魂" level="8" unlock="15" />
         <Skill type="镜面" level="0" unlock="15" />
+        <Skill type="追魂" level="8" unlock="15" />
     </Card>
     <Card id="4673" name="邪恶巨龙" wikiId="" race="地狱" speed="3" star="5" cost="19" incrCost="2" at="500" hp="1560" incrAT="43" incrHP="40">
         <Skill type="恶魔印记" level="0" unlock="0"  />
@@ -6588,19 +6588,46 @@
     </Card>
 
     <Card id="5737" name="试炼天启骑士" wikiId="" race="魔神" speed="3" star="5" cost="99" incrCost="0" at="10000" hp="20000" incrAT="0" incrHP="0">
-        <Skill type="圣炎" level="0" unlock="10" />
-        <Skill type="圣炎" level="0" unlock="10" />
-        <Skill type="圣炎" level="0" unlock="10" />
-        <Skill type="圣炎" level="0" unlock="10" />
-        <Skill type="圣炎" level="0" unlock="10" />
         <Skill type="免疫" level="0" unlock="10" />
         <Skill type="腐化之地" level="0" unlock="10" />
+        <Skill type="圣炎" level="0" unlock="10" />
+        <Skill type="圣炎" level="0" unlock="10" />
+        <Skill type="圣炎" level="0" unlock="10" />
+        <Skill type="圣炎" level="0" unlock="10" />
+        <Skill type="圣炎" level="0" unlock="10" />
+        <!--Skill type="毁灭之刃" level="0" unlock="10" /-->
+        <!--Skill type="猛毒" level="0" unlock="10" /-->
+        <!--Skill type="末日预言" level="0" unlock="10" /-->
+        <!--Skill type="反制瘟疫" level="0" unlock="10" /-->
         <Skill type="恻隐" level="0" unlock="10" />
     </Card>
     <Card id="5738" name="试炼五毒蛇帝" wikiId="" race="魔神" speed="3" star="5" cost="99" incrCost="0" at="10000" hp="20000" incrAT="0" incrHP="0">
         <Skill type="免疫" level="0" unlock="10" />
+        <!--Skill type="迷惑毒素" level="0" unlock="10" /-->
+        <Skill type="智慧之光" level="0" unlock="10" death="true" />
+        <!--Skill type="反制毒蛇增授" level="0" unlock="10" /-->
+        <!--Skill type="休眠" level="0" unlock="10" /-->
         <Skill type="魔女之息" level="0" unlock="10" />
-        <Skill type="智慧之光" level="0" unlock="10" />
+        <Skill type="恻隐" level="0" unlock="10" />
+    </Card>
+    <Card id="5739" name="试炼噩梦之影" wikiId="" race="魔神" speed="3" star="5" cost="99" incrCost="0" at="10000" hp="20000" incrAT="0" incrHP="0">
+        <Skill type="免疫" level="0" unlock="10" />
+        <!--Skill type="追猎" level="0" unlock="10" /-->
+        <!--Skill type="鬼影重重" level="0" unlock="10" /-->
+        <!--Skill type="冥狱之门" level="0" unlock="10" /-->
+        <Skill type="连续魔法" level="8" unlock="10" />
+        <Skill type="二段斩" level="0" unlock="10" />
+        <Skill type="破军" level="7" unlock="10" />
+        <Skill type="恻隐" level="0" unlock="10" />
+    </Card>
+    <Card id="5740" name="试炼摆渡者" wikiId="" race="魔神" speed="3" star="5" cost="99" incrCost="0" at="10000" hp="20000" incrAT="0" incrHP="0">
+        <Skill type="免疫" level="0" unlock="10" />
+        <!--Skill type="镇魂" level="0" unlock="10" /-->
+        <Skill type="奥术回声" level="0" unlock="10" />
+        <!--Skill type="暗流" level="0" unlock="10" /-->
+        <Skill type="地裂" level="0" unlock="10" />
+        <Skill type="全体阻碍" level="1" unlock="10" />
+        <!--Skill type="异界神兵" level="7" unlock="10" /-->
         <Skill type="恻隐" level="0" unlock="10" />
     </Card>
 

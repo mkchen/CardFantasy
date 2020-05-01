@@ -348,10 +348,12 @@ var playLilithGame = function(count) {
     var targetRemainingGuardCount = $('#lilith-target-remaining-guard-count').val();    //清怪模式下清至剩余多少怪, 打贼时记得设为0
     var remainingHP = $('#lilith-remaining-hp').val();                                  //尾刀模式下莉莉丝还剩多少血
     var eventCards = $('#lilith-event-cards').val();    //莉莉丝活动卡牌
+    var selectType = $('#select-lilith-game-level').val();    //选择的模拟类别
 
+    /*
     if(count == -110){                                  //强度选卡时，选择范围为几星卡和符文类别
         count = $('#select-lilith-game-level').val() + $('#cnt-lilith-game-level').val();
-    }else if(count == -100 || count == -101){
+    }else if(count == -100 || count == -101){           //排序
         count = count + $('#cnt-lilith-game-level').val();
     }else if(count == 100){
         count = $('#cnt-lilith-game-level').val();
@@ -370,6 +372,15 @@ var playLilithGame = function(count) {
         }else if(count == 7){
             count = 10000;
         }
+    }*/
+    if(count != 103){       //非选卡时不出现选卡选项
+        selectType = 0;
+    }
+    if(count == 102){       //用选卡选项来标记102为排序
+        selectType = 102;
+    }
+    if(count != 1 && count != -1){       //模拟次数，单次与动画除外，
+        count = $('#cnt-lilith-game-level').val();
     }
 
     var postData = {
@@ -384,7 +395,8 @@ var playLilithGame = function(count) {
         ecg: enableCustomGuards,
         cg: $('#custom-lilith-guards-deck').val(),      //莉莉丝卡组
         cgab: $('#custom-lilith-guards-atbuff').val(),  //莉莉丝卡组攻击加成
-        cghb: $('#custom-lilith-guards-hpbuff').val()   //莉莉丝卡组生命加成
+        cghb: $('#custom-lilith-guards-hpbuff').val(),   //莉莉丝卡组生命加成
+        st: selectType
     };
 
     $.cookie('lilith-battle', JSON.stringify(postData), { expires: 365 });  //将数据存入cookie
@@ -406,6 +418,7 @@ var playMapGame = function(count) {
     var deck = $('#map-deck').val().trim();
     var heroLv = $('#map-hero-lv').val();
     var map = getMap();
+    //var selectType = $('#select-map-game-level').val();
     if(count == -110){                                  //强度选卡时，选择范围为几星卡和符文类别
         count = $('#select-map-game-level').val() + $('#cnt-map-game-level').val();
     }else if(count == -100 || count == -101){           //强度排序和15级排序
@@ -432,7 +445,8 @@ var playMapGame = function(count) {
         deck: deck,
         hlv: heroLv,
         map: map,
-        count: count
+        count: count,
+        //selectType: selectType
     };
 
     $.cookie('map-battle', JSON.stringify(postData), { expires: 365 });
@@ -916,10 +930,10 @@ $(document)
     }
     $('#play-lilith-1-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(1);');
     $('#simulate-lilith-1-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(-1);');
-    $('#play-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(100);');
-    $('#sort-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(-100);');
-    $('#sort15-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(-101);');
-    $('#select-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(-110);');
+    $('#play-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(101);');     //模拟该卡组
+    $('#sort-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(102);');    //卡组排序
+    //$('#sort15-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(-101);');  
+    $('#select-lilith-massive-game-button').attr('href', 'javascript:CardFantasy.Core.playLilithGame(103);');  //各种选卡
     $('#lilith-config-1').hide();
     updateCustomLilithGuardsVisibility();
 })

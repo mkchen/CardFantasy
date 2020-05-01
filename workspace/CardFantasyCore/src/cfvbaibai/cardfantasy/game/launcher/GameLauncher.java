@@ -16,6 +16,8 @@ import cfvbaibai.cardfantasy.engine.Player;
 import cfvbaibai.cardfantasy.engine.Rule;
 import cfvbaibai.cardfantasy.game.*;
 
+import java.util.Random;
+
 public final class GameLauncher {
     private GameLauncher() {
     }
@@ -98,9 +100,26 @@ public final class GameLauncher {
         return player2Buffs;
     }
 
+
+    //为了把莉莉丝战役名带进来好做随机小兵而写的重整函数
+    public static LilithGameResult playCustomLilithGame(
+        String playerDeck, String lilithDeck, int playerHeroLv, int lilithCardAtBuff, int lilithCardHpBuff,
+        int gameType, int remainingGuard, int remainingHp, String eventCardNames, int gameCount, GameUI ui) {
+
+            return playCustomLilithGame(
+                playerDeck, lilithDeck, playerHeroLv, lilithCardAtBuff, lilithCardHpBuff,
+                gameType, remainingGuard, remainingHp, eventCardNames, gameCount, ui, "");
+
+        }
+
     public static LilithGameResult playCustomLilithGame(
             String playerDeck, String lilithDeck, int playerHeroLv, int lilithCardAtBuff, int lilithCardHpBuff,
-            int gameType, int remainingGuard, int remainingHp, String eventCardNames, int gameCount, GameUI ui) {
+            int gameType, int remainingGuard, int remainingHp, String eventCardNames, int gameCount, GameUI ui, String lilithName) {
+        
+        //试炼卡组池
+        String[] slCards={"月樱公主+逃跑","创世神女+加速1","魂之乐师+魔法毁灭","叹惋之歌+毒刃","火焰巫女+钢铁之肤6","邪月翼魔+全领域沉默","夜魅鬼手+暴击10","钢铁蛮牛兽+扼杀","蝶语仙子+本源之力7","神风剑豪+战意9",
+        "银河圣剑使+月恩术10","元素精灵使+连击","制裁之锤+冰甲8","钢铁士兵+不屈","水晶巨龙+召唤花族侍卫","黄金毒龙+不屈","花语术师+法力反射","联盟摄政王+英雄杀手7","圣剑持有者+反射装甲","雷眼狂花+先机全体加速1","骑士王血魂+免疫"};
+
         List<Skill> player1Buffs = PvlEngine.getCardBuffs(lilithCardAtBuff, lilithCardHpBuff);
         PlayerInfo player1 = PlayerBuilder.build(false, "莉莉丝", lilithDeck, 99999, player1Buffs, 100);
         List<Skill> player2Buffs = buildBuffsForLilithEvents(eventCardNames);
@@ -122,9 +141,41 @@ public final class GameLauncher {
         for (int i = 0; i < gameCount; ++i) {
             PvlEngine engine = new PvlEngine(ui, Rule.getDefault());
             PvlGameResult pvlGameResult = null;
-            if (gameType == 0) {
+            if (gameType == 0) {    //清怪模式
+                //当为试炼时，从试炼卡牌池中随机选择小兵
+                if(lilithName.indexOf("试炼") == 0){
+                    //设置一个数组下编的列表，回头再用这个列表里的下编去取卡牌池数组里的卡牌
+                    int cardscnt = slCards.length;
+                    ArrayList<Integer> list = new ArrayList<Integer>();
+                    Random rand = new Random();
+                    boolean[] bool = new boolean[cardscnt];
+                    int num = 0;
+                    for (int j = 0; j < 11; j++) {
+                        do {
+                            // 如果产生的数相同继续循环
+                            num = rand.nextInt(cardscnt);
+                        } while (bool[num]);
+                        bool[num] = true;
+                        list.add(num);
+                    }
+                    //取卡牌
+                    String newdeckinfo = "";
+                    for (int j = 0; j < 11; j++) {
+                        int x = list.get(j);
+                        newdeckinfo = newdeckinfo + slCards[x] +",";
+                    }
+                    //将卡牌加入
+                    newdeckinfo = lilithDeck + newdeckinfo;
+                    player1 = PlayerBuilder.build(false, "莉莉丝", newdeckinfo, 99999, player1Buffs, 100);
+                    //int k = 0;
+                    //if(k == 0){
+                        //throw new CardFantasyRuntimeException("待确认的地图:" + player1.getDeckParsableDesc() +":"+lilithName);
+                    //}
+                }
+                //
+
                 pvlGameResult = engine.clearGuards(player1, player2, remainingGuard);
-            } else {
+            } else {                //尾刀模式
                 pvlGameResult = engine.rushBoss(player1, remainingHp, player2);
             }
             statBattleCount.addData(pvlGameResult.getBattleCount());
@@ -144,7 +195,7 @@ public final class GameLauncher {
         LilithStartupInfo lsi = LilithDataStore.loadDefault().getStartupInfo(lilithName);
         String lilithDeck = lsi.getDeckDescsText(gameType == 0);
         return playCustomLilithGame(playerDeck, lilithDeck, heroLv, lsi.getCardAtBuff(), lsi.getCardHpBuff(),
-                gameType, remainingGuard, remainingHp, eventCardNames, gameCount, ui);
+                gameType, remainingGuard, remainingHp, eventCardNames, gameCount, ui, lilithName);
     }
 
     public static MapGameResult playMapGame(String playerDeck, String mapName, int heroLv, int gameCount, GameUI ui) {

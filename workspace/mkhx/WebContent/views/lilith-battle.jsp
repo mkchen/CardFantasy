@@ -72,15 +72,14 @@
             <a id="simulate-lilith-1-game-button" class="battle-button" data-role="button" data-mini="true">动画战斗</a>
             <a id="play-lilith-massive-game-button" class="battle-button" data-role="button" data-mini="true">强度分析</a>
             <a id="sort-lilith-massive-game-button" class="battle-button" data-role="button" data-mini="true">卡组排序</a>
-            <a id="sort15-lilith-massive-game-button" class="battle-button" data-role="button" data-mini="true">15级排序</a>
             <select id="cnt-lilith-game-level" data-mini="true" data-native-menu="true">
-                <option value="1">10次</option>
-                <option value="2" selected="selected">100次</option>
-                <option value="3">1000次</option>
-                <option value="4">10000次</option>
-                <option value="5">TOP百次</option>
-                <option value="6">TOP千次</option>
-                <option value="7">TOP万次</option>
+                <option value="10">10次</option>
+                <option value="100" selected="selected">100次</option>
+                <option value="1000">1000次</option>
+                <option value="10000">10000次</option>
+                <option value="-100">TOP百次</option>
+                <option value="-1000">TOP千次</option>
+                <option value="-10000">TOP万次</option>
             </select>
             <a id="select-lilith-massive-game-button" class="battle-button" data-role="button" data-mini="true">强度选卡</a>
             <select id="select-lilith-game-level" data-mini="true" data-native-menu="true">

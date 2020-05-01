@@ -16,6 +16,8 @@ import cfvbaibai.cardfantasy.engine.GameResult;
 import cfvbaibai.cardfantasy.engine.Player;
 import cfvbaibai.cardfantasy.engine.Rule;
 
+import cfvbaibai.cardfantasy.CardFantasyRuntimeException;
+
 public class PvlEngine extends GameEngine {
     private int timeout;
     
