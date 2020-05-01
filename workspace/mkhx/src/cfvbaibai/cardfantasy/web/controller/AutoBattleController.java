@@ -232,7 +232,7 @@ public class AutoBattleController {
     public void playAutoMassiveGame(HttpServletRequest request, HttpServletResponse response,
             @RequestParam("deck1") String deck1, @RequestParam("deck2") String deck2,
             @RequestParam("hlv1") int heroLv1, @RequestParam("hlv2") int heroLv2, @RequestParam("count") int count,
-            @RequestParam("fa") int firstAttack, @RequestParam("do") int deckOrder,
+            @RequestParam("fa") int firstAttack, @RequestParam("do") int deckOrder, @RequestParam("st") int selectType, 
             @RequestParam("p1hhpb") int p1HeroHpBuff, @RequestParam("p1catb") int p1CardAtBuff, @RequestParam("p1chpb") int p1CardHpBuff,
             @RequestParam("p2hhpb") int p2HeroHpBuff, @RequestParam("p2catb") int p2CardAtBuff, @RequestParam("p2chpb") int p2CardHpBuff,
             @RequestParam("vc1") String victoryConditionText1
@@ -255,45 +255,22 @@ public class AutoBattleController {
             ArenaGameResult result = null;
             GameResultStat stat = null;
 
-            int selectType = 0;
+            //int selectType = 0;
             int count20 = 0;
-            if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
-                selectType = count/10;
-                count = count - selectType*10;
-                if(count == -1){
-                    count = 10;
-                }else if(count == -2){
-                    count = 100;
-                }else if(count == -3){
-                    count = 1000;
-                }else if(count == -4){
-                    count = 10000;
-                }else if(count == -5){
-                    count = 10;
-                    count20 = 100;
-                }else if(count == -6){
-                    count = 100;
-                    count20 = 1000;
-                }else if(count == -7){
-                    count = 1000;
-                    count20 = 10000;
-                }
+            if(count < -1){
+                count20 = count * -1;
+                count = count20 / 10;
             }
             //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
             String cardswithcnt = "";
             String cardsnocnt = "";
             List<sortCard> sortcards = new ArrayList<>();
-            deck1 = deck1.replace("，", ",");
-            deck1 = deck1 + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
-            deck1 = deck1.replace(" ", "");
-            deck1 = deck1.replace(",,", ",");
-            deck1 = deck1.replace(",,", ",");
             String subdeck = deck1;
             int firstcnt = subdeck.indexOf(',');
             String errornote = "";
 
 
-            if (selectType == -100 || selectType == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+            if (selectType == 102){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
                 if(count20 != 0){   
                     count = count20;        //排序时按TOP的次数排
                 }
@@ -305,18 +282,8 @@ public class AutoBattleController {
                     
                     if(thisdeck.replace(",", "") != ""){
                         String newdeck = "";
-                        String thisdeck15 = "";
-                        if(selectType == -100){        //当为卡组排序时,每次进行去掉本张卡的模拟
+                        if(selectType == 102){         //当为卡组排序时,每次进行去掉本张卡的模拟
                             newdeck = deck1.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
-                        }else if(selectType == -101){
-                            
-                            newdeck = deck1.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
-                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
-                                thisdeck15 = thisdeck +"-15";
-                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
-                                thisdeck15 = thisdeck.replace("-10", "-15").replace("-14", "-15");
-                            } 
-                            newdeck = thisdeck15 +","+ newdeck;
                         }
                         
 
@@ -358,26 +325,12 @@ public class AutoBattleController {
                     }
                 });
                 //从列表中取出来
-                int i = 1;
                 for(sortCard sortcard:sortcards){
                     cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
                     cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
 
-                    if(selectType == -100){            //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
+                    if(selectType == 102){             //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
                         cardsnocnt = cardsnocnt + sortcard.cardname +" ";
-                    }else if(selectType == -101){      //当为15排序的时候, 最后显示最强卡牌15级加其它卡牌来显示卡组
-                        if(i ==1){
-                            String thisdeck = sortcard.cardname;
-                            String newdeck = deck1.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
-                            thisdeck = thisdeck.replace(",","");
-                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
-                                thisdeck = thisdeck +"-15";
-                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
-                                thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
-                            } 
-                            cardsnocnt = thisdeck +", "+ newdeck;
-                        }
-                        i++;
                     }
                 }
             } else if(selectType <= -110){              //在已获得的卡牌中选择出对本战胜率最高的
@@ -388,6 +341,8 @@ public class AutoBattleController {
                 InputStream cardFWStream;
                 //String txturl = "";
                 //List txturls;
+                List<String> txturls = getMycardTxt(selectType);
+                /*
                 List<String> txturls=new ArrayList<>();
 
                 //从文件中读取出卡牌列表
@@ -478,7 +433,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardspZb.txt");
                 }else if(selectType == -161){       //星辰远征
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardYZ.txt");
-                }
+                }*/
 
                 //从mycard文件列表中取出卡牌
                 for (int i = 0; i < txturls.size(); i++) {
@@ -684,6 +639,9 @@ public class AutoBattleController {
 
 
             }else{
+                if(count20 != 0){   
+                    count = count20;        //单次模拟时按TOP的次数排
+                }
                 setup = GameSetup.setupArenaGame(
                         deck1, deck2, heroLv1, heroLv2,
                         p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
@@ -870,6 +828,7 @@ public class AutoBattleController {
     public void playBossMassiveGame(HttpServletRequest request, HttpServletResponse response,
             @RequestParam("deck") String deck, @RequestParam("count") int count, @RequestParam("gt") int guardType,
             @RequestParam("hlv") int heroLv, @RequestParam("bn") String bossName, @RequestParam("bk") int buffKingdom,
+            @RequestParam("st") int selectType, 
             @RequestParam("bf") int buffForest, @RequestParam("bs") int buffSavage, @RequestParam("bh") int buffHell
             ) throws IOException {
         PrintWriter writer = response.getWriter();
@@ -887,9 +846,13 @@ public class AutoBattleController {
 
             deck = formatDeck(deck);
 
-            int selectType = 0;
+            //int selectType = 0;
             int count20 = 0;
-            if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
+            if(count < -1){
+                count20 = count * -1;
+                count = count20 / 10;
+            }
+            /*if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
                 selectType = count/10;
                 count = count - selectType*10;
                 if(count == -1){
@@ -910,16 +873,11 @@ public class AutoBattleController {
                     count = 1000;
                     count20 = 10000;
                 }
-            }
+            }*/
             //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
             String cardswithcnt = "";
             String cardsnocnt = "";
             List<sortCard> sortcards = new ArrayList<>();
-            deck = deck.replace("，", ",");
-            deck = deck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
-            deck = deck.replace(" ", "");
-            deck = deck.replace(",,", ",");
-            deck = deck.replace(",,", ",");
             String subdeck = deck;
             int firstcnt = subdeck.indexOf(',');
 
@@ -927,7 +885,7 @@ public class AutoBattleController {
             //String ttest = "";
             
 
-            if (selectType == -100 || selectType == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+            if (selectType == 102){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
                 if(count20 != 0){   
                     count = count20;        //排序时按TOP的次数排
                 }
@@ -938,19 +896,9 @@ public class AutoBattleController {
 
                     if(thisdeck.replace(",", "") != ""){
                         String newdeck = "";
-                        String thisdeck15 = "";
-                        if(selectType == -100){        //当为卡组排序时,每次进行去掉本张卡的模拟
+                        if(selectType == 102){         //当为卡组排序时,每次进行去掉本张卡的模拟
                             newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
                             //ttest = ttest + thisdeck +"|"+ newdeck +"@\r\n";
-                        }else if(selectType == -101){
-                            
-                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
-                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
-                                thisdeck15 = thisdeck +"-15";
-                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
-                                thisdeck15 = thisdeck.replace("-10", "-15").replace("-14", "-15");
-                            } 
-                            newdeck = thisdeck15 +","+ newdeck;
                         }
                         
 
@@ -994,26 +942,12 @@ public class AutoBattleController {
                     }
                 });
                 //从列表中取出来
-                int i = 1;
                 for(sortCard sortcard:sortcards){
                     cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
                     cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
 
-                    if(selectType == -100){            //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
+                    if(selectType == 102){             //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
                         cardsnocnt = cardsnocnt + sortcard.cardname +" ";
-                    }else if(selectType == -101){      //当为15排序的时候, 最后显示最强卡牌15级加其它卡牌来显示卡组
-                        if(i ==1){
-                            String thisdeck = sortcard.cardname;
-                            String newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
-                            thisdeck = thisdeck.replace(",","");
-                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
-                                thisdeck = thisdeck +"-15";
-                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
-                                thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
-                            } 
-                            cardsnocnt = thisdeck +","+ newdeck;
-                        }
-                        i++;
                     }
                 }
             } else if(selectType <= -110){              //在已获得的卡牌中选择出对本战胜率最高的
@@ -1022,6 +956,8 @@ public class AutoBattleController {
                 Double bestcnt = 0.0;
 
                 InputStream cardFWStream;
+                List<String> txturls = getMycardTxt(selectType);
+                /*
                 List<String> txturls=new ArrayList<>();
 
                 //从文件中读取出卡牌列表
@@ -1110,7 +1046,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardfjZb.txt");
                 }else if(selectType == -153){       //装备饰品
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardspZb.txt");
-                }
+                }*/
                 
                 //从mycard文件列表中取出卡牌
                 for (int i = 0; i < txturls.size(); i++) {
@@ -1238,6 +1174,9 @@ public class AutoBattleController {
                 
 
             } else {    //作者原本的强度分析
+                if(count20 != 0){   
+                    count = count20;        //单次模拟时按TOP的次数排
+                }
                 //setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                 //result = GameLauncher.playBossGame(setup);
                 try{
@@ -1921,7 +1860,7 @@ public class AutoBattleController {
                         return o1.getCnt().compareTo(o2.getCnt());
                     }
                 });
-                int i = 1;
+                //int i = 1;
                 for(sortCard sortcard:sortcards){
                     //System.out.println(student.cardname);
                     //System.out.println(student.cnt.toString());
@@ -2345,7 +2284,7 @@ public class AutoBattleController {
     @RequestMapping(value = "/PlayMapMassiveGame")
     public void playMapMassiveGame(HttpServletRequest request, HttpServletResponse response,
             @RequestParam("deck") String deck, @RequestParam("hlv") int heroLv, @RequestParam("map") String map,
-            @RequestParam("count") int count, @RequestParam("selectType") int selectType) throws IOException {
+            @RequestParam("count") int count, @RequestParam("st") int selectType) throws IOException {
         PrintWriter writer = response.getWriter();
         GameUI ui = new DummyGameUI();
         try {
@@ -2364,48 +2303,26 @@ public class AutoBattleController {
 
             deck = formatDeck(deck);
 
-            selectType = 0;
+            //selectType = 0;
             //if(selectType == 0){
                 //throw new CardFantasyRuntimeException("待确认的地图:" + selectType +":");
             //}
             int count20 = 0;
-            if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
-                selectType = count/10;
-                count = count - selectType*10;
-                if(count == -1){
-                    count = 10;
-                }else if(count == -2){
-                    count = 100;
-                }else if(count == -3){
-                    count = 1000;
-                }else if(count == -4){
-                    count = 10000;
-                }else if(count == -5){
-                    count = 10;
-                    count20 = 100;
-                }else if(count == -6){
-                    count = 100;
-                    count20 = 1000;
-                }else if(count == -7){
-                    count = 1000;
-                    count20 = 10000;
-                }
+            if(count < -1){
+                count20 = count * -1;
+                count = count20 / 10;
             }
+
             //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
             String cardswithcnt = "";
             String cardsnocnt = "";
             List<sortCard> sortcards = new ArrayList<>();
-            deck = deck.replace("，", ",");
-            deck = deck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
-            deck = deck.replace(" ", "");
-            deck = deck.replace(",,", ",");
-            deck = deck.replace(",,", ",");
             String subdeck = deck;
             int firstcnt = subdeck.indexOf(',');
             String errornote = "";
             String ttest = "";
 
-            if (selectType == -100 || selectType == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+            if (selectType == 102){        //102:本卡组卡牌胜率排序;  
                 if(count20 != 0){   
                     count = count20;        //排序时按TOP的次数排
                 }
@@ -2416,19 +2333,9 @@ public class AutoBattleController {
 
                     if(thisdeck.replace(",", "") != ""){
                         String newdeck = "";
-                        String thisdeck15 = "";
-                        if(selectType == -100){        //当为卡组排序时,每次进行去掉本张卡的模拟
+                        if(selectType == 102){         //当为卡组排序时,每次进行去掉本张卡的模拟
                             newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
                             //ttest = ttest + thisdeck +"|"+ newdeck +"@\r\n";
-                        }else if(selectType == -101){
-                            
-                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
-                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
-                                thisdeck15 = thisdeck +"-15";
-                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
-                                thisdeck15 = thisdeck.replace("-10", "-15").replace("-14", "-15");
-                            } 
-                            newdeck = thisdeck15 +","+ newdeck;
                         }
                         
 
@@ -2452,26 +2359,12 @@ public class AutoBattleController {
                     }
                 });
                 //从列表中取出来
-                int i = 1;
                 for(sortCard sortcard:sortcards){
                     cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
                     cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
 
-                    if(selectType == -100){            //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
+                    if(selectType == 102){             //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
                         cardsnocnt = cardsnocnt + sortcard.cardname +" ";
-                    }else if(selectType == -101){      //当为15排序的时候, 最后显示最强卡牌15级加其它卡牌来显示卡组
-                        if(i ==1){
-                            String thisdeck = sortcard.cardname;
-                            String newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
-                            thisdeck = thisdeck.replace(",","");
-                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
-                                thisdeck = thisdeck +"-15";
-                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
-                                thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
-                            } 
-                            cardsnocnt = thisdeck +","+ newdeck;
-                        }
-                        i++;
                     }
                 }
             } else if(selectType <= -110){              //在已获得的卡牌中选择出对本战胜率最高的
@@ -2480,6 +2373,8 @@ public class AutoBattleController {
                 Double bestcnt = 0.0;
 
                 InputStream cardFWStream;
+                List<String> txturls = getMycardTxt(selectType);
+                /*
                 List<String> txturls=new ArrayList<>();
 
                 //从文件中读取出卡牌列表
@@ -2569,7 +2464,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardfjZb.txt");
                 }else if(selectType == -153){       //装备饰品
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardspZb.txt");
-                }
+                }*/
                 
                 //从mycard文件列表中取出卡牌
                 for (int i = 0; i < txturls.size(); i++) {
@@ -2710,6 +2605,9 @@ public class AutoBattleController {
                 result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
 
             } else {    //作者原本的强度分析
+                if(count20 != 0){   
+                    count = count20;        //单次模拟时按TOP的次数排
+                }
                 result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
             }
 
@@ -2948,7 +2846,7 @@ public class AutoBattleController {
                                    @RequestParam("fa") int firstAttack, @RequestParam("do") int deckOrder,
                                    @RequestParam("p1hhpb") int p1HeroHpBuff, @RequestParam("p1catb") int p1CardAtBuff, @RequestParam("p1chpb") int p1CardHpBuff,
                                    @RequestParam("p2hhpb") int p2HeroHpBuff, @RequestParam("p2catb") int p2CardAtBuff, @RequestParam("p2chpb") int p2CardHpBuff,
-                                   @RequestParam("vc1") String victoryConditionText1,
+                                   @RequestParam("vc1") String victoryConditionText1, @RequestParam("st") int selectType, 
                                    @RequestParam("deck") String deck, @RequestParam("hlv") int heroLv, @RequestParam("map") String map,
                                    @RequestParam("count") int count) throws IOException {
         PrintWriter writer = response.getWriter();
@@ -2969,9 +2867,13 @@ public class AutoBattleController {
 
             MapGameResult result = null;
 
-            int selectType = 0;
+            //int selectType = 0;
             int count20 = 0;
-            if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
+            if(count < -1){
+                count20 = count * -1;
+                count = count20 / 10;
+            }
+            /*if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
                 selectType = count/10;
                 count = count - selectType*10;
                 if(count == -1){
@@ -2992,7 +2894,7 @@ public class AutoBattleController {
                     count = 1000;
                     count20 = 10000;
                 }
-            }
+            }*/
             //虽然下面这些在官方千场里用不到, 但不想写在里面, 嫌麻烦
             String cardswithcnt = "";
             String cardsnocnt = "";
@@ -3007,7 +2909,7 @@ public class AutoBattleController {
             String errornote = "";
             //String ttest = "";
 
-            if (selectType == -100 || selectType == -101){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
+            if (selectType == 102){        //-100:本卡组卡牌胜率排序;  -101:本卡组卡牌升15胜率排序
                 if(count20 != 0){   
                     count = count20;        //排序时按TOP的次数排
                 }
@@ -3018,19 +2920,10 @@ public class AutoBattleController {
 
                     if(thisdeck.replace(",", "") != ""){
                         String newdeck = "";
-                        String thisdeck15 = "";
-                        if(selectType == -100){        //当为卡组排序时,每次进行去掉本张卡的模拟
+                        //String thisdeck15 = "";
+                        if(selectType == 102){         //当为卡组排序时,每次进行去掉本张卡的模拟
                             newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
                             //ttest = ttest + thisdeck +"|"+ newdeck +"@\r\n";
-                        }else if(selectType == -101){
-                            
-                            newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
-                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
-                                thisdeck15 = thisdeck +"-15";
-                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
-                                thisdeck15 = thisdeck.replace("-10", "-15").replace("-14", "-15");
-                            } 
-                            newdeck = thisdeck15 +","+ newdeck;
                         }
                         
                         //将卡牌胜率写进列表
@@ -3054,26 +2947,12 @@ public class AutoBattleController {
                     }
                 });
                 //从列表中取出来
-                int i = 1;
                 for(sortCard sortcard:sortcards){
                     cardswithcnt = cardswithcnt + sortcard.cardname.replace(",","");
                     cardswithcnt = cardswithcnt +"("+ sortcard.cnt.toString() +"),";
 
-                    if(selectType == -100){            //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
+                    if(selectType == 102){             //当为卡组排序的时候, 最后按强度卡牌排序显示卡组
                         cardsnocnt = cardsnocnt + sortcard.cardname +" ";
-                    }else if(selectType == -101){      //当为15排序的时候, 最后显示最强卡牌15级加其它卡牌来显示卡组
-                        if(i ==1){
-                            String thisdeck = sortcard.cardname;
-                            String newdeck = deck.replaceFirst(thisdeck.replace("+", "\\+").replace("?", "\\?"), "");  //去掉取出来的卡牌的卡牌组
-                            thisdeck = thisdeck.replace(",","");
-                            if(thisdeck.indexOf('-') == -1){            //当本卡没有加等级的时候,加上等级15
-                                thisdeck = thisdeck +"-15";
-                            }else{                                      //当本卡有加等级的时候,把10级或14级换成15级, 应该不会有别的等级出现
-                                thisdeck = thisdeck.replace("-10", "-15").replace("-14", "-15");
-                            } 
-                            cardsnocnt = thisdeck +","+ newdeck;
-                        }
-                        i++;
                     }
                 }
 
@@ -3083,6 +2962,8 @@ public class AutoBattleController {
                 Double bestcnt = 0.0;
 
                 InputStream cardFWStream;
+                List<String> txturls = getMycardTxt(selectType);
+                /*
                 List<String> txturls=new ArrayList<>();
 
                 //从文件中读取出卡牌列表
@@ -3171,7 +3052,7 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardfjZb.txt");
                 }else if(selectType == -153){       //装备饰品
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardspZb.txt");
-                }
+                }*/
                 
                 //从mycard文件列表中取出卡牌
                 for (int i = 0; i < txturls.size(); i++) {
@@ -3313,6 +3194,9 @@ public class AutoBattleController {
                 result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
     
             }else{
+                if(count20 != 0){   
+                    count = count20;        //单次模拟时按TOP的次数排
+                }
                 result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
             }
             

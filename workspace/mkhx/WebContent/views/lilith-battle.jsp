@@ -102,7 +102,7 @@
                 <option value="-124">土符文</option>
                 <option value="-125">全符文</option>
                 <option value="-140">精选契约</option>
-                <option value="-141">契约</option>
+                <option value="-141">全契约</option>
                 
                 <option value="-151">武器</option>
                 <option value="-152">防具</option>

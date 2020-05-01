@@ -47,15 +47,14 @@
                 <a id="simulate-auto-1-game-button" class="battle-button" data-role="button" data-mini="true">动画战斗</a>
                 <a id="play-auto-massive-game-button" class="battle-button" data-role="button" data-mini="true">连续千场</a>
                 <a id="sort-auto-massive-game-button" class="battle-button" data-role="button" data-mini="true">卡组排序</a>
-                <a id="sort15-auto-massive-game-button" class="battle-button" data-role="button" data-mini="true">15级排序</a>
                 <select id="cnt-auto-game-level" data-mini="true" data-native-menu="true">
-                    <option value="1">10次</option>
-                    <option value="2" selected="selected">100次</option>
-                    <option value="3">1000次</option>
-                    <option value="4">10000次</option>
-                    <option value="5">TOP百次</option>
-                    <option value="6">TOP千次</option>
-                    <option value="7">TOP万次</option>
+                    <option value="10">10次</option>
+                    <option value="100" selected="selected">100次</option>
+                    <option value="1000">1000次</option>
+                    <option value="10000">10000次</option>
+                    <option value="-100">TOP百次</option>
+                    <option value="-1000">TOP千次</option>
+                    <option value="-10000">TOP万次</option>
                 </select>
                 <a id="select-auto-massive-game-button" class="battle-button" data-role="button" data-mini="true">强度选卡</a>
                 <select id="select-auto-game-level" data-mini="true" data-native-menu="true">
@@ -78,11 +77,10 @@
                     <option value="-124">土符文</option>
                     <option value="-125">全符文</option>
                     <option value="-140">精选契约</option>
-                    <option value="-141">契约</option>
-                    
+                    <option value="-141">全契约</option>
                     <option value="-151">武器</option>
-                <option value="-152">防具</option>
-                <option value="-153">饰品</option>
+                    <option value="-152">防具</option>
+                    <option value="-153">饰品</option>
                     <option value="-161">星辰远征</option>
             </select>
                 <a data-role="button" data-mini="true" data-type="bug" href="#">提BUG</a>

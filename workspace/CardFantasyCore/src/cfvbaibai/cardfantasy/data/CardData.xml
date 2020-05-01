@@ -1662,6 +1662,13 @@
         <Skill type="恶龙领域" level="0" unlock="5" />
         <Skill type="恶龙诅咒" level="0" unlock="10" />
     </Card>
+    <Card id="1711" name="新亭侯" wikiId="" race="王国" speed="3" star="5" cost="20" incrCost="2" at="550" hp="1510" incrAT="43" incrHP="46">
+        <!--Skill type="拔刀斩" level="0" unlock="0" /-->
+        <Skill type="破军" level="7" unlock="5" />
+        <Skill type="神兵召唤" level="0" unlock="5" />
+        <Skill type="镜像" level="0" unlock="10" death="true" />
+        <Skill type="不屈" level="0" unlock="10" />
+    </Card>
 
 
 
