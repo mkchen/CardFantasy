@@ -36,9 +36,11 @@ public final class SummonStopSkillUseInfoList {
         GameUI ui = stage.getUI();
         int number =0;
         SkillUseInfo useSkillUseInfo = null;
+        List<SkillUseInfo> deleteSkillUseInfoList = new ArrayList<>();
         for(SkillUseInfo skillUseInfo:skillUseInfoList){
             CardInfo cardInfo = (CardInfo) skillUseInfo.getOwner();
             if(cardInfo.isDead()){
+                deleteSkillUseInfoList.add(skillUseInfo);
                 continue;
             }
             ui.useSkill(skillUseInfo.getOwner(), attacker, skillUseInfo.getSkill(), true);
@@ -50,6 +52,9 @@ public final class SummonStopSkillUseInfoList {
         }
         if(number<=1){
             defender.removeSummonStopSkillUseInfoList(useSkillUseInfo);
+        }
+        for(SkillUseInfo skillUseInfo:deleteSkillUseInfoList){
+            defender.removeSummonStopSkillUseInfoList(skillUseInfo);
         }
         return flag;
     }

@@ -1,16 +1,14 @@
 package cfvbaibai.cardfantasy.engine;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import cfvbaibai.cardfantasy.CardFantasyRuntimeException;
 import cfvbaibai.cardfantasy.data.Card;
 import cfvbaibai.cardfantasy.data.PlayerInfo;
 import cfvbaibai.cardfantasy.data.RuneData;
 import cfvbaibai.cardfantasy.data.Skill;
 
-import javax.naming.spi.Resolver;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class Player extends EntityInfo {
     private PlayerInfo playerInfo;
@@ -31,6 +29,7 @@ public class Player extends EntityInfo {
     private List<SkillUseInfo>  impregnableDefenseHero;//铁壁系列技能
     private List<SkillUseInfo>  failureSkillUseInfoList;//腐化之地系列技能
     private List<SkillUseInfo>  summonStopSkillUseInfoList;//降临禁止系列技能
+    private List<SkillUseInfo>  summonReturnSkillUseInfoList;//降临返回系列技能
     
     public Player(PlayerInfo playerInfo, StageInfo stage) {
         this.playerInfo = playerInfo;
@@ -51,6 +50,7 @@ public class Player extends EntityInfo {
         this.impregnableDefenseHero = new ArrayList<SkillUseInfo>();
         this.failureSkillUseInfoList = new ArrayList<SkillUseInfo>();
         this.summonStopSkillUseInfoList = new ArrayList<SkillUseInfo>();
+        this.summonReturnSkillUseInfoList = new ArrayList<SkillUseInfo>();
         for (Skill cardBuff : playerInfo.getCardBuffs()) {
             this.cardBuffs.add(new SkillUseInfo(this, cardBuff));
         }
@@ -253,9 +253,8 @@ public class Player extends EntityInfo {
     public void addSummonStopSkillUseInfoList(SkillUseInfo skillUseInfo) {
         for(SkillUseInfo addSkillUserInfo:this.summonStopSkillUseInfoList)
         {
-            if(addSkillUserInfo == skillUseInfo)
-            {
-                throw new CardFantasyRuntimeException("skillUseInfo is reused，addSummonStopSkillUseInfoList"+ skillUseInfo.getType() +","+ skillUseInfo.getOwner().getShortDesc());
+            if(addSkillUserInfo == skillUseInfo) {
+                return;
             }
         }
         this.summonStopSkillUseInfoList.add(skillUseInfo);
@@ -263,5 +262,23 @@ public class Player extends EntityInfo {
 
     public void removeSummonStopSkillUseInfoList(SkillUseInfo skillUseInfo) {
         this.summonStopSkillUseInfoList.remove(skillUseInfo);
+    }
+
+    public List<SkillUseInfo> getSummonReturnSkillUseInfoList() {
+        return this.summonReturnSkillUseInfoList;
+    }
+
+    public void addSummonReturnSkillUseInfoList(SkillUseInfo skillUseInfo) {
+        for(SkillUseInfo addSkillUserInfo:this.summonReturnSkillUseInfoList)
+        {
+            if(addSkillUserInfo == skillUseInfo) {
+                return;
+            }
+        }
+        this.summonReturnSkillUseInfoList.add(skillUseInfo);
+    }
+
+    public void removeSummonReturnSkillUseInfoList(SkillUseInfo skillUseInfo) {
+        this.summonReturnSkillUseInfoList.remove(skillUseInfo);
     }
 }

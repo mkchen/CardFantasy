@@ -1487,6 +1487,10 @@ public class SkillResolver {
                 Substitution.apply(this, skillUseInfo, attacker, defender);
             } else if (skillUseInfo.getType() == SkillType.蛛网束缚) {
                 Asthenia.apply(this, skillUseInfo, attacker, defender, 4, 2);
+            } else if (skillUseInfo.getType() == SkillType.引力支配) {
+                Petrifaction.apply(skillUseInfo, this, attacker, defender, 100);
+            } else if (skillUseInfo.getType() == SkillType.死亡闪烁) {
+                Destroy.apply(this, skillUseInfo.getSkill(), attacker, defender, -1);
             }
         }
         if (!attacker.isDead() && status == 0) {
@@ -2494,6 +2498,8 @@ public class SkillResolver {
                     MouseGuard.apply(this, deadCardSkillUseInfo, deadCard, opponent, 2, 4, 0);
                 } else if (deadCardSkillUseInfo.getType() == SkillType.秘术守护) {
                     MouseGuard.apply(this, deadCardSkillUseInfo, deadCard, opponent, 0, 4, 1);
+                } else if (deadCardSkillUseInfo.getType() == SkillType.星光重耀) {
+                    SummonWhenAttack.apply(this, deadCardSkillUseInfo, deadCard, 1, false, "深邃之星");
                 }
             }
         }
@@ -3141,7 +3147,8 @@ public class SkillResolver {
                             skillUseInfo.getType() == SkillType.三界行者 ||
                             skillUseInfo.getType() == SkillType.圣灵护佑 ||
                             skillUseInfo.getType() == SkillType.疏影横斜 ||
-                            skillUseInfo.getType() == SkillType.堕落之印) {
+                            skillUseInfo.getType() == SkillType.堕落之印 ||
+                            skillUseInfo.getType() == SkillType.星光重耀) {
                         // BUGBUG: The original game does not set cardDead to false
                         // result.cardDead = false
                         result.unbending = Unbending.apply(skillUseInfo, this, defender);
@@ -5052,19 +5059,24 @@ public class SkillResolver {
                     }
                     SoulChains.apply(this, skillUseInfo, card, enemy, 5, 4);
                     Horn.apply(skillUseInfo.getAttachedUseInfo1(), this, card);
+                } else if (skillUseInfo.getType() == SkillType.眩目之光) {
+                    SummonReturnSkillUseInfoList.apply(this, skillUseInfo, card);
+                } else if (skillUseInfo.getType() == SkillType.双子星) {
+                    if (SummonStopSkillUseInfoList.explode(this, card, enemy)) {
+                        continue;
+                    }
+                    Cooperation.apply(this, skillUseInfo, card, "璀璨之星", false);
                 }
             }
         }
         card.setIsSummon(false);
+        //敌方发动眩目之光
+        SummonReturnSkillUseInfoList.explode(this,card,enemy);
     }
 
     // reviver: for most of the cases, it should be null.
     // It is only set when the summoning skill performer is revived by another card.
     public void resolveSecondClassSummoningSkills(List<CardInfo> summonedCards, Field myField, Field opField, Skill summonSkill, boolean isSummoning) throws HeroDieSignal {
-//        if (summonSkill != null && summonSkill.getType() == SkillType.星云锁链) {
-//            // 木盒的特殊BUG，星云锁链召唤的卡无法发动第二阶降临技能//这个作废可以发动二段降临技能
-//            return;
-//        }
         for (CardInfo card : summonedCards) {
             if (null == card) {
                 continue;
@@ -5303,6 +5315,7 @@ public class SkillResolver {
         ImpregnableDefenseHeroBuff.remove(card, this); //铁壁的移除和buff的移除放在一起
         CounterAttackHero.remove(card, this); //背水的移除和buff的移除放在一起
         FailureSkillUseInfoList.remove(card, this); //腐化之地的移除和buff的移除放在一起
+        SummonReturnSkillUseInfoList.remove(card, this); //眩目之光的移除和buff的移除放在一起
     }
 
     public void removeGiveSkills(CardInfo card) {
@@ -5988,7 +6001,7 @@ public class SkillResolver {
                         NebulaChainByEquipment.apply(equipmentSkillUserInfo, this, equipmentInfo, enemy);
                     }
                 } else if (equipmentSkillUserInfo.getType() == SkillType.装备恶魔重生) {
-                    if (enemy.getField().getAliveCards().size()>7) {
+                    if (player.getField().getAliveCards().size()>1) {
                         AddFiledCardMultSkillByEquipment.apply(this, equipmentSkillUserInfo, equipmentInfo, equipmentSkillUserInfo.getAttachedUseInfo1().getSkill());
                     }
                 }

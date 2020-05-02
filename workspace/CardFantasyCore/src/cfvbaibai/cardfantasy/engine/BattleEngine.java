@@ -10,10 +10,7 @@ import cfvbaibai.cardfantasy.data.PlayerInfo;
 import cfvbaibai.cardfantasy.data.Rune;
 import cfvbaibai.cardfantasy.data.Skill;
 import cfvbaibai.cardfantasy.data.SkillType;
-import cfvbaibai.cardfantasy.engine.skill.MouseGuard;
-import cfvbaibai.cardfantasy.engine.skill.Offspring;
-import cfvbaibai.cardfantasy.engine.skill.Petrifaction;
-import cfvbaibai.cardfantasy.engine.skill.TrumpetHorn;
+import cfvbaibai.cardfantasy.engine.skill.*;
 
 public class BattleEngine {
 
@@ -217,6 +214,7 @@ public class BattleEngine {
         for (CardInfo card : this.getActivePlayer().getGrave().toList()) {
             this.stage.getResolver().resolvePostcastSkills(card, this.getInactivePlayer());
         }
+
         //减少cd调整为回合开始时 yzq2019.08.08
 //        Collection<CardInfo> allHandCards = this.stage.getAllHandCards();
 //        for (CardInfo card : allHandCards) {
@@ -227,6 +225,7 @@ public class BattleEngine {
 //        }
 
         Player previousPlayer = getActivePlayer();
+        SummonReturnSkillUseInfoList.reset(previousPlayer,getOpponent(previousPlayer));
         int thisRound = stage.getRound();
         this.stage.setRound(thisRound + 1);
         this.stage.getUI().roundEnded(previousPlayer, thisRound);
@@ -722,7 +721,13 @@ public class BattleEngine {
             }
         }
         for(CardInfo defenderCard : this.getInactivePlayer().getField().getAliveCards()) {
-            this.stage.getResolver().removeStatus(defenderCard, CardStatusType.厄运);//移除魔族buff
+            this.stage.getResolver().removeStatus(defenderCard, CardStatusType.厄运);//移除厄运buff
+        }
+        for(CardInfo attackCard : this.getActivePlayer().getField().getAliveCards()) {
+            attackCard.setRuneActive(false);//符文不发动
+            attackCard.setSummonNumber(attackCard.getSummonNumber()+1);//存在回合数+1
+            this.stage.getResolver().removeStatus(attackCard, CardStatusType.魔族);//移除魔族buff
+            this.stage.getResolver().removeGiveSkills(attackCard);
         }
 
         Player activePlayer = this.getActivePlayer();
