@@ -30,6 +30,7 @@ public class Player extends EntityInfo {
     private List<SkillUseInfo>  failureSkillUseInfoList;//腐化之地系列技能
     private List<SkillUseInfo>  summonStopSkillUseInfoList;//降临禁止系列技能
     private List<SkillUseInfo>  summonReturnSkillUseInfoList;//降临返回系列技能
+    private List<SkillUseInfo>  cardEndSkillUseInfoList;//回合结束技能
     
     public Player(PlayerInfo playerInfo, StageInfo stage) {
         this.playerInfo = playerInfo;
@@ -51,6 +52,7 @@ public class Player extends EntityInfo {
         this.failureSkillUseInfoList = new ArrayList<SkillUseInfo>();
         this.summonStopSkillUseInfoList = new ArrayList<SkillUseInfo>();
         this.summonReturnSkillUseInfoList = new ArrayList<SkillUseInfo>();
+        this.cardEndSkillUseInfoList = new ArrayList<SkillUseInfo>();
         for (Skill cardBuff : playerInfo.getCardBuffs()) {
             this.cardBuffs.add(new SkillUseInfo(this, cardBuff));
         }
@@ -280,5 +282,22 @@ public class Player extends EntityInfo {
 
     public void removeSummonReturnSkillUseInfoList(SkillUseInfo skillUseInfo) {
         this.summonReturnSkillUseInfoList.remove(skillUseInfo);
+    }
+
+    public List<SkillUseInfo> getCardEndSkillUseInfoList() {
+        return this.cardEndSkillUseInfoList;
+    }
+
+    public void addCardEndSkillUseInfoList(SkillUseInfo skillUseInfo) {
+        for(SkillUseInfo addSkillUserInfo:this.cardEndSkillUseInfoList) {
+            if(addSkillUserInfo == skillUseInfo) {
+                return;
+            }
+        }
+        this.cardEndSkillUseInfoList.add(skillUseInfo);
+    }
+
+    public void removeCardEndSkillUseInfoList(SkillUseInfo skillUseInfo) {
+        this.cardEndSkillUseInfoList.remove(skillUseInfo);
     }
 }

@@ -115,7 +115,7 @@ public enum SkillType {
     陨星攻击(0, SkillTag.额外攻击加成),
     致命一击(400,0, SkillTag.额外攻击加成),
     固守(0, SkillTag.守护, SkillTag.抗毒刃),
-    龙脉守护(0,SkillTag.守护, SkillTag.基础攻击加成, SkillTag.抗削弱,SkillTag.抗毒刃),
+    真言结界(0, SkillTag.抗毒刃),
     星座连携(200,0,400,0, SkillTag.基础攻击加成, SkillTag.抗削弱,SkillTag.抗毒刃),
     星座能量清醒(0,0,SkillType.星座连携,0,null,0, SkillTag.额外攻击加成),
     破魔神兵(0, SkillTag.额外攻击加成),
@@ -385,6 +385,7 @@ public enum SkillType {
     凤凰涅盘(100, 0,SkillTag.复活),
     天选之子(60, 0),
     净身明礼(65, 0,SkillTag.抗沉默),
+    不溃(0, 0, SkillTag.召唤),
 
 
     //特别处理守护三
@@ -708,7 +709,7 @@ public enum SkillType {
     蛮荒之盾(15, 5, SkillTag.种族之盾),
     地狱之盾(15, 5, SkillTag.种族之盾),
 
-    圣炎(0,SkillTag.魔族天赋),
+    圣炎(0),
     弑魂夺魄(0,SkillTag.魔族天赋),
     热血战士(0,SkillTag.魔族天赋),
     扼杀(0),
@@ -794,6 +795,7 @@ public enum SkillType {
     七罪(7, 0),
     太平清领书(0, 0),
     赤焰战场(1, 0),
+    铿锵排奡(0,SkillTag.抗沉默),
     俊才(2, 0),
     永生审判(2, 0),
     军团之首(2, 0),
@@ -987,6 +989,7 @@ public enum SkillType {
     救命毫毛(5,0,100,0,SkillTag.召唤),
     虚幻之影(3,0,100,0,SkillTag.召唤),
     星光重耀(2,0,100,0,SkillTag.召唤),
+    笔走龙蛇(4,0,3,0,SkillTag.召唤),
 
     特殊体质(0,0,SkillTag.召唤),
     月之暗面(5,0,100,0,SkillTag.召唤),
@@ -1057,10 +1060,10 @@ public enum SkillType {
     良禽择木(50, 0,SkillTag.沉默无效),
 
     //合并技能中单个技能
-    天崩地裂(0,SkillTag.即死),
-    地裂(0,SkillTag.即死),
-    三振出局(0,SkillTag.即死),
-    合纵连横(0,SkillTag.即死),
+    天崩地裂(0),
+    地裂(0),
+    三振出局(0),
+    合纵连横(0),
 
     // Merged Skills
     凋零陷阱(SkillType.凋零真言, 6, SkillType.陷阱, 3),
@@ -1385,6 +1388,7 @@ public enum SkillType {
     善任(SkillType.祈愿,1,SkillType.加速,1),
     知人善任(3,0,SkillType.司命,0,SkillType.善任,0),
     不朽(5,0,SkillType.冥界召唤,0,null,0, SkillTag.抗免疫, SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋),
+    剑鸣出鞘(2,0,SkillType.狂性,0,null,0),
 
     金魔装甲(50,0),
     //给自身场上所有卡牌添加技能除自己以外
@@ -1482,6 +1486,7 @@ public enum SkillType {
     银色之棘守护(100,0,SkillTag.抗夺魂),
     神依(50,0,SkillTag.抗夺魂),
     回归(100,0,SkillTag.抗夺魂),
+    诸行无常(0,SkillTag.抗夺魂),
 
     //给对方卡牌添加回合buff
     绝对压制(1,0,300,0,SkillTag.抗免疫, SkillTag.抗不屈, SkillTag.魔王无效, SkillTag.魔族天赋,SkillTag.基础攻击加成),
@@ -1511,12 +1516,13 @@ public enum SkillType {
     深渊之力(5,0,0,0, SkillTag.抗免疫,SkillTag.魔王无效),
     英雄冢(1,0,0,0, SkillTag.抗免疫,SkillTag.魔王无效),
     古神的低语伪(1,0,30,0, SkillTag.抗免疫,SkillTag.魔王无效),
-    上古神剑(2,0,40,0, SkillTag.抗免疫,SkillTag.魔王无效),
+    上古神剑(50,0,40,0, SkillTag.抗免疫,SkillTag.魔王无效), //50指发动概率
     寄生(0, SkillTag.魔王无效, SkillTag.召唤),
     庚子守护(0, SkillTag.魔王无效, SkillTag.召唤),
     秘术守护(0, SkillTag.魔王无效, SkillTag.召唤),
     疾行突击(4,0, SkillType.号角,1,null,0, SkillTag.抗免疫,SkillTag.魔王无效),
     进退自如(100,0,2,0,SkillType.秘术守护,0, null,0,SkillTag.复活),
+
 
     死亡诅咒(1,0, SkillTag.抗免疫,SkillTag.魔王无效),
     蚀月军团(1,0, SkillTag.抗免疫,SkillTag.魔王无效),
@@ -1556,6 +1562,9 @@ public enum SkillType {
     肝胆俱裂(1,0,70,0, SkillTag.魔王无效,SkillTag.抗免疫),
     古神的召唤(0, SkillTag.魔王无效, SkillTag.魔族天赋,SkillTag.召唤),
     神鬼之术(750, 0, 3, 0, new int[] {90,90,90,90,90,90,90,90,90,90,90},SkillType.魔力法阵,8,SkillType.威震天下,0, SkillTag.抗免疫,SkillTag.魔法,SkillTag.雷系灵轰),
+
+    低语集结(3,0,50,0, SkillType.号角,1,null,0,SkillTag.抗免疫,SkillTag.魔王无效),
+    道法自然(2,0,SkillType.低语集结,0,SkillType.死亡链接,0, SkillTag.即死),
 
     噩梦(SkillType.噩梦来临,0,SkillType.噩梦扼杀,0),
 

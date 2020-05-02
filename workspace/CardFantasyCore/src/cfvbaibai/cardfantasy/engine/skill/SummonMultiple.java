@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SummonMultiple {
-    public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo summoner, SummonType summonType, int summonPicks, String... summonedCardsDescs) throws HeroDieSignal {
+    public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo summoner, int summonPicks, String... summonedCardsDescs) throws HeroDieSignal {
         if (summoner == null) {
             throw new CardFantasyRuntimeException("summoner should not be null");
         }

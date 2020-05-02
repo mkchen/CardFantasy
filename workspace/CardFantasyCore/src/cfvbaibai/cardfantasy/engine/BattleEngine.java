@@ -225,7 +225,7 @@ public class BattleEngine {
 //        }
 
         Player previousPlayer = getActivePlayer();
-        SummonReturnSkillUseInfoList.reset(previousPlayer,getOpponent(previousPlayer));
+        SummonReturnSkillUseInfoList.reset(previousPlayer,getOpponent(previousPlayer)); //重置眩目概率
         int thisRound = stage.getRound();
         this.stage.setRound(thisRound + 1);
         this.stage.getUI().roundEnded(previousPlayer, thisRound);
@@ -410,6 +410,7 @@ public class BattleEngine {
             resolver.removeStatus(myField.getCard(i), CardStatusType.咒恨);
             resolver.removeStatus(myField.getCard(i), CardStatusType.咒皿);
             resolver.removeStatus(myField.getCard(i), CardStatusType.远古);
+            CardEndSkillUseInfoList.explode(resolver,card,getInactivePlayer());
             ui.cardActionEnds(card);
         }
 
