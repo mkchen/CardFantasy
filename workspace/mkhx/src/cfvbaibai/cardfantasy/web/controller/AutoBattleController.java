@@ -250,6 +250,7 @@ public class AutoBattleController {
 
             deck1 = formatDeck(deck1);
             deck2 = formatDeck(deck2);
+            deck2 = formatDeckZB(deck2);
 
             GameSetup setup = null;
             ArenaGameResult result = null;
@@ -292,6 +293,7 @@ public class AutoBattleController {
                         //ui = new DummyGameUI();
                         //result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
                         //sortcards.add(new sortCard(thisdeck,Double.valueOf(result.getAdvWinCount())));
+                        newdeck = formatDeckZB(newdeck);
                         setup = GameSetup.setupArenaGame(
                             newdeck, deck2,  heroLv1, heroLv2,
                             p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
@@ -311,6 +313,7 @@ public class AutoBattleController {
 
                 }
                 //最后运行一次正常的, 好显示数据及对比
+                deck1 = formatDeckZB(deck1);
                 setup = GameSetup.setupArenaGame(
                     deck1, deck2, heroLv1, heroLv2,
                     p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
@@ -505,10 +508,11 @@ public class AutoBattleController {
 
 
                 //用list里的符文分别模拟，将获得的分数写进list里
+                String olddeck = deck1;
+                //olddeck = olddeck.replace('，', ',');
+                olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                olddeck = formatDeckZB(olddeck);
                 for(sortCard sortcard:sortcards){
-                    String olddeck = deck1;
-                    olddeck = olddeck.replace('，', ',');
-                    olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                     /*if(thiscardname.indexOf("-") == -1){
                         if(selectType <= -120){     //为符文时
@@ -560,9 +564,9 @@ public class AutoBattleController {
                 if(count20 != 0){
                     int i = 0;
                     for(sortCard sortcard:sortcards){
-                        String olddeck = deck1;
-                        olddeck = olddeck.replace('，', ',');
-                        olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                        //String olddeck = deck1;
+                        //olddeck = olddeck.replace('，', ',');
+                        //olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                         String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                         String newdeck = thiscardname +", "+ olddeck;
                         //进行模拟并取值
@@ -630,6 +634,7 @@ public class AutoBattleController {
                 }
 
                 //最后显示一遍原始卡组的分数
+                deck1 = formatDeckZB(deck1);
                 setup = GameSetup.setupArenaGame(
                         deck1, deck2, heroLv1, heroLv2,
                         p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
@@ -642,6 +647,7 @@ public class AutoBattleController {
                 if(count20 != 0){   
                     count = count20;        //单次模拟时按TOP的次数排
                 }
+                deck1 = formatDeckZB(deck1);
                 setup = GameSetup.setupArenaGame(
                         deck1, deck2, heroLv1, heroLv2,
                         p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
@@ -910,6 +916,7 @@ public class AutoBattleController {
                         //setup = GameSetup.setupBossGame(newdeck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                         //result = GameLauncher.playBossGame(setup);
                         try{
+                            newdeck = formatDeckZB(newdeck);
                             setup = GameSetup.setupBossGame(newdeck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                             result = GameLauncher.playBossGame(setup);
                             avgDamagePerMinute = Double.valueOf(Math.round(result.getAvgDamagePerMinute()));
@@ -928,6 +935,7 @@ public class AutoBattleController {
                 //setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                 //result = GameLauncher.playBossGame(setup);
                 try{
+                    deck = formatDeckZB(deck);
                     setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                     result = GameLauncher.playBossGame(setup);
                 }catch (PvlGameTimeoutException e) {
@@ -1086,10 +1094,11 @@ public class AutoBattleController {
                     br.close();    
                 }
 
+                String olddeck = deck;
+                //olddeck = olddeck.replace('，', ',');
+                olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                olddeck = formatDeckZB(olddeck);
                 for(sortCard sortcard:sortcards){
-                    String olddeck = deck;
-                    olddeck = olddeck.replace('，', ',');
-                    olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                     /*if(thiscardname.indexOf("-") == -1){
                         if(selectType <= -120){     //为符文时
@@ -1165,6 +1174,7 @@ public class AutoBattleController {
                 //setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                 //result = GameLauncher.playBossGame(setup);
                 try{
+                    deck = formatDeckZB(deck);
                     setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                     result = GameLauncher.playBossGame(setup);
                 }catch (PvlGameTimeoutException e) {
@@ -1180,6 +1190,7 @@ public class AutoBattleController {
                 //setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                 //result = GameLauncher.playBossGame(setup);
                 try{
+                    deck = formatDeckZB(deck);
                     setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                     result = GameLauncher.playBossGame(setup);
                 }catch (PvlGameTimeoutException e) {
@@ -1478,13 +1489,19 @@ public class AutoBattleController {
         return thiszb;
 
     }
- 
+
     public String formatDeck(String deck){ 
         deck = deck.replace("，", ",");
         deck = deck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
         deck = deck.replace(" ", "");   //先去掉了空格才能接下来去掉双逗号
         deck = deck.replace(",,", ",");
         deck = deck.replace(",,", ","); 
+
+        return deck;
+    }
+
+    
+    public String formatDeckZB(String deck){ 
 
         deck = deck.replace("wq", "WQ");
         deck = deck.replace("fj", "FJ");
@@ -1817,6 +1834,7 @@ public class AutoBattleController {
                         try {
                             result = null;
                             GameUI ui = new DummyGameUI();
+                            newdeck = formatDeckZB(newdeck);
                             result = GameLauncher.playLilithGame(
                                 newdeck, lilithName, heroLv, gameType, 
                                         targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
@@ -1839,6 +1857,7 @@ public class AutoBattleController {
                 try {
                     result = null;
                     GameUI ui = new DummyGameUI();
+                    deck = formatDeckZB(deck);
                     result = GameLauncher.playLilithGame(
                                 deck, lilithName, heroLv, gameType, 
                                 targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
@@ -2048,10 +2067,11 @@ public class AutoBattleController {
 
 
                 //用list里的符文分别模拟，将获得的分数写进list里
+                String olddeck = deck;
+                //olddeck = olddeck.replace('，', ',');
+                olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                olddeck = formatDeckZB(olddeck);
                 for(sortCard sortcard:sortcards){
-                    String olddeck = deck;
-                    olddeck = olddeck.replace('，', ',');
-                    olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                     /*if(thiscardname.indexOf("-") == -1){
                         if(selectType <= -120){     //为符文时
@@ -2109,9 +2129,9 @@ public class AutoBattleController {
                 if(count20 != 0){
                     int i = 0;
                     for(sortCard sortcard:sortcards){
-                        String olddeck = deck;
-                        olddeck = olddeck.replace('，', ',');
-                        olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                        //String olddeck = deck;
+                        //olddeck = olddeck.replace('，', ',');
+                        //olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                         String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                         String newdeck = thiscardname +", "+ olddeck;
                         //进行模拟并取值
@@ -2178,6 +2198,7 @@ public class AutoBattleController {
                 try {
                     result = null;
                     GameUI ui = new DummyGameUI();
+                    deck = formatDeckZB(deck);
                     result = GameLauncher.playLilithGame(
                                 deck, lilithName, heroLv, gameType, 
                                 targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
@@ -2207,6 +2228,7 @@ public class AutoBattleController {
                     count = count20;        //单次模拟时按TOP的次数排
                 }
                 //本卡组胜率
+                deck = formatDeckZB(deck);
                 try {
                     //LilithGameResult result = null;
                     GameUI ui = new DummyGameUI();
@@ -2342,6 +2364,7 @@ public class AutoBattleController {
                         //将卡牌胜率写进列表
                         //result = null;
                         //ui = new DummyGameUI();
+                        newdeck = formatDeckZB(newdeck);
                         result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
                         sortcards.add(new sortCard(thisdeck,Double.valueOf(result.getAdvWinCount())));
                     }
@@ -2350,6 +2373,7 @@ public class AutoBattleController {
                 //最后运行一次正常的, 好显示数据及对比
                 result = null;
                 ui = new DummyGameUI();
+                deck = formatDeckZB(deck);
                 result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
                 //开始排序列表
                 Collections.sort(sortcards, new Comparator<sortCard>() {
@@ -2505,10 +2529,11 @@ public class AutoBattleController {
                 }
 
                 //用list里的符文分别模拟，将获得的分数写进list里
+                String olddeck = deck;
+                //olddeck = olddeck.replace('，', ',');
+                olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                olddeck = formatDeckZB(olddeck);
                 for(sortCard sortcard:sortcards){
-                    String olddeck = deck;
-                    olddeck = olddeck.replace('，', ',');
-                    olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                     /*if(thiscardname.indexOf("-") == -1){
                         if(selectType <= -120){     //为符文时
@@ -2547,9 +2572,9 @@ public class AutoBattleController {
                 if(count20 != 0){
                     int i = 0;
                     for(sortCard sortcard:sortcards){
-                        String olddeck = deck;
-                        olddeck = olddeck.replace('，', ',');
-                        olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                        //String olddeck = deck;
+                        //olddeck = olddeck.replace('，', ',');
+                        //olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                         String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                         String newdeck = thiscardname +", "+ olddeck;
                         //进行模拟并取值
@@ -2602,12 +2627,14 @@ public class AutoBattleController {
                 //最后显示一遍原始卡组的分数
                 result = null;
                 ui = new DummyGameUI();
+                deck = formatDeckZB(deck);
                 result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
 
             } else {    //作者原本的强度分析
                 if(count20 != 0){   
                     count = count20;        //单次模拟时按TOP的次数排
                 }
+                deck = formatDeckZB(deck);
                 result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
             }
 
@@ -2899,11 +2926,6 @@ public class AutoBattleController {
             String cardswithcnt = "";
             String cardsnocnt = "";
             List<sortCard> sortcards = new ArrayList<>();
-            deck = deck.replace("，", ",");
-            deck = deck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
-            deck = deck.replace(" ", "");
-            deck = deck.replace(",,", ",");
-            deck = deck.replace(",,", ",");
             String subdeck = deck;
             int firstcnt = subdeck.indexOf(',');
             String errornote = "";
@@ -2929,6 +2951,7 @@ public class AutoBattleController {
                         //将卡牌胜率写进列表
                         //result = null;
                         //ui = new DummyGameUI();
+                        newdeck = formatDeckZB(newdeck);
                         result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,newdeck, map, heroLv, count,rule, ui);
                         sortcards.add(new sortCard(thisdeck,Double.valueOf(result.getAdvWinCount())));
                     }
@@ -2938,6 +2961,7 @@ public class AutoBattleController {
                 //最后运行一次正常的, 好显示数据及对比
                 //result = null;
                 //ui = new DummyGameUI();
+                deck = formatDeckZB(deck);
                 result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
                 //开始排序列表
                 Collections.sort(sortcards, new Comparator<sortCard>() {
@@ -3094,10 +3118,11 @@ public class AutoBattleController {
 
 
                 //用list里的符文分别模拟，将获得的分数写进list里
+                String olddeck = deck;
+                //olddeck = olddeck.replace('，', ',');
+                olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                olddeck = formatDeckZB(olddeck);
                 for(sortCard sortcard:sortcards){
-                    String olddeck = deck;
-                    olddeck = olddeck.replace('，', ',');
-                    olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                     /*if(thiscardname.indexOf("-") == -1){
                         if(selectType <= -120){     //为符文时
@@ -3135,9 +3160,9 @@ public class AutoBattleController {
                 if(count20 != 0){
                     int i = 0;
                     for(sortCard sortcard:sortcards){
-                        String olddeck = deck;
-                        olddeck = olddeck.replace('，', ',');
-                        olddeck = olddeck.substring(olddeck.indexOf(',')+1);
+                        //String olddeck = deck;
+                        //olddeck = olddeck.replace('，', ',');
+                        //olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                         String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                         String newdeck = thiscardname +", "+ olddeck;
                         //进行模拟并取值
@@ -3191,12 +3216,14 @@ public class AutoBattleController {
                 //最后显示一遍原始卡组的分数
                 //result = null;
                 //ui = new DummyGameUI();
+                deck = formatDeckZB(deck);
                 result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
     
             }else{
                 if(count20 != 0){   
                     count = count20;        //单次模拟时按TOP的次数排
                 }
+                deck = formatDeckZB(deck);
                 result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
             }
             

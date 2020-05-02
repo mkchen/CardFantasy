@@ -243,19 +243,19 @@
     <Map victory="EnemyHeroDie" heroHP="115500" id="5-9-2">爆弹强袭+结界立场,爆弹强袭+萦梦,风暴主宰+时间扭曲*2,五子良将张辽+进军之令,五子良将张辽+不息神盾,华舞霓裳+影青龙,华舞霓裳+轮回渡厄,钻石王牌+顽强10,刻乱之时+周旋,风暴领主+影青龙,烈焰凤凰+遗志归魂5,Q终焉使者+终焉时刻极?IN后援3,Q森之御魔使+一骑当千?IN后援4,Q五子良将张辽+致命一击?IN后援4,Q三国英魂张角+新生?IN后援5,龙吟,玄石,逆流,明镜</Map>
     <Map victory="EnemyAllCardsDie" heroHP="115500" id="5-9-3">爆弹强袭+结界立场,爆弹强袭+萦梦,风暴主宰+时间扭曲*2,五子良将张辽+进军之令,五子良将张辽+不息神盾,华舞霓裳+影青龙,华舞霓裳+轮回渡厄,钻石王牌+顽强10,刻乱之时+周旋,风暴领主+影青龙,烈焰凤凰+遗志归魂5,Q终焉使者+终焉时刻极?IN后援3,Q森之御魔使+一骑当千?IN后援4,Q五子良将张辽+致命一击?IN后援4,Q三国英魂张角+新生?IN后援5,龙吟,玄石,逆流,明镜</Map>
 
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-1-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-2-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-3-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-4-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:100" heroHP="52200" id="Y-5-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-6-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-7-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-8-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-9-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardRound:20" heroHP="52200" id="Y-10-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-11-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-12-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-13-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-14-1">寒潮,暴雨,雷云,龙吟,</Map>
-    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-15-1">寒潮,暴雨,雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-1-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-2-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-3-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-4-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:100" heroHP="52200" id="Y-5-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-6-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-7-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-8-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-9-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardRound:20" heroHP="52200" id="Y-10-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-11-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-12-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-13-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-14-1">寒潮,暴雨,符文雷云,龙吟,</Map>
+    <Map victory="MyAllCardHP:80" heroHP="52200" id="Y-15-1">寒潮,暴雨,符文雷云,龙吟,</Map>
 </Maps>

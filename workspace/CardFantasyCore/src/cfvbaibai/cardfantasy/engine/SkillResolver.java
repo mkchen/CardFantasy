@@ -6069,7 +6069,7 @@ public class SkillResolver {
                 IceMagic.apply(rune.getSkillUseInfo(), this, rune, defenderHero, -1, 30, 0);
             } else if (rune.is(RuneData.闪电)) {
                 LighteningMagic.apply(rune.getSkillUseInfo(), this, rune, defenderHero, 1, 50);
-            } else if (rune.is(RuneData.雷云)) {
+            } else if (rune.is(RuneData.符文雷云)) {
                 LighteningMagic.apply(rune.getSkillUseInfo(), this, rune, defenderHero, 3, 40);
             } else if (rune.is(RuneData.霹雳)) {
                 LighteningMagic.apply(rune.getSkillUseInfo(), this, rune, defenderHero, 1, 50);

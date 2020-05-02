@@ -107,7 +107,7 @@ public class CardFantasyRuneTest {
     @Test
     public void 水源制造者vs地岭拥有者_闪电雷云() {
         PlayerInfo playerA = PlayerBuilder.build(true, "【A】", 50, "C水源制造者-10*5", "R闪电-4");
-        PlayerInfo playerB = PlayerBuilder.build(true, "【B】", 20, "C地岭拥有者-10*5", "R雷云-4");
+        PlayerInfo playerB = PlayerBuilder.build(true, "【B】", 20, "C地岭拥有者-10*5", "R符文雷云-4");
         TestGameBuilder.build(playerA, playerB).playGame();
     }
 

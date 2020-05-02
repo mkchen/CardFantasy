@@ -46,7 +46,7 @@ public enum RuneData {
     甘露("", RuneClass.WATER, 4, SkillType.清水甘露, 1, 1, 5, Growth.RUNE, RuneActivator.enemyField(5, null)),
 
     闪电("31385", RuneClass.WIND, 3, SkillType.落雷, 3, 1, 1, Growth.RUNE, RuneActivator.enemyGrave(2, null)),
-    雷云("31472", RuneClass.WIND, 3, SkillType.连环闪电, 1, 1, 1, Growth.RUNE, RuneActivator.myHeroHP(50)),
+    符文雷云("31472", RuneClass.WIND, 3, SkillType.连环闪电, 1, 1, 1, Growth.RUNE, RuneActivator.myHeroHP(50)),
     霹雳("31397", RuneClass.WIND, 3, SkillType.落雷, 5, 1, 2, Growth.RUNE, RuneActivator.round(14)),
     飞羽("31473", RuneClass.WIND, 4, SkillType.狙击, 4, 1, 2, Growth.RUNE, RuneActivator.myGrave(1, Race.FOREST)),
     复苏("31474", RuneClass.WIND, 4, SkillType.回春, 4, 1, 3, Growth.RUNE, RuneActivator.enemyGrave(1, Race.SAVAGE)),
