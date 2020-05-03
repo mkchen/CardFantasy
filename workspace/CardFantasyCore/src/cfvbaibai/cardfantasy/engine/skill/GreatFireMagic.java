@@ -58,7 +58,7 @@ public final class GreatFireMagic {
             ui.attackCard(attacker, victim, cardSkill, damage);
             OnDamagedResult resultDamage=resolver.applyDamage(attacker, victim, cardSkill, damage);
             //判断是否触发死亡技能
-            if(deathFlag  || victim.isBoss() || victim.isDeman()) {
+            if(deathFlag  || victim.isBoss() || victim.isDemon()) {
                 resolver.resolveDeathSkills(attacker, victim, cardSkill, resultDamage);
             } else{
                 resolver.resetDeadCard(resultDamage,victim);

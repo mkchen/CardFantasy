@@ -11,7 +11,7 @@ public final class MultipleSnipe {
     public static void apply(SkillUseInfo skillUseInfo,Skill cardSkill, SkillResolver resolver, EntityInfo attacker, Player defenderPlayer,
             int targetCount) throws HeroDieSignal {
         int number = cardSkill.getImpact();
-        int damage = cardSkill.getImpact3();
+        int damage = cardSkill.getImpact2();
         if (damage == 0) {
             
         }

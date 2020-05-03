@@ -28,7 +28,7 @@ public final class WatchkeepingPower {
             List<CardInfo> selectCard = new ArrayList<>();
             for (CardInfo fieldCard : defender.getField().getAliveCards()) {
                 if (fieldCard != null) {
-                    if (fieldCard.isDeman()) {
+                    if (fieldCard.isDemon()) {
                         continue;
                     }
                     selectCard.add(fieldCard);

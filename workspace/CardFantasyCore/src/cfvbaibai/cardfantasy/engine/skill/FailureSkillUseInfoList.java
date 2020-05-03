@@ -27,7 +27,7 @@ public final class FailureSkillUseInfoList {
         }
         CardInfo attackCardinfo = (CardInfo) attacker;
 
-        if (attackCardinfo.isBoss() || attackCardinfo.isDeman()) {
+        if (attackCardinfo.isBoss() || attackCardinfo.isDemon()) {
             return flag;
         }
 
@@ -55,7 +55,7 @@ public final class FailureSkillUseInfoList {
         }
         CardInfo attackCardinfo = (CardInfo) attacker;
 
-        if (attackCardinfo.isBoss() || attackCardinfo.isDeman()) {
+        if (attackCardinfo.isBoss() || attackCardinfo.isDemon()) {
             return flag;
         }
 

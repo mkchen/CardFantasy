@@ -85,6 +85,7 @@ public class MouseGuard {
         for (CardStatusItem statusItem : statusItems) {
             int recordHp = statusItem.getEffect();
             if (recordHp <= hp) {
+                statusItem.setEffect(0);
                 resolver.resolveDebuff(cardInfo, CardStatusType.庚子);
                 return;
             } else {

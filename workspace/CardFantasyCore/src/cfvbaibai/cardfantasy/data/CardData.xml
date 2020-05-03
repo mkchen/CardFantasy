@@ -535,11 +535,6 @@
         <Skill type="寒霜护佑" level="0" unlock="5" />
         <Skill type="转生" level="6" unlock="10" />
     </Card>
-    <Card id="1501" name="领航者" wikiId="30922" race="王国" speed="3" star="4" cost="15" incrCost="2" at="450" hp="1350" incrAT="35" incrHP="35">
-        <Skill type="铁壁" level="4" unlock="0" />
-        <Skill type="镜像" level="0" unlock="5" death="true"/>
-        <Skill type="风雨无阻" level="6" unlock="10" />
-    </Card>
 
     <Card id="11501" name="降临天使" wikiId="30922" race="王国" speed="4" star="5" cost="15" incrCost="3" at="365" hp="1800" incrAT="24" incrHP="24">
         <Skill type="魔甲" level="8" unlock="0" />
@@ -1687,6 +1682,36 @@
         <Skill type="诸行无常" level="0" unlock="0" />
         <Skill type="铁壁" level="4" unlock="5" />
         <Skill type="真言结界" level="0" unlock="10" />
+    </Card>
+    <Card id="1715" name="巨阙" wikiId="" race="王国" speed="3" star="5" cost="22" incrCost="2" at="610" hp="1640" incrAT="45" incrHP="49">
+        <Skill type="紧急召集" level="0" unlock="0" />
+        <Skill type="异界神兵" level="0" unlock="5" />
+        <Skill type="轮换" level="0" unlock="10" />
+    </Card>
+    <Card id="1716" name="新亭侯" wikiId="" race="王国" speed="3" star="5" cost="20" incrCost="2" at="550" hp="1510" incrAT="43" incrHP="46">
+        <Skill type="拔刀斩" level="0" unlock="0" />
+        <Skill type="利器" level="0" unlock="5" />
+        <Skill type="刀魂附体" level="0" unlock="10" />
+    </Card>
+    <Card id="1717" name="引龙追凤环" wikiId="" race="王国" speed="3" star="5" cost="20" incrCost="2" at="545" hp="1595" incrAT="42" incrHP="48">
+        <Skill type="替身术" level="0" unlock="0" />
+        <Skill type="反向溅射" level="0" unlock="5" />
+        <Skill type="铜墙铁壁" level="0" unlock="10" />
+    </Card>
+    <Card id="1718" name="黄金镖客" wikiId="" race="王国" speed="3" star="5" cost="18" incrCost="2" at="580" hp="1580" incrAT="40" incrHP="40">
+        <Skill type="百骑袭营" level="0" unlock="0" />
+        <Skill type="全体加速" level="1" unlock="5" />
+        <Skill type="脱壳" level="0" unlock="10" />
+    </Card>
+    <Card id="1719" name="三月的烟花" wikiId="" race="王国" speed="3" star="5" cost="20" incrCost="2" at="530" hp="1700" incrAT="55" incrHP="43">
+        <Skill type="绽放烟花" level="0" unlock="0" />
+        <Skill type="吞噬焰火" level="0" unlock="5" />
+        <Skill type="圣母回声" level="0" unlock="10" />
+    </Card>
+    <Card id="1720" name="领航者" wikiId="" race="王国" speed="3" star="4" cost="15" incrCost="2" at="450" hp="1350" incrAT="35" incrHP="35">
+        <Skill type="铁壁" level="4" unlock="0" />
+        <Skill type="镜像" level="0" unlock="5" death="true"/>
+        <Skill type="风雨无阻" level="0" unlock="10" />
     </Card>
 
 
@@ -3077,6 +3102,11 @@
         <Skill type="铁壁" level="4" unlock="5" />
         <Skill type="真言结界" level="0" unlock="10" />
     </Card>
+    <Card id="2678" name="二月的恋人" wikiId="" race="森林" speed="3" star="5" cost="20" incrCost="2" at="570" hp="1570" incrAT="44" incrHP="47">
+        <Skill type="幻影斩" level="0" unlock="0" />
+        <Skill type="拔刀斩" level="0" unlock="5" />
+        <Skill type="重整" level="0" unlock="10" />
+    </Card>
 
 
 
@@ -4400,6 +4430,31 @@
         <Skill type="毒刃攻心" level="0" unlock="0"  />
         <Skill type="蛇影重重" level="0" unlock="5"  />
         <Skill type="剧毒领域" level="0" unlock="10" />
+    </Card>
+    <Card id="3660" name="一月的荣光" wikiId="" race="蛮荒" speed="3" star="5" cost="20" incrCost="2" at="590" hp="1610" incrAT="44" incrHP="47">
+        <Skill type="戍边" level="0" unlock="0"  />
+        <Skill type="守护" level="7" unlock="5"  />
+        <Skill type="决胜之心" level="0" unlock="10" />
+    </Card>
+    <Card id="3661" name="囚龙" wikiId="" race="蛮荒" speed="3" star="5" cost="20" incrCost="2" at="520" hp="1535" incrAT="42" incrHP="45">
+        <Skill type="影青龙" level="0" unlock="0"  />
+        <Skill type="龙虎棍法" level="0" unlock="5"  />
+        <Skill type="压迫力" level="0" unlock="10" />
+    </Card>
+    <Card id="3662" name="黄昏镖客" wikiId="" race="蛮荒" speed="2" star="5" cost="18" incrCost="2" at="550" hp="1550" incrAT="40" incrHP="40">
+        <Skill type="觉醒孤胆英雄" level="0" unlock="0"  />
+        <Skill type="金汤" level="5" unlock="5"  />
+        <Skill type="连续魔法" level="7" unlock="10" />
+    </Card>
+    <Card id="3663" name="汉宫春晓" wikiId="" race="蛮荒" speed="3" star="5" cost="22" incrCost="2" at="585" hp="1615" incrAT="45" incrHP="48">
+        <Skill type="妙笔生花" level="0" unlock="0"  />
+        <Skill type="画意相通" level="0" unlock="5"  />
+        <Skill type="流光回梦" level="0" unlock="10" postcast="true"/>
+    </Card>
+    <Card id="3664" name="画境·汉宫春晓" wikiId="" race="蛮荒" speed="3" star="5" cost="22" incrCost="2" at="584" hp="1614" incrAT="45" incrHP="48">
+        <Skill type="守护" level="10" unlock="0"  />
+        <Skill type="画意相通" level="0" unlock="5"  />
+        <Skill type="月神的护佑" level="10" unlock="10" death="true"/>
     </Card>
 
 
@@ -5889,7 +5944,7 @@
         <Skill type="免疫" level="0" unlock="5" />
         <Skill type="魔族之血" level="0" unlock="10" />
     </Card>
-    <Card id="4701" name="蝙蝠恶魔" wikiId="" race="地狱" speed="3" star="5" cost="18" incrCost="2" at="540" hp="1515" incrAT="44" incrHP="45">
+    <Card id="47001" name="蝙蝠恶魔" wikiId="" race="地狱" speed="3" star="5" cost="18" incrCost="2" at="540" hp="1515" incrAT="44" incrHP="45">
         <Skill type="王国卫士" level="0" unlock="0" />
         <Skill type="同调" level="0" unlock="5" summon="true" />
         <Skill type="不屈" level="0" unlock="5" />
@@ -5954,6 +6009,26 @@
         <Skill type="诸行无常" level="0" unlock="0" />
         <Skill type="铁壁" level="4" unlock="5" />
         <Skill type="真言结界" level="0" unlock="10" />
+    </Card>
+    <Card id="4713" name="龙胆亮银枪" wikiId="" race="地狱" speed="3" star="5" cost="20" incrCost="2" at="510" hp="1565" incrAT="44" incrHP="44">
+        <Skill type="上挑" level="0" unlock="0" />
+        <Skill type="金蝉脱壳" level="0" unlock="5" />
+        <Skill type="木牛流马" level="0" unlock="10" />
+    </Card>
+    <Card id="4714" name="朱雀焚天" wikiId="" race="地狱" speed="3" star="5" cost="20" incrCost="2" at="515" hp="1580" incrAT="41" incrHP="44">
+        <Skill type="沉默之境" level="0" unlock="0" />
+        <Skill type="断绝之力" level="0" unlock="5" />
+        <Skill type="冥火" level="0" unlock="10" />
+    </Card>
+    <Card id="4715" name="魔力兔宝贝" wikiId="" race="地狱" speed="3" star="5" cost="20" incrCost="2" at="580" hp="1580" incrAT="48" incrHP="47">
+        <Skill type="死亡链接" level="0" unlock="0" summon="true"/>
+        <Skill type="魔力彩蛋" level="0" unlock="5" />
+        <Skill type="重生与希望" level="0" unlock="10" />
+    </Card>
+    <Card id="4716" name="四月的繁花" wikiId="" race="地狱" speed="3" star="5" cost="20" incrCost="2" at="580" hp="1580" incrAT="48" incrHP="47">
+        <Skill type="禁语" level="0" unlock="0" />
+        <Skill type="三花聚顶" level="0" unlock="5" />
+        <Skill type="护身" level="0" unlock="10" />
     </Card>
 
 
@@ -6748,6 +6823,11 @@
         <Skill type="鲜血记忆" level="0" unlock="0" />
         <Skill type="滋养" level="0" unlock="5" />
         <Skill type="守护" level="0" unlock="10" />
+    </Card>
+    <Card id="6120" name="汉宫春晓图" wikiId="" race="魔族" speed="3" star="5" cost="99" incrCost="0" at="560" hp="1600" incrAT="44" incrHP="46">
+        <Skill type="睹物思人" level="0" unlock="0" />
+        <Skill type="虚实相生" level="0" unlock="5" />
+        <Skill type="画境乾坤" level="0" unlock="10" />
     </Card>
 
     <!-- 测试卡 -->

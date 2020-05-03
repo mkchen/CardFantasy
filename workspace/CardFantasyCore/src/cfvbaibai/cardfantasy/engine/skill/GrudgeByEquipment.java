@@ -46,7 +46,7 @@ public class GrudgeByEquipment {
                     }
                 }
                 ui.addCardStatus(attacker, victim, skill, statusItem2);
-                if (!victim.isDeman()) {
+                if (!victim.isDemon()) {
                     victim.addStatus(statusItem1);
                 }
                 victim.addStatus(statusItem2);
@@ -69,7 +69,7 @@ public class GrudgeByEquipment {
                             }
                         }
                         ui.addCardStatus(attacker, randomVictim, skill, statusItem2);
-                        if (!randomVictim.isDeman()) {
+                        if (!randomVictim.isDemon()) {
                             randomVictim.addStatus(statusItem1);
                         }
                         randomVictim.addStatus(statusItem2);

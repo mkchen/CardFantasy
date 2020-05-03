@@ -851,7 +851,7 @@ public class CardInfo extends EntityInfo {
         return this.getRace() == Race.BOSS;
     }
 
-    public boolean isDeman() {
+    public boolean isDemon() {
         return this.getRace() == Race.DEMON;
     }
 

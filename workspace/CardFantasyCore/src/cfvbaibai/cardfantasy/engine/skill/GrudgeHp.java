@@ -47,7 +47,7 @@ public class GrudgeHp {
                 }
             }
             ui.addCardStatus(attackCard, victim, skill, statusItem2);
-            if(!victim.isDeman()) {
+            if(!victim.isDemon()) {
                 victim.addStatus(statusItem1);
             }
             victim.addStatus(statusItem2);
@@ -70,7 +70,7 @@ public class GrudgeHp {
                         }
                     }
                     ui.addCardStatus(attackCard, randomVictim, skill, statusItem2);
-                    if(!randomVictim.isDeman()) {
+                    if(!randomVictim.isDemon()) {
                         randomVictim.addStatus(statusItem1);
                     }
                     randomVictim.addStatus(statusItem2);
@@ -123,7 +123,7 @@ public class GrudgeHp {
                 }
             }
             ui.addCardStatus(skillUseInfo.getOwner(), victim, skill, statusItem2);
-            if(!victim.isDeman()) {
+            if(!victim.isDemon()) {
                 victim.addStatus(statusItem1);
             }
             victim.addStatus(statusItem2);

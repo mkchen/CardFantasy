@@ -24,16 +24,13 @@ public final class Guard {
             damage = guardian.getOwner().getHP();
         }
         int sdamage = damage;
-        if(guardSkill.getType()== SkillType.诲人不倦)
-        {
+        if(guardSkill.getType()== SkillType.诲人不倦) {
             sdamage = damage*30/100;
         }
-        else if(guardSkill.getType()== SkillType.心转之术)
-        {
+        else if(guardSkill.getType()== SkillType.心转之术) {
             sdamage = damage*10/100;
         }
-        else if(guardSkill.getType()== SkillType.固守)
-        {
+        else if(guardSkill.getType()== SkillType.固守) {
             sdamage = damage*50/100;
         }
         //调整守护，但是不影响旧技能

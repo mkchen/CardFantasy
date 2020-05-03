@@ -11,7 +11,7 @@ import cfvbaibai.cardfantasy.engine.SkillUseInfo;
 public final class AlchemyFailure {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, Skill cardSkill, CardInfo card) throws HeroDieSignal {
         GameUI ui = resolver.getStage().getUI();
-        if(card.isDeman())
+        if(card.isDemon())
         {
             ui.useSkill(card, card, cardSkill, false);
             return;

@@ -8,15 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DisorderMult {
-    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, CardInfo card,Player defenderHero,int killCount,int type) throws HeroDieSignal {
+    public static DeadType apply(SkillUseInfo skillUseInfo, SkillResolver resolver, CardInfo card,Player defenderHero,int killCount,int type,int health, EntityInfo attacker, Skill killSkill) throws HeroDieSignal {
+        DeadType deadType = resolver.cardDeadBeforeScapegoat(attacker,killSkill,card);
+        if(deadType != DeadType.Normal){
+            return  deadType;
+        }
+
         int impact2 = skillUseInfo.getSkill().getImpact2();
         int number = skillUseInfo.getSkillNumber();
-        if(number==0)
-        {
-            return;
+        if(number==0) {
+            card.restoreOwner();
+            card.getOwner().getBeforeDeath().addCard(card);
+            return deadType;
         }
-        if(number<0)
-        {
+        if(number<0) {
             number = impact2;
             skillUseInfo.setSkillNumber(impact2);
         }
@@ -30,14 +35,14 @@ public final class DisorderMult {
         for(CardInfo cardInfo:player.getField().getAliveCards()){
             if(cardInfo == card){
 
-            }else if(cardInfo.isDeman() || cardInfo.isBoss()){
+            }else if(cardInfo.isDemon() || cardInfo.isBoss()){
                 extraCard.add(cardInfo);
             }else if(cardInfo.getStatus().containsStatus(CardStatusType.不屈)){
                 extraCard.add(cardInfo);
             }
         }
         for(CardInfo cardInfo:defenderHero.getField().getAliveCards()){
-            if(cardInfo.isDeman() || cardInfo.isBoss()){
+            if(cardInfo.isDemon() || cardInfo.isBoss()){
                 extraCard.add(cardInfo);
             }else if(cardInfo.getStatus().containsStatus(CardStatusType.不屈)){
                 extraCard.add(cardInfo);
@@ -49,25 +54,30 @@ public final class DisorderMult {
         }
         List<CardInfo> effectCardList = random.pickRandom(cardInfoList, killCount, true, extraCard);
         if(effectCardList.size()==0){
-            return;
+            card.restoreOwner();
+            card.getOwner().getBeforeDeath().addCard(card);
+            return deadType;
         }
-        for(CardInfo cardInfo:effectCardList){
-            resolver.killCard(card,cardInfo,skill);//杀死卡牌
-        }
+
         int healHP = skill.getImpact();
         if (healHP + card.getHP() > card.getMaxHP()) {
             healHP = card.getMaxHP() - card.getHP();
         }
-        if (healHP == 0) {
-            return;
+        if(healHP>0) {
+            if (healHP > health) {
+                healHP = health;
+            }
+            resolver.getStage().getUI().useSkill(card, skill, true);
+            resolver.getStage().getUI().healCard(card, card, skill, healHP);
+            resolver.applyDamage(card, card, skill, -healHP);
         }
-        OnAttackBlockingResult result = resolver.resolveHealBlockingSkills(card, card, skill);
-        if (!result.isAttackable()) {
-            return;
+
+        for(CardInfo cardInfo:effectCardList){
+            resolver.getStage().getUI().useSkill(card,cardInfo,skill,true);
+            resolver.getStage().getUI().killCard(card, cardInfo,skill);
+            resolver.killCard(card,cardInfo,skill);//杀死卡牌
         }
-        resolver.getStage().getUI().useSkill(card, skill, true);
-        resolver.getStage().getUI().healCard(card, card, skill, healHP);
-        resolver.applyDamage(card, card, skill, -healHP);
+        return deadType;
 
     }
 

@@ -40,9 +40,13 @@ public final class CardEndSkillUseInfoList {
             if (!FailureSkillUseInfoList.exploded(resolver, cardInfo, attacker.getOwner())) {
                 continue;
             }
-            int impact = skillUseInfo.getSkill().getImpact();
-            if (resolver.getStage().getRandomizer().roll100(impact)) {
-                Ancient.apply(resolver, skillUseInfo, attacker, defender, 2, 1);
+            if(skillUseInfo.getType() == SkillType.上古神剑) {
+                int impact = skillUseInfo.getSkill().getImpact();
+                if (resolver.getStage().getRandomizer().roll100(impact)) {
+                    Ancient.apply(resolver, skillUseInfo, attacker, defender, 2, 1);
+                }
+            }else if(skillUseInfo.getType() == SkillType.三花聚顶){
+                ThunderStrike.apply(skillUseInfo, resolver, attacker, defender, 3);
             }
         }
         for(SkillUseInfo deleteSkillUseInfo:deleteSkillUseInfoList){

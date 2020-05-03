@@ -38,7 +38,7 @@ public final class Erode {
         {
             if(fieldCard!=null)
             {
-                if(fieldCard.isDeman())
+                if(fieldCard.isDemon())
                 {
                     continue;
                 }
