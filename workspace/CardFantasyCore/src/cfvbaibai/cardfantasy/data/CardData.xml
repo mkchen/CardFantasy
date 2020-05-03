@@ -3107,6 +3107,11 @@
         <Skill type="拔刀斩" level="0" unlock="5" />
         <Skill type="重整" level="0" unlock="10" />
     </Card>
+    <Card id="2679" name="安乐少女" wikiId="" race="森林" speed="3" star="4" cost="15" incrCost="2" at="455" hp="1305" incrAT="27" incrHP="34">
+        <Skill type="氛氲馥郁" level="0" unlock="0" />
+        <Skill type="月神的护佑" level="7" unlock="5" />
+        <Skill type="英雄冢" level="0" unlock="10" />
+    </Card>
 
 
 

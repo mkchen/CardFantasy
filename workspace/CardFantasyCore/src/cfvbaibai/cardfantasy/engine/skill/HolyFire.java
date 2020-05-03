@@ -33,7 +33,8 @@ public final class HolyFire {
                 return;
             }
             for(SkillUseInfo skillUseInfo:victim.getUsableNormalSkills()){
-                if(skillUseInfo.getType() == SkillType.浴火重生 || skillUseInfo.getType() == SkillType.大圣归来 ||skillUseInfo.getType() == SkillType.拉莱耶领域){
+                if(skillUseInfo.getType() == SkillType.浴火重生 || skillUseInfo.getType() == SkillType.大圣归来 || skillUseInfo.getType() == SkillType.拉莱耶领域
+                        || skillUseInfo.getType() == SkillType.入木三分){
                     ui.useSkill(victim, victim, skillUseInfo.getSkill(), true);
                     defender.getGrave().removeCard(victim);
                     resolver.summonCard(defender, victim, victim, false, skillUseInfo.getSkill(),0);

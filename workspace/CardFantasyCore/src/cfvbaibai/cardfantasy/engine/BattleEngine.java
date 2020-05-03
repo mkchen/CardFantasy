@@ -556,8 +556,9 @@ public class BattleEngine {
                 if(skillUseInfo.getType() == SkillType.嘲讽 || skillUseInfo.getType() == SkillType.酒池肉林
                         || skillUseInfo.getType() == SkillType.喵喵喵|| skillUseInfo.getType() == SkillType.蔑视
                         || skillUseInfo.getType() == SkillType.龙之守护 || skillUseInfo.getType() == SkillType.守护之翼
-                        || skillUseInfo.getType()==SkillType.百里
-                        || skillUseInfo.getType() == SkillType.战意侵蚀 || skillUseInfo.getType() == SkillType.魔女之息)
+                        || skillUseInfo.getType()==SkillType.百里 || skillUseInfo.getType() == SkillType.叫阵
+                        || skillUseInfo.getType() == SkillType.战意侵蚀 || skillUseInfo.getType() == SkillType.魔女之息
+                        || skillUseInfo.getType() == SkillType.永劫深渊 || skillUseInfo.getType() == SkillType.辰星之子)
                 {
                     skill = skillUseInfo.getSkill();
                 }
@@ -759,7 +760,10 @@ public class BattleEngine {
                             || skillUseInfo.getType()==SkillType.龙之守护 || skillUseInfo.getType()==SkillType.守护之翼
                             || skillUseInfo.getType()==SkillType.百里
                             || skillUseInfo.getType()==SkillType.战意侵蚀
-                            || skillUseInfo.getType() == SkillType.魔女之息) {
+                            || skillUseInfo.getType() == SkillType.魔女之息
+                            || skillUseInfo.getType() == SkillType.永劫深渊
+                            || skillUseInfo.getType() == SkillType.辰星之子
+                            || skillUseInfo.getType() == SkillType.叫阵) {
                         if (!card.getStatus().containsStatus(CardStatusType.不屈)) {
                             return card;
                         }

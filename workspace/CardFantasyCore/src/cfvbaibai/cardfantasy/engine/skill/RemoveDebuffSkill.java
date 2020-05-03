@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class RemoveDebuffSkill {
-    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, EntityInfo attacker,int number,Player defener)
+    public static void apply(SkillUseInfo skillUseInfo, SkillResolver resolver, EntityInfo attacker,int number,Player defender)
             throws HeroDieSignal {
         CardStatus status = attacker.getStatus();
         if (status.containsStatus(CardStatusType.迷惑) ||
@@ -21,9 +21,6 @@ public final class RemoveDebuffSkill {
             return ;
         }
         List<CardInfo> cards = null;
-        Skill skill = skillUseInfo.getSkill();
-        SkillUseInfo extraSkillUserInfo = skillUseInfo.getAttachedUseInfo1();
-        Skill exitSkill = extraSkillUserInfo.getSkill();
 //        cards = attacker.getOwner().getField().getAliveCards();
         StageInfo stage = resolver.getStage();
         Randomizer random = stage.getRandomizer();
@@ -86,11 +83,15 @@ public final class RemoveDebuffSkill {
                     resolver.getStage().getUI().removeCardStatus(card, CardStatusType.虚化);
                 } else{
                     cardStatus.removeItem(deleteItem);
-                    if(exitSkill.getType() == SkillType.归魂) {
-                        RegressionSoul.apply(resolver, extraSkillUserInfo, attacker, defener);
-                    } else if(exitSkill.getType() == SkillType.复活) {
+                    if(skillUseInfo.getType() == SkillType.以德服人) {
+                        RegressionSoul.apply(resolver, skillUseInfo, attacker, defender);
+                    } else if(skillUseInfo.getType() == SkillType.圣灵之力) {
                         CardInfo cardInfo = (CardInfo) attacker;
-                        Revive.apply(resolver, extraSkillUserInfo, cardInfo);
+                        Revive.apply(resolver, skillUseInfo.getAttachedUseInfo1(), cardInfo);
+                    } else if(skillUseInfo.getType() == SkillType.平沙落雁){
+                        Spread.apply(resolver, skillUseInfo, attacker, defender, 3, 6);
+                    } else if(skillUseInfo.getType() == SkillType.清水甘露){
+                        ManaErode.apply(skillUseInfo.getSkill(), resolver, attacker, defender, 1);
                     }
                 }
             }
