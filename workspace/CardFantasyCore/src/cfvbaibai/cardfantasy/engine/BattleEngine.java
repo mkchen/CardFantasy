@@ -569,7 +569,7 @@ public class BattleEngine {
         else {
              damagedResult = resolver.attackCard(myField.getCard(i), defender, null);
         }
-        if (damagedResult != null && damagedResult.originalDamage > 0 && myField.getCard(i) != null&&attackflag) {
+        if (myField.getCard(i) != null&&attackflag) {
             for (SkillUseInfo skillUseInfo : myField.getCard(i).getUsableNormalSkills()) {
                 if (skillUseInfo.getType() == SkillType.横扫 ||
                         skillUseInfo.getType() == SkillType.地裂劲 ||
@@ -615,8 +615,10 @@ public class BattleEngine {
 //                            resolver.attackCard(myField.getCard(i), tauntTwo, skillUseInfo, damagedResult.originalDamage);
 //                        }
 //                        else {
-                            ui.useSkill(myField.getCard(i), sweepDefender, skillUseInfo.getSkill(), true);
-                            resolver.attackCard(myField.getCard(i), sweepDefender, skillUseInfo, damagedResult.originalDamage,false);
+                        ui.useSkill(myField.getCard(i), sweepDefender, skillUseInfo.getSkill(), true);
+//                            resolver.attackCard(myField.getCard(i), sweepDefender, skillUseInfo, damagedResult.originalDamage,false);
+                        //伤害单独计算
+                        resolver.attackCard(myField.getCard(i), sweepDefender, skillUseInfo, myField.getCard(i).getCurrentAT(),false);
 //                        }
                         // Physical attack cannot proceed if attacker is killed by counter attack skills.
                         if (myField.getCard(i) == null) {
@@ -627,7 +629,7 @@ public class BattleEngine {
                 }
             }
         }
-        if (damagedResult != null && damagedResult.originalDamage > 0 && myField.getCard(i) != null&&attackflag) {
+        if (myField.getCard(i) != null&&attackflag) {
             for (SkillUseInfo skillUseInfo : myField.getCard(i).getUsableNormalSkills()) {
                 if (skillUseInfo.getType() == SkillType.一文字 || skillUseInfo.getType() == SkillType.页游横扫千军
                         || skillUseInfo.getType() == SkillType.横扫千军 || skillUseInfo.getType() == SkillType.纷乱雪月花
@@ -644,7 +646,9 @@ public class BattleEngine {
                             continue;
                         }
                         ui.useSkill(myField.getCard(i), sweepDefender, skillUseInfo.getSkill(), true);
-                        resolver.attackCard(myField.getCard(i), sweepDefender, skillUseInfo, damagedResult.originalDamage,false);
+//                        resolver.attackCard(myField.getCard(i), sweepDefender, skillUseInfo, damagedResult.originalDamage,false);
+                        //伤害单独计算
+                        resolver.attackCard(myField.getCard(i), sweepDefender, skillUseInfo, myField.getCard(i).getCurrentAT(),false);
                         if (myField.getCard(i) == null ||myField.getCard(i).isDead()) {
                             break;
                         }
