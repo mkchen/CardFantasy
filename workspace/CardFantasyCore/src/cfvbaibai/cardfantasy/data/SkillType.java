@@ -658,7 +658,6 @@ public enum SkillType {
 
     代罪(999999,0, SkillTag.魔王无效, SkillTag.抗免疫,SkillTag.即死,SkillTag.抗不屈),
     紊乱(999999,0, SkillTag.魔王无效, SkillTag.抗免疫,SkillTag.即死,SkillTag.抗不屈),
-    //风雨无阻(999999,0, SkillTag.魔王无效, SkillTag.抗免疫,SkillTag.即死,SkillTag.抗不屈),
     神鬼之医(999999,0,2,0, SkillTag.魔王无效, SkillTag.抗免疫,SkillTag.即死,SkillTag.抗不屈),
     逆转之矢(999999,0,3,0, SkillType.终极天谴,0,null,0, SkillTag.魔王无效, SkillTag.抗免疫,SkillTag.即死,SkillTag.抗不屈),
     风雨无阻(999999,0,1,0, SkillTag.魔王无效, SkillTag.抗免疫,SkillTag.即死,SkillTag.抗不屈),
@@ -1032,7 +1031,6 @@ public enum SkillType {
     魏之恋(1, 0,SkillTag.抗夺魂),
     残影(3, 0,SkillTag.抗夺魂),
     魔偶替身(2, 0,SkillTag.抗夺魂),
-    //雪影分身(1, 0,SkillTag.抗夺魂),
     风暴之主(2, 0,SkillTag.抗夺魂),
     吴之悌(1, 0,SkillTag.抗夺魂),
     吴之恋(1, 0,SkillTag.抗夺魂),
@@ -1074,7 +1072,6 @@ public enum SkillType {
     魔神之咒(0, 1000, SkillTag.抗免疫),
     // 用于处理各技能中"对魔神无效"的描述
     无效(0, 0),
-    // 用于处理各技能中"对魔族无效"的描述
     魔族天赋(0, 0),
     物品技能(0),
 
@@ -1239,7 +1236,6 @@ public enum SkillType {
     流星(SkillType.祈愿,1,SkillType.全体加速,1),
     风驰电掣(1,0),
     霜火交织(SkillType.霜火,0,SkillType.圣炎,0),
-    //热情似火(null,0,SkillType.圣炎,0,SkillTag.抗沉默),
     冥界三重奏(SkillType.侧击,0,SkillType.夹击,0),
     云雾缭绕(3,0, SkillType.侧击,0,SkillType.夹击,0,SkillTag.抗免疫,SkillTag.魔王无效),
     龙虎棍法(SkillType.侧击,0,SkillType.夹击,0),
@@ -1679,7 +1675,6 @@ public enum SkillType {
     封魔神剑(444, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
     裂地斩(0, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
     对决(400, 0, 40,0,SkillTag.永久, SkillTag.基础攻击加成),
-    //裂地(0, 0, 44,0,SkillTag.永久, SkillTag.基础攻击加成),
     暗影奇袭(400, 0, 100,0,SkillTag.永久, SkillTag.基础攻击加成),
     狩猎(0, 0, 0,0),
     花果山美猴王(200, 0, 50,0,SkillType.救命毫毛,0,null,0,SkillTag.召唤,SkillTag.永久, SkillTag.基础攻击加成),
@@ -1746,13 +1741,10 @@ public enum SkillType {
     装备震击(400, 100, 3, 0, SkillTag.抗免疫),
     装备顺劈(0, 1, 1, 0, new int[] { 0, 250, 650, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200 },SkillTag.抗免疫),
     装备饮魂(200,100,0,1),
-    装备恶魔诅咒(2000,0,0,1),
-    装备瘟疫蔓延(0,1,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
-    //装备恶魔重生(0,1,SkillType.重整,0,null,0),
-    //装备围攻(0,0),
-    //知人善任(3,0,SkillType.司命,0,SkillType.善任,0),
+    //装备恶魔诅咒(2000,0,0,1),
+    //装备瘟疫蔓延(0,1,500,0,SkillTag.抗不屈,SkillTag.永久, SkillTag.基础攻击加成, SkillTag.魔王无效),
     装备雷神之锤(1000,0,3,0, SkillTag.抗免疫),
-    装备恶魔重生(0,1,SkillType.重整,0, null,0),
+    //装备恶魔重生(0,1,SkillType.重整,0, null,0),
     装备围攻(0,1);
 
 

@@ -104,10 +104,10 @@ public class SkillResolver {
                     ResurrectionByEquipment.reset(equipmentSkillUserInfo);
                 } else if (equipmentSkillUserInfo.getType() == SkillType.装备祈祷) {
                     PrayByEquipment.apply(equipmentSkillUserInfo.getSkill(), this, equipmentInfo);
-                } else if (equipmentSkillUserInfo.getType() == SkillType.装备恶魔诅咒) {
-                    if(stage.getRound() < 16){
-                        Curse.apply(this, equipmentSkillUserInfo.getSkill(), attacker, defender); 
-                    }
+                //} else if (equipmentSkillUserInfo.getType() == SkillType.装备恶魔诅咒) {
+                //    if(stage.getRound() < 16){
+                //        Curse.apply(this, equipmentSkillUserInfo.getSkill(), attacker, defender); 
+                //    }
                 } else if (equipmentSkillUserInfo.getType() == SkillType.装备强攻 || equipmentSkillUserInfo.getType() == SkillType.装备鼓舞) {
                     int impact = equipmentSkillUserInfo.getSkill().getImpact();
                     if (impact == 1) {
@@ -3271,15 +3271,11 @@ public class SkillResolver {
                         Player opponent = this.getStage().getOpponent(defender.getOwner());
                         scapegoatType = Disorder.apply(skillUseInfo, this, defender, opponent,attacker,skill);
                         scapegoat = true;
-                    //} else if (skillUseInfo.getType() == SkillType.风雨无阻) {
-                    //    Player opponent = this.getStage().getOpponent(defender.getOwner());
-                    //    scapegoatType = Disorder3.apply(skillUseInfo, this, defender, opponent,attacker,skill);
-                    //    scapegoat = true;
                     } else if (skillUseInfo.getType() == SkillType.神鬼之医) {
                         Player opponent = this.getStage().getOpponent(defender.getOwner());
                         scapegoatType = DisorderMult.apply(skillUseInfo, this, defender, opponent, 1,0,1,attacker,skill);
                         scapegoat = true;
-                    } else if (skillUseInfo.getType() == SkillType.逆转之矢) {
+                    } else if (skillUseInfo.getType() == SkillType.逆转之矢 || skillUseInfo.getType() == SkillType.风雨无阻) {
                         Player opponent = this.getStage().getOpponent(defender.getOwner());
                         scapegoatType = DisorderMult.apply(skillUseInfo, this, defender, opponent, 1,1,9999,attacker,skill);
                         scapegoat = true;
