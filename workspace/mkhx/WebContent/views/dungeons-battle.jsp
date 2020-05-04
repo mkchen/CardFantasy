@@ -40,19 +40,20 @@
                                         <option value="d-27">月光妖兽关121</option>
                                         <option value="d-28">幻影凤凰关121</option>
                                         <option value="d-29">满地孙猴关121(s)</option>
-                                        <option value="d-30"> 满地孙猴关121（n）</option>
                                         <option value="d-31"> 烈火南华关121</option>
                                         <option value="d-32">秘术投影关121</option>
                                         <option value="d-33">泳池派对关121</option>
                                         <option value="d-34">魔法季关121</option>
                                         <option value="d-35">坚韧九霄关121</option>
                                         <option value="d-36">日本妖怪关121</option>
-                                        <option value="d-37">中国妖怪关121(s)</option>
-                                        <option value="d-38">中国妖怪关121(n)</option>
+                                        <option value="d-30">中国妖怪关121(s)</option>
+                                        <option value="d-30n">中国妖怪关121(n)</option>
+                                        <option value="d-29n"> 满地孙猴关121（n）</option>
                                         <option value="d-110">地下城110</option>
                                         <option value="d-110m">地下城110全灭</option>
                                         <option value="d-120">地下城120</option>
                                         <option value="d-11020">地下城110和120层</option>
+                                        <option value="d-130">地下城130</option>
                                     </optgroup>
                                     <optgroup label="噩梦1图">
                                         <option value="1-1">1-1 森林入口</option>
@@ -253,6 +254,7 @@
                     <option value="-140">精选契约</option>
                     <option value="-141">全契约</option>
                     
+                    <option value="-150">装备</option>
                     <option value="-151">武器</option>
                 <option value="-152">防具</option>
                 <option value="-153">饰品</option>

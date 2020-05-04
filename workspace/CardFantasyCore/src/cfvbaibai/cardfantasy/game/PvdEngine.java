@@ -43,6 +43,10 @@ public class PvdEngine extends GameEngine {
             Random rand = new Random();
             int i = rand.nextInt(10)+17;
             mapId = "d-"+ i +"-1";
+        }else if(mapId.indexOf("d-130-") == 0){
+            Random rand = new Random();
+            int i = rand.nextInt(10)+27;
+            mapId = "d-"+ i +"-1";
         }else if(mapId.indexOf("d-110-") == 0){
             Random rand = new Random();
             int i = rand.nextInt(10)+7;

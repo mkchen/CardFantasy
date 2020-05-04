@@ -137,6 +137,8 @@ public final class DeckBuilder {
                 parseAndAddRune(deck, desc.substring(1));
             } else if (desc.length() > 1 && desc.charAt(0) == 'Q') {
                 parseAndAddIndenture(deck, desc.substring(1));
+            } else if (desc.length() > 1 && (desc.indexOf("QY1") == 0 || desc.indexOf("QY2") == 0 || desc.indexOf("QY3") == 0 || desc.indexOf("QY4") == 0 || desc.indexOf("QY5") == 0 || desc.indexOf("QY6") == 0)) {
+                parseAndAddIndenture(deck, desc.substring(3));
             } else if (desc.length() > 1 && desc.charAt(0) == 'Z') {
                 parseAndAddEquipment(deck, desc.substring(1));
             } else if (desc.length() > 1 && (desc.indexOf("WQ") == 0 || desc.indexOf("FJ") == 0 || desc.indexOf("SP") == 0)) {

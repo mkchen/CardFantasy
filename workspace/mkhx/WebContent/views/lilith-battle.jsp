@@ -104,7 +104,8 @@
                 <option value="-140">精选契约</option>
                 <option value="-141">全契约</option>
                 
-                <option value="-151">武器</option>
+                <option value="-150">装备</option>
+                    <option value="-151">武器</option>
                 <option value="-152">防具</option>
                 <option value="-153">饰品</option>
             </select>

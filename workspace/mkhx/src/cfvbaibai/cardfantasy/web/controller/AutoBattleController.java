@@ -251,7 +251,29 @@ public class AutoBattleController {
             deck1 = formatDeck(deck1);
             deck2 = formatDeck(deck2);
             deck2 = formatDeckZB(deck2);
+            deck2 = formatDeckQY(deck2);
 
+            if(selectType == -150){
+                String exname = deck1.substring(0, 2);
+
+                if(exname.toUpperCase().equals("WQ")){
+                    selectType = -151;
+                }else if(exname.toUpperCase().equals("FJ")){
+                    selectType = -152;
+                }else if(exname.toUpperCase().equals("SP")){
+                    selectType = -153;
+                }else{
+                    if(deck1.toUpperCase().indexOf("WQ") == -1){
+                        selectType = -151;
+                    }else if(deck1.toUpperCase().indexOf("FJ") == -1){
+                        selectType = -152;
+                    }else if(deck1.toUpperCase().indexOf("SP") == -1){
+                        selectType = -153;
+                    }else{
+                        throw new CardFantasyRuntimeException("当前卡组已存在三种装备，无法设置第四种装备"+ deck1 +"|");
+                    }
+                }
+            }
             GameSetup setup = null;
             ArenaGameResult result = null;
             GameResultStat stat = null;
@@ -294,6 +316,7 @@ public class AutoBattleController {
                         //result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
                         //sortcards.add(new sortCard(thisdeck,Double.valueOf(result.getAdvWinCount())));
                         newdeck = formatDeckZB(newdeck);
+                        newdeck = formatDeckQY(newdeck);
                         setup = GameSetup.setupArenaGame(
                             newdeck, deck2,  heroLv1, heroLv2,
                             p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
@@ -314,6 +337,8 @@ public class AutoBattleController {
                 }
                 //最后运行一次正常的, 好显示数据及对比
                 deck1 = formatDeckZB(deck1);
+                deck1 = formatDeckQY(deck1);
+                
                 setup = GameSetup.setupArenaGame(
                     deck1, deck2, heroLv1, heroLv2,
                     p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
@@ -438,8 +463,15 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardYZ.txt");
                 }*/
 
+                String exname = "";
+                if(selectType == -140 || selectType == -141){     //当为契约时取出头三个字母，获得原契约的书写格式和序号
+                    exname = deck1.substring(0, 3);
+                }
+                sortcards = getSortcards(txturls, selectType, exname);   //从mycard文件列表中取出卡牌
+
+
                 //从mycard文件列表中取出卡牌
-                for (int i = 0; i < txturls.size(); i++) {
+                /*for (int i = 0; i < txturls.size(); i++) {
                     
                     String txturl = txturls.get(i); 
                     cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
@@ -460,7 +492,11 @@ public class AutoBattleController {
                                     cardname = cardname.replace("-","");
                                 }
                                 if(selectType == -140 || selectType == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
-                                    cardname = "Q" + cardname;
+                                    String exname = deck1.substring(0, 3);
+                                    if(exname.indexOf("QY") != 0){
+                                        exname = "Q";
+                                    }
+                                    cardname = exname + cardname;
                                 }
 
                                 if(selectType == -110 || selectType == -120 || selectType == -140 || selectType == -150){       //当选择类型为精选时
@@ -474,7 +510,7 @@ public class AutoBattleController {
                         }
                     }
                     br.close();    
-                }
+                }*/
 
                 /*for (int i = 0; i < txturls.size(); i++) {
                     
@@ -490,7 +526,11 @@ public class AutoBattleController {
                                 cardname = cardname.replace("-","");
                             }
                             if(selectType == -140 || selectType == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
-                                cardname = "Q" + cardname;
+                                String exname = deck1.substring(0, 3);
+                                    if(exname.indexOf("QY") != 0){
+                                        exname = "Q";
+                                    }
+                                    cardname = exname + cardname;
                             }
 
                             if(selectType == -110 || selectType == -120 || selectType == -140 || selectType == -150){       //当选择类型为精选时
@@ -512,6 +552,7 @@ public class AutoBattleController {
                 //olddeck = olddeck.replace('，', ',');
                 olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                 olddeck = formatDeckZB(olddeck);
+                olddeck = formatDeckQY(olddeck);
                 for(sortCard sortcard:sortcards){
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                     /*if(thiscardname.indexOf("-") == -1){
@@ -523,6 +564,11 @@ public class AutoBattleController {
                     }
                     String newdeck = thiscardname + olddeck;*/
                     String newdeck = thiscardname +", "+ olddeck;
+                    if(selectType == -140 || selectType == -141){
+                        newdeck = formatDeckQY(newdeck);
+                    }else if(selectType <= -151 && selectType >= -153){   //武器，装备，饰品
+                        newdeck = formatDeckZB(newdeck);
+                    }
                     //进行模拟并取值
                     setup = GameSetup.setupArenaGame(
                         newdeck, deck2, heroLv1, heroLv2,
@@ -569,6 +615,11 @@ public class AutoBattleController {
                         //olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                         String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                         String newdeck = thiscardname +", "+ olddeck;
+                        if(selectType == -140 || selectType == -141){
+                            newdeck = formatDeckQY(newdeck);
+                        }else if(selectType <= -151 && selectType >= -153){   //武器，装备，饰品
+                            newdeck = formatDeckZB(newdeck);
+                        }                       
                         //进行模拟并取值
                         //result = null;
                         //ui = new DummyGameUI();
@@ -635,6 +686,7 @@ public class AutoBattleController {
 
                 //最后显示一遍原始卡组的分数
                 deck1 = formatDeckZB(deck1);
+                deck1 = formatDeckQY(deck1);
                 setup = GameSetup.setupArenaGame(
                         deck1, deck2, heroLv1, heroLv2,
                         p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
@@ -648,6 +700,7 @@ public class AutoBattleController {
                     count = count20;        //单次模拟时按TOP的次数排
                 }
                 deck1 = formatDeckZB(deck1);
+                deck1 = formatDeckQY(deck1);
                 setup = GameSetup.setupArenaGame(
                         deck1, deck2, heroLv1, heroLv2,
                         p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff, p2CardAtBuff, p2CardHpBuff, p2HeroHpBuff,
@@ -852,6 +905,28 @@ public class AutoBattleController {
 
             deck = formatDeck(deck);
 
+            if(selectType == -150){
+                String exname = deck.substring(0, 2);
+
+                if(exname.toUpperCase().equals("WQ")){
+                    selectType = -151;
+                }else if(exname.toUpperCase().equals("FJ")){
+                    selectType = -152;
+                }else if(exname.toUpperCase().equals("SP")){
+                    selectType = -153;
+                }else{
+                    if(deck.toUpperCase().indexOf("WQ") == -1){
+                        selectType = -151;
+                    }else if(deck.toUpperCase().indexOf("FJ") == -1){
+                        selectType = -152;
+                    }else if(deck.toUpperCase().indexOf("SP") == -1){
+                        selectType = -153;
+                    }else{
+                        throw new CardFantasyRuntimeException("当前卡组已存在三种装备，无法设置第四种装备"+ deck +"|");
+                    }
+                }
+            }
+
             //int selectType = 0;
             int count20 = 0;
             if(count < -1){
@@ -917,6 +992,7 @@ public class AutoBattleController {
                         //result = GameLauncher.playBossGame(setup);
                         try{
                             newdeck = formatDeckZB(newdeck);
+                            newdeck = formatDeckQY(newdeck);
                             setup = GameSetup.setupBossGame(newdeck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                             result = GameLauncher.playBossGame(setup);
                             avgDamagePerMinute = Double.valueOf(Math.round(result.getAvgDamagePerMinute()));
@@ -936,6 +1012,7 @@ public class AutoBattleController {
                 //result = GameLauncher.playBossGame(setup);
                 try{
                     deck = formatDeckZB(deck);
+                    deck = formatDeckQY(deck);
                     setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                     result = GameLauncher.playBossGame(setup);
                 }catch (PvlGameTimeoutException e) {
@@ -1056,8 +1133,14 @@ public class AutoBattleController {
                     txturls.add("cfvbaibai/cardfantasy/data/MyCardspZb.txt");
                 }*/
                 
+                String exname = "";
+                if(selectType == -140 || selectType == -141){     //当为契约时取出头三个字母，获得原契约的书写格式和序号
+                    exname = deck.substring(0, 3);
+                }
+                sortcards = getSortcards(txturls, selectType, exname);   //从mycard文件列表中取出卡牌
+
                 //从mycard文件列表中取出卡牌
-                for (int i = 0; i < txturls.size(); i++) {
+                /*for (int i = 0; i < txturls.size(); i++) {
                     
                     String txturl = txturls.get(i); 
                     cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
@@ -1078,7 +1161,11 @@ public class AutoBattleController {
                                     cardname = cardname.replace("-","");
                                 }
                                 if(selectType == -140 || selectType == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
-                                    cardname = "Q" + cardname;
+                                    String exname = deck.substring(0, 3);
+                                    if(exname.indexOf("QY") != 0){
+                                        exname = "Q";
+                                    }
+                                    cardname = exname + cardname;
                                 }
 
                                 if(selectType == -110 || selectType == -120 || selectType == -140 || selectType == -150){       //当选择类型为精选时
@@ -1092,12 +1179,13 @@ public class AutoBattleController {
                         }
                     }
                     br.close();    
-                }
+                }*/
 
                 String olddeck = deck;
                 //olddeck = olddeck.replace('，', ',');
                 olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                 olddeck = formatDeckZB(olddeck);
+                olddeck = formatDeckQY(olddeck);
                 for(sortCard sortcard:sortcards){
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                     /*if(thiscardname.indexOf("-") == -1){
@@ -1109,6 +1197,11 @@ public class AutoBattleController {
                     }
                     String newdeck = thiscardname + olddeck;*/
                     String newdeck = thiscardname +", "+ olddeck;
+                    if(selectType == -140 || selectType == -141){
+                        newdeck = formatDeckQY(newdeck);
+                    }else if(selectType <= -151 && selectType >= -153){   //武器，装备，饰品
+                        newdeck = formatDeckZB(newdeck);
+                    }
                     //进行模拟并取值
                     //result = null;
                     //ui = new DummyGameUI();
@@ -1175,6 +1268,7 @@ public class AutoBattleController {
                 //result = GameLauncher.playBossGame(setup);
                 try{
                     deck = formatDeckZB(deck);
+                    deck = formatDeckQY(deck);
                     setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                     result = GameLauncher.playBossGame(setup);
                 }catch (PvlGameTimeoutException e) {
@@ -1191,6 +1285,7 @@ public class AutoBattleController {
                 //result = GameLauncher.playBossGame(setup);
                 try{
                     deck = formatDeckZB(deck);
+                    deck = formatDeckQY(deck);
                     setup = GameSetup.setupBossGame(deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, count, ui);
                     result = GameLauncher.playBossGame(setup);
                 }catch (PvlGameTimeoutException e) {
@@ -1355,15 +1450,69 @@ public class AutoBattleController {
             txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
         }else if(selectType == -140 || selectType == -141){       //精选契约和契约
             txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-       }else if(selectType == -151){ //装备
-            txturls.add("cfvbaibai/cardfantasy/data/MyCardwqZb.txt");
+       }else if(selectType == -151){        //装备武器
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardZBWQ.txt");
         }else if(selectType == -152){       //装备防具
-            txturls.add("cfvbaibai/cardfantasy/data/MyCardfjZb.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardZBFJ.txt");
         }else if(selectType == -153){       //装备饰品
-            txturls.add("cfvbaibai/cardfantasy/data/MyCardspZb.txt");
+            txturls.add("cfvbaibai/cardfantasy/data/MyCardZBSP.txt");
         }
 
         return txturls;
+
+    }
+
+    public List<sortCard> getSortcards(List<String> txturls, int selectType, String exname){
+        List<sortCard> sortcards = new ArrayList<>();
+
+        InputStream cardFWStream;
+        try {
+        for (int i = 0; i < txturls.size(); i++) {
+                    
+            String txturl = txturls.get(i); 
+            cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
+            //将文件中的符文读进list里
+            BufferedReader br = new BufferedReader(new InputStreamReader(cardFWStream, "UTF-8"));//构造一个BufferedReader类来读取文件
+            String cardname = null;
+            while((cardname = br.readLine())!=null){    //使用readLine方法，一次读一行
+                cardname = cardname.replace('，', ',');
+                
+                if(selectType == -1160){                                                                           //当为程序可能报错卡牌时
+                    if(cardname.indexOf(',') != -1 && cardname.indexOf("//") != -1){            //程序可能报错卡牌是放在尚未收录中的标记卡牌
+                        cardname = cardname.replace("//","");
+                        sortcards.add(new sortCard(cardname, 0.0));
+                    }
+                }else{
+                    if(cardname.indexOf("//") == -1){                       //当卡牌不为尚未收录的卡牌时
+                        if(cardname.indexOf('-') == 0){                     //当为还是碎片未合成的卡牌时
+                            //cardname = cardname.replace("-","");
+                            cardname = cardname.substring(1);
+                        }
+                        if(selectType == -140 || selectType == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
+                            //String exname = deck.substring(0, 3);
+                            if(exname.indexOf("QY") != 0){
+                                exname = "Q";
+                            }
+                            cardname = exname + cardname;
+                        }
+
+                        if(selectType == -110 || selectType == -120 || selectType == -140 || selectType == -150){       //当选择类型为精选时
+                            if(cardname.indexOf(',') != -1){            //当为标记卡牌时
+                                sortcards.add(new sortCard(cardname, 0.0));
+                            }
+                        }else{                                                                                              //当选择类型不为精选时
+                            sortcards.add(new sortCard(cardname, 0.0));
+                        }
+                    }                              
+                }
+            }
+            br.close();    
+        }}  catch (Exception e) {
+           //writer.print(errorHelper.handleError(e, false));
+           throw new CardFantasyRuntimeException("排序卡牌里读取文件出错:" + e );
+        }
+
+        return sortcards;
 
     }
 
@@ -1491,6 +1640,8 @@ public class AutoBattleController {
     }
 
     public String formatDeck(String deck){ 
+    
+        deck = deck.trim();
         deck = deck.replace("，", ",");
         deck = deck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
         deck = deck.replace(" ", "");   //先去掉了空格才能接下来去掉双逗号
@@ -1500,6 +1651,39 @@ public class AutoBattleController {
         return deck;
     }
 
+    public String formatDeckQY(String deck){ 
+        deck = deck.replace("qy", "QY");
+
+
+        //int qyCnt = 0;
+        String[] qy = new String[6];
+
+
+        int beginIdx = deck.indexOf("QY");
+        while(beginIdx != -1){
+
+            String thisQyDeck = deck.substring(beginIdx, deck.indexOf(",", beginIdx)+1);
+            deck = deck.replace(thisQyDeck, "");
+
+            int qyNum = Integer.parseInt(thisQyDeck.substring(2, 3));
+            qy[qyNum-1] = thisQyDeck;
+
+            beginIdx = deck.indexOf("QY");
+
+            //throw new CardFantasyRuntimeException("待确认的地图:" + wq.getSkill1Level() +":"+ fj.getSkill1Level());
+        }
+
+        //String QyDeck = "";
+        for(int i=0; i<6; i++){
+            if(qy[i] != null){
+                deck = deck + qy[i];
+            }//else{
+            //    break;
+            //}
+        }
+        return deck;
+
+    }
     
     public String formatDeckZB(String deck){ 
 
@@ -1741,6 +1925,29 @@ public class AutoBattleController {
 
 
             deck = formatDeck(deck);
+
+            if(selectType == -150){
+                String exname = deck.substring(0, 2);
+
+                if(exname.toUpperCase().equals("WQ")){
+                    selectType = -151;
+                }else if(exname.toUpperCase().equals("FJ")){
+                    selectType = -152;
+                }else if(exname.toUpperCase().equals("SP")){
+                    selectType = -153;
+                }else{
+                    if(deck.toUpperCase().indexOf("WQ") == -1){
+                        selectType = -151;
+                    }else if(deck.toUpperCase().indexOf("FJ") == -1){
+                        selectType = -152;
+                    }else if(deck.toUpperCase().indexOf("SP") == -1){
+                        selectType = -153;
+                    }else{
+                        throw new CardFantasyRuntimeException("当前卡组已存在三种装备，无法设置第四种装备"+ deck +"|");
+                    }
+                }
+            }
+            
             //-100:卡组排序, -101:15级排序, -110到-129:卡牌选择和符文选择
             //String ttest = "";
             
@@ -1750,31 +1957,7 @@ public class AutoBattleController {
                 count20 = count * -1;
                 count = count20 / 10;
             }
-            /*if(count < -10){        //取出跟着count带进来的排序类型和排序次数, 由于不想去改原作者的代码, 所以只好用麻烦的方法来传过来
-                selectType = count/10;
-                count = count - selectType*10;
-                if(count == -1){
-                    count = 10;
-                }else if(count == -2){
-                    count = 100;
-                }else if(count == -3){
-                    count = 1000;
-                }else if(count == -4){
-                    count = 10000;
-                }else if(count == -5){
-                    count = 10;
-                    count20 = 100;
-                }else if(count == -6){
-                    count = 100;
-                    count20 = 1000;
-                }else if(count == -7){
-                    count = 1000;
-                    count20 = 10000;
-                }
-            }*/
 
-            //ttest = ttest + selectType +","+ count;
-            //count = 10;
             List<sortCard> sortcards = new ArrayList<>();
             LilithGameResult result = null;
 
@@ -1788,28 +1971,13 @@ public class AutoBattleController {
                 if(count20 != 0){   
                     count = count20;        //排序时按TOP的次数排
                 }
-                //selectType = count;
-                //count = 1000;
 
-                //把中文逗号换成英文，打多了的减掉
-                /*deck = deck.replace("，", ",");
-                deck = deck + ",";    //在结尾加逗号是为了方便循环的时候不用写额外的判断语句，保证每个卡牌后都至少有一个逗号
-                deck = deck.replace(" ", "");   //先去掉了空格才能接下来去掉双逗号
-                deck = deck.replace(",,", ",");
-                deck = deck.replace(",,", ",");*/
                 String subdeck = deck;
 
                 
-                //String cardswithcnt = "";
-                //String cardsnocnt = "";
-
-                //List<sortCard> sortcards = new ArrayList<>();
-                //sortcards.add(new sortCard("a", 18.1));
 
                 int firstcnt = subdeck.indexOf(',');
-                //String firstdeck = subdeck;
-                //String newdesk;
-                //LilithGameResult result = null;
+
                 while (firstcnt != -1){
 
                     String thisdeck = subdeck.substring(0, firstcnt+1).replace(" ","");  //第一个取出来的卡牌
@@ -1835,6 +2003,7 @@ public class AutoBattleController {
                             result = null;
                             GameUI ui = new DummyGameUI();
                             newdeck = formatDeckZB(newdeck);
+                            newdeck = formatDeckQY(newdeck);
                             result = GameLauncher.playLilithGame(
                                 newdeck, lilithName, heroLv, gameType, 
                                         targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
@@ -1858,6 +2027,7 @@ public class AutoBattleController {
                     result = null;
                     GameUI ui = new DummyGameUI();
                     deck = formatDeckZB(deck);
+                    deck = formatDeckQY(deck);
                     result = GameLauncher.playLilithGame(
                                 deck, lilithName, heroLv, gameType, 
                                 targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
@@ -1932,100 +2102,21 @@ public class AutoBattleController {
                 String bestdeck = "";
                 Double bestcnt = 999.0;
 
-                InputStream cardFWStream;
-                //List<String> txturls=new ArrayList<>();
-                List<String> txturls = getMycardTxt(selectType);
-
-                /*
-                //从文件中读取出卡牌列表
-                if(selectType == -110){            //精选345
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
-                    //txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-               
-                }else if(selectType == -120 || selectType == -125){      //符文精选或全符文时
-
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
-    
-                }else if(selectType == -111 ){             
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard1.txt");
-                }else if(selectType == -112){
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard2.txt");
-                }else if(selectType == -113){
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard3.txt");
-                }else if(selectType == -114){
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
-                }else if(selectType == -115){
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-                 }else if(selectType == -116 || selectType == -1160){      //45星
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-                }else if(selectType == -121){       //水
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFS.txt");
-                }else if(selectType == -122){       //风
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFF.txt");
-                }else if(selectType == -123){       //火
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFH.txt");
-                }else if(selectType == -124){       //土
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardFT.txt");
-                }else if(selectType == -131){       //王国
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5S.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4S.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-                }else if(selectType == -132){       //森林
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5F.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4F.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-                }else if(selectType == -133){       //蛮荒
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5T.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4T.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-                }else if(selectType == -134){       //地狱
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5H.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4H.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard4M.txt");
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCard5M.txt");
-                }else if(selectType == -140 || selectType == -141){       //精选契约和契约
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardQY.txt");
-               }else if(selectType == -151){ //装备
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardwqZb.txt");
-                }else if(selectType == -152){       //装备防具
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardfjZb.txt");
-                }else if(selectType == -153){       //装备饰品
-                    txturls.add("cfvbaibai/cardfantasy/data/MyCardspZb.txt");
-                }*/
                 
-                //从mycard文件列表中取出卡牌
+                //List<String> txturls=new ArrayList<>();
+                List<String> txturls = getMycardTxt(selectType);    //从文件中读取出卡牌列表
+
+                
+                //List<sortCard> sortcards = new ArrayList<>();
+                String exname = "";
+                if(selectType == -140 || selectType == -141){     //当为契约时取出头三个字母，获得原契约的书写格式和序号
+                    exname = deck.substring(0, 3);
+                }
+                sortcards = getSortcards(txturls, selectType, exname);   //从mycard文件列表中取出卡牌
+                
+               
+                /*
+                InputStream cardFWStream;
                 for (int i = 0; i < txturls.size(); i++) {
                     
                     String txturl = txturls.get(i); 
@@ -2047,7 +2138,12 @@ public class AutoBattleController {
                                     cardname = cardname.replace("-","");
                                 }
                                 if(selectType == -140 || selectType == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
-                                    cardname = "Q" + cardname;
+                                    //String exname = deck.substring(0, 3);
+                                    exname = deck.substring(0, 3);
+                                    if(exname.indexOf("QY") != 0){
+                                        exname = "Q";
+                                    }
+                                    cardname = exname + cardname;
                                 }
 
                                 if(selectType == -110 || selectType == -120 || selectType == -140 || selectType == -150){       //当选择类型为精选时
@@ -2061,7 +2157,7 @@ public class AutoBattleController {
                         }
                     }
                     br.close();    
-                }
+                }*/
 
 
 
@@ -2071,6 +2167,7 @@ public class AutoBattleController {
                 //olddeck = olddeck.replace('，', ',');
                 olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                 olddeck = formatDeckZB(olddeck);
+                olddeck = formatDeckQY(olddeck);
                 for(sortCard sortcard:sortcards){
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                     /*if(thiscardname.indexOf("-") == -1){
@@ -2084,6 +2181,11 @@ public class AutoBattleController {
                     //String newdeck = thiscardname + olddeck;
                     //errornote = errornote + newdeck +",";
                     String newdeck = thiscardname +", "+ olddeck;
+                    if(selectType == -140 || selectType == -141){   //契约
+                        newdeck = formatDeckQY(newdeck);
+                    }else if(selectType <= -151 && selectType >= -153){   //武器，装备，饰品
+                        newdeck = formatDeckZB(newdeck);
+                    }
 
                     try {
                         result = null;
@@ -2134,6 +2236,11 @@ public class AutoBattleController {
                         //olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                         String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                         String newdeck = thiscardname +", "+ olddeck;
+                        if(selectType == -140 || selectType == -141){
+                            newdeck = formatDeckQY(newdeck);
+                        }else if(selectType <= -151 && selectType >= -153){   //武器，装备，饰品
+                            newdeck = formatDeckZB(newdeck);
+                        }
                         //进行模拟并取值
                         result = null;
                         GameUI ui = new DummyGameUI();
@@ -2199,6 +2306,7 @@ public class AutoBattleController {
                     result = null;
                     GameUI ui = new DummyGameUI();
                     deck = formatDeckZB(deck);
+                    deck = formatDeckQY(deck);
                     result = GameLauncher.playLilithGame(
                                 deck, lilithName, heroLv, gameType, 
                                 targetRemainingGuardCount, remainingHP, eventCardNames, count, ui);
@@ -2229,6 +2337,7 @@ public class AutoBattleController {
                 }
                 //本卡组胜率
                 deck = formatDeckZB(deck);
+                deck = formatDeckQY(deck);
                 try {
                     //LilithGameResult result = null;
                     GameUI ui = new DummyGameUI();
@@ -2325,6 +2434,28 @@ public class AutoBattleController {
 
             deck = formatDeck(deck);
 
+            if(selectType == -150){
+                String exname = deck.substring(0, 2);
+
+                if(exname.toUpperCase().equals("WQ")){
+                    selectType = -151;
+                }else if(exname.toUpperCase().equals("FJ")){
+                    selectType = -152;
+                }else if(exname.toUpperCase().equals("SP")){
+                    selectType = -153;
+                }else{
+                    if(deck.toUpperCase().indexOf("WQ") == -1){
+                        selectType = -151;
+                    }else if(deck.toUpperCase().indexOf("FJ") == -1){
+                        selectType = -152;
+                    }else if(deck.toUpperCase().indexOf("SP") == -1){
+                        selectType = -153;
+                    }else{
+                        throw new CardFantasyRuntimeException("当前卡组已存在三种装备，无法设置第四种装备"+ deck +"|");
+                    }
+                }
+            }
+
             //selectType = 0;
             //if(selectType == 0){
                 //throw new CardFantasyRuntimeException("待确认的地图:" + selectType +":");
@@ -2365,6 +2496,7 @@ public class AutoBattleController {
                         //result = null;
                         //ui = new DummyGameUI();
                         newdeck = formatDeckZB(newdeck);
+                        newdeck = formatDeckQY(newdeck);
                         result = GameLauncher.playMapGame(newdeck, map, heroLv, count, ui);
                         sortcards.add(new sortCard(thisdeck,Double.valueOf(result.getAdvWinCount())));
                     }
@@ -2374,6 +2506,7 @@ public class AutoBattleController {
                 result = null;
                 ui = new DummyGameUI();
                 deck = formatDeckZB(deck);
+                deck = formatDeckQY(deck);
                 result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
                 //开始排序列表
                 Collections.sort(sortcards, new Comparator<sortCard>() {
@@ -2491,7 +2624,13 @@ public class AutoBattleController {
                 }*/
                 
                 //从mycard文件列表中取出卡牌
-                for (int i = 0; i < txturls.size(); i++) {
+                String exname = "";
+                if(selectType == -140 || selectType == -141){     //当为契约时取出头三个字母，获得原契约的书写格式和序号
+                    exname = deck.substring(0, 3);
+                }
+                sortcards = getSortcards(txturls, selectType, exname);   //从mycard文件列表中取出卡牌
+
+                /*for (int i = 0; i < txturls.size(); i++) {
                     
                     String txturl = txturls.get(i); 
                     cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
@@ -2512,7 +2651,11 @@ public class AutoBattleController {
                                     cardname = cardname.replace("-","");
                                 }
                                 if(selectType == -140 || selectType == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
-                                    cardname = "Q" + cardname;
+                                    String exname = deck.substring(0, 3);
+                                    if(exname.indexOf("QY") != 0){
+                                        exname = "Q";
+                                    }
+                                    cardname = exname + cardname;
                                 }
 
                                 if(selectType == -110 || selectType == -120 || selectType == -140 || selectType == -150){       //当选择类型为精选时
@@ -2526,13 +2669,14 @@ public class AutoBattleController {
                         }
                     }
                     br.close();    
-                }
+                }*/
 
                 //用list里的符文分别模拟，将获得的分数写进list里
                 String olddeck = deck;
                 //olddeck = olddeck.replace('，', ',');
                 olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                 olddeck = formatDeckZB(olddeck);
+                olddeck = formatDeckQY(olddeck);
                 for(sortCard sortcard:sortcards){
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                     /*if(thiscardname.indexOf("-") == -1){
@@ -2544,6 +2688,11 @@ public class AutoBattleController {
                     }
                     String newdeck = thiscardname + olddeck;*/
                     String newdeck = thiscardname +", "+ olddeck;
+                    if(selectType == -140 || selectType == -141){
+                        newdeck = formatDeckQY(newdeck);
+                    }else if(selectType <= -151 && selectType >= -153){   //武器，装备，饰品
+                        newdeck = formatDeckZB(newdeck);
+                    }
                     //进行模拟并取值
                     result = null;
                     ui = new DummyGameUI();
@@ -2577,6 +2726,11 @@ public class AutoBattleController {
                         //olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                         String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                         String newdeck = thiscardname +", "+ olddeck;
+                        if(selectType == -140 || selectType == -141){
+                            newdeck = formatDeckQY(newdeck);
+                        }else if(selectType <= -151 && selectType >= -153){   //武器，装备，饰品
+                            newdeck = formatDeckZB(newdeck);
+                        }
                         //进行模拟并取值
                         result = null;
                         ui = new DummyGameUI();
@@ -2628,6 +2782,7 @@ public class AutoBattleController {
                 result = null;
                 ui = new DummyGameUI();
                 deck = formatDeckZB(deck);
+                deck = formatDeckQY(deck);
                 result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
 
             } else {    //作者原本的强度分析
@@ -2635,6 +2790,7 @@ public class AutoBattleController {
                     count = count20;        //单次模拟时按TOP的次数排
                 }
                 deck = formatDeckZB(deck);
+                deck = formatDeckQY(deck);
                 result = GameLauncher.playMapGame(deck, map, heroLv, count, ui);
             }
 
@@ -2783,7 +2939,11 @@ public class AutoBattleController {
                             cardname = cardname.replace("-","");
                         }
                         if(selectType == -140 || selectType == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
-                            cardname = "Q" + cardname;
+                            String exname = deck1.substring(0, 3);
+                                    if(exname.indexOf("QY") != 0){
+                                        exname = "Q";
+                                    }
+                                    cardname = exname + cardname;
                         }
 
                         if(selectType == -110 || selectType == -120 || selectType == -140 || selectType == -150){       //当选择类型为精选时
@@ -2892,6 +3052,28 @@ public class AutoBattleController {
 
             deck = formatDeck(deck);
 
+            if(selectType == -150){
+                String exname = deck.substring(0, 2);
+
+                if(exname.toUpperCase().equals("WQ")){
+                    selectType = -151;
+                }else if(exname.toUpperCase().equals("FJ")){
+                    selectType = -152;
+                }else if(exname.toUpperCase().equals("SP")){
+                    selectType = -153;
+                }else{
+                    if(deck.toUpperCase().indexOf("WQ") == -1){
+                        selectType = -151;
+                    }else if(deck.toUpperCase().indexOf("FJ") == -1){
+                        selectType = -152;
+                    }else if(deck.toUpperCase().indexOf("SP") == -1){
+                        selectType = -153;
+                    }else{
+                        throw new CardFantasyRuntimeException("当前卡组已存在三种装备，无法设置第四种装备"+ deck +"|");
+                    }
+                }
+            }
+
             MapGameResult result = null;
 
             //int selectType = 0;
@@ -2952,6 +3134,7 @@ public class AutoBattleController {
                         //result = null;
                         //ui = new DummyGameUI();
                         newdeck = formatDeckZB(newdeck);
+                        newdeck = formatDeckQY(newdeck);
                         result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,newdeck, map, heroLv, count,rule, ui);
                         sortcards.add(new sortCard(thisdeck,Double.valueOf(result.getAdvWinCount())));
                     }
@@ -2962,6 +3145,7 @@ public class AutoBattleController {
                 //result = null;
                 //ui = new DummyGameUI();
                 deck = formatDeckZB(deck);
+                deck = formatDeckQY(deck);
                 result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
                 //开始排序列表
                 Collections.sort(sortcards, new Comparator<sortCard>() {
@@ -2985,7 +3169,7 @@ public class AutoBattleController {
                 String bestdeck = "";
                 Double bestcnt = 0.0;
 
-                InputStream cardFWStream;
+                //InputStream cardFWStream;
                 List<String> txturls = getMycardTxt(selectType);
                 /*
                 List<String> txturls=new ArrayList<>();
@@ -3079,7 +3263,13 @@ public class AutoBattleController {
                 }*/
                 
                 //从mycard文件列表中取出卡牌
-                for (int i = 0; i < txturls.size(); i++) {
+                String exname = "";
+                if(selectType == -140 || selectType == -141){     //当为契约时取出头三个字母，获得原契约的书写格式和序号
+                    exname = deck.substring(0, 3);
+                }
+                sortcards = getSortcards(txturls, selectType, exname);   //从mycard文件列表中取出卡牌
+
+                /*for (int i = 0; i < txturls.size(); i++) {
                     
                     String txturl = txturls.get(i); 
                     cardFWStream = CardDataStore.class.getClassLoader().getResourceAsStream(txturl);
@@ -3100,7 +3290,11 @@ public class AutoBattleController {
                                     cardname = cardname.replace("-","");
                                 }
                                 if(selectType == -140 || selectType == -141){     //当为契约时加上契约前冠Q ,本来Q可以写在契约表里,但是那样不方便看
-                                    cardname = "Q" + cardname;
+                                    String exname = deck.substring(0, 3);
+                                    if(exname.indexOf("QY") != 0){
+                                        exname = "Q";
+                                    }
+                                    cardname = exname + cardname;
                                 }
 
                                 if(selectType == -110 || selectType == -120 || selectType == -140 || selectType == -150){       //当选择类型为精选时
@@ -3114,7 +3308,7 @@ public class AutoBattleController {
                         }
                     }
                     br.close();    
-                }
+                }*/
 
 
                 //用list里的符文分别模拟，将获得的分数写进list里
@@ -3122,6 +3316,7 @@ public class AutoBattleController {
                 //olddeck = olddeck.replace('，', ',');
                 olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                 olddeck = formatDeckZB(olddeck);
+                olddeck = formatDeckQY(olddeck);
                 for(sortCard sortcard:sortcards){
                     String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                     /*if(thiscardname.indexOf("-") == -1){
@@ -3132,6 +3327,11 @@ public class AutoBattleController {
                         }
                     }*/
                     String newdeck = thiscardname +", "+ olddeck;
+                    if(selectType == -140 || selectType == -141){
+                        newdeck = formatDeckQY(newdeck);
+                    }else if(selectType <= -151 && selectType >= -153){   //武器，装备，饰品
+                        newdeck = formatDeckZB(newdeck);
+                    }
                     //进行模拟并取值
                     //result = null;
                     //ui = new DummyGameUI();
@@ -3165,6 +3365,11 @@ public class AutoBattleController {
                         //olddeck = olddeck.substring(olddeck.indexOf(',')+1);
                         String thiscardname = sortcard.cardname.replace("，",",").replace(",", "");
                         String newdeck = thiscardname +", "+ olddeck;
+                        if(selectType == -140 || selectType == -141){
+                            newdeck = formatDeckQY(newdeck);
+                        }else if(selectType <= -151 && selectType >= -153){   //武器，装备，饰品
+                            newdeck = formatDeckZB(newdeck);
+                        }
                         //进行模拟并取值
                         result = null;
                         ui = new DummyGameUI();
@@ -3217,6 +3422,7 @@ public class AutoBattleController {
                 //result = null;
                 //ui = new DummyGameUI();
                 deck = formatDeckZB(deck);
+                deck = formatDeckQY(deck);
                 result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
     
             }else{
@@ -3224,6 +3430,7 @@ public class AutoBattleController {
                     count = count20;        //单次模拟时按TOP的次数排
                 }
                 deck = formatDeckZB(deck);
+                deck = formatDeckQY(deck);
                 result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, count,rule, ui);
             }
             
