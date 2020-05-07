@@ -178,6 +178,12 @@ public class AutoBattleController {
             outputBattleOptions(writer, firstAttack, deckOrder, 
                     p1HeroHpBuff, p1CardAtBuff, p1CardHpBuff, p2HeroHpBuff, p2CardAtBuff, p2CardHpBuff, vc1);
             WebPlainTextGameUI ui = new WebPlainTextGameUI();
+            deck1 = formatDeck(deck1);
+            deck1 = formatDeckZB(deck1);
+            deck1 = formatDeckQY(deck1);
+            deck2 = formatDeck(deck2);
+            deck2 = formatDeckZB(deck2);
+            deck2 = formatDeckQY(deck2);
             GameSetup setup = GameSetup.setupArenaGame(
                     deck1, deck2, heroLv1, heroLv2,
                     p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff,
@@ -213,6 +219,12 @@ public class AutoBattleController {
             this.userActionRecorder.addAction(new UserAction(new Date(), request.getRemoteAddr(), "Simulate Auto 1Match Game", logMessage));
             VictoryCondition vc1 = VictoryCondition.parse(victoryConditionText1);
             StructuredRecordGameUI ui = new StructuredRecordGameUI();
+            deck1 = formatDeck(deck1);
+            deck1 = formatDeckZB(deck1);
+            deck1 = formatDeckQY(deck1);
+            deck2 = formatDeck(deck2);
+            deck2 = formatDeckZB(deck2);
+            deck2 = formatDeckQY(deck2);
             GameSetup setup = GameSetup.setupArenaGame(
                     deck1, deck2, heroLv1, heroLv2,
                     p1CardAtBuff, p1CardHpBuff, p1HeroHpBuff,
@@ -741,6 +753,9 @@ public class AutoBattleController {
             logger.info("PlayBoss1MatchGame: " + logMessage);
             this.userActionRecorder.addAction(new UserAction(new Date(), request.getRemoteAddr(), "Play Boss 1Match Game", logMessage));
             WebPlainTextGameUI ui = new WebPlainTextGameUI();
+            deck = formatDeck(deck);
+            deck = formatDeckZB(deck);
+            deck = formatDeckQY(deck);
             GameSetup setup = GameSetup.setupBossGame(
                     deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, 1, ui);
             BossGameResult result = GameLauncher.playBossGame(setup);
@@ -772,6 +787,9 @@ public class AutoBattleController {
             logger.info("PlayLilith1MatchGame: " + logMessage);
             this.userActionRecorder.addAction(new UserAction(new Date(), request.getRemoteAddr(), "Play Lilith 1Match Game", logMessage));
             LilithGameResult result = null;
+            deck = formatDeck(deck);
+            deck = formatDeckZB(deck);
+            deck = formatDeckQY(deck);
             if (enableCustomGuards && gameType == 0) {
                 result = GameLauncher.playCustomLilithGame(
                         deck, lilithName + "," + customGuards, heroLv, customGuardsAtBuff, customGuardsHpBuff,
@@ -813,6 +831,9 @@ public class AutoBattleController {
             this.userActionRecorder.addAction(new UserAction(new Date(), request.getRemoteAddr(), "Simulate Boss 1Match Game",
                     String.format("Deck=%s<br />HeroLV=%d, Boss=%s, GuardType=%d", deck, heroLv, bossName, guardType)));
             StructuredRecordGameUI ui = new StructuredRecordGameUI();
+            deck = formatDeck(deck);
+            deck = formatDeckZB(deck);
+            deck = formatDeckQY(deck);
             GameSetup setup = GameSetup.setupBossGame(
                     deck, bossName, heroLv, buffKingdom, buffForest, buffSavage, buffHell, guardType, 1, ui);
             BossGameResult result = GameLauncher.playBossGame(setup);
@@ -850,6 +871,9 @@ public class AutoBattleController {
                 player1 = PlayerBuilder.buildLilith(lilithDataStore, lilithName, gameType == 0);
             }
             List<Skill> player2Buffs = buildBuffsForLilithEvents(eventCardNames);
+            deck = formatDeck(deck);
+            deck = formatDeckZB(deck);
+            deck = formatDeckQY(deck);
             PlayerInfo player2 = PlayerBuilder.build(true, "玩家", deck, heroLv, player2Buffs, 100);
             StructuredRecordGameUI ui = new StructuredRecordGameUI();
             BattleEngine engine = new BattleEngine(ui, Rule.getDefault());
@@ -2378,6 +2402,9 @@ public class AutoBattleController {
             this.userActionRecorder.addAction(new UserAction(new Date(), request.getRemoteAddr(), "Play Map 1Match Game",
                     String.format("Deck=%s<br />HeroLV=%d, Map=%s", deck, heroLv, map)));
             WebPlainTextGameUI ui = new WebPlainTextGameUI();
+            deck = formatDeck(deck);
+            deck = formatDeckZB(deck);
+            deck = formatDeckQY(deck);
             MapGameResult result = GameLauncher.playMapGame(deck, map, heroLv, 1, ui);
             writer.print(Utils.getCurrentDateTime() + "<br />");
             writer.print("<div style='color: red'>" + result.getValidationResult() + "</div>");
@@ -2400,6 +2427,9 @@ public class AutoBattleController {
             logger.info("Hero LV = " + heroLv + ", Map = " + map);
             this.userActionRecorder.addAction(new UserAction(new Date(), request.getRemoteAddr(), "Simulate Map 1Match Game",
                     String.format("Deck=%s<br />HeroLV=%d, Map=%s", deck, heroLv, map)));
+            deck = formatDeck(deck);
+            deck = formatDeckZB(deck);
+            deck = formatDeckQY(deck);
             PlayerInfo player = PlayerBuilder.build(true, "玩家", deck, heroLv);
             StructuredRecordGameUI ui = new StructuredRecordGameUI();
             PveEngine engine = new PveEngine(ui, this.maps);
@@ -2981,6 +3011,9 @@ public class AutoBattleController {
             VictoryCondition vc1 = VictoryCondition.parse(victoryConditionText1);
             Rule rule = new Rule(5, 999, firstAttack, deckOrder, false, vc1);
             WebPlainTextGameUI ui = new WebPlainTextGameUI();
+            deck = formatDeck(deck);
+            deck = formatDeckZB(deck);
+            deck = formatDeckQY(deck);
             MapGameResult result = GameLauncher.playDungeonsGame(p1HeroHpBuff,p1CardAtBuff,p1CardHpBuff,p2HeroHpBuff,p2CardAtBuff,p2CardHpBuff,deck, map, heroLv, 1,rule, ui);
             writer.print(Utils.getCurrentDateTime() + "<br />");
             writer.print("<div style='color: red'>" + result.getValidationResult() + "</div>");
@@ -3016,6 +3049,9 @@ public class AutoBattleController {
             if (p2CardHpBuff != 100) {
                 p2CardBuffs.add(new PlayerCardBuffSkill(SkillType.原始体力调整, p2CardHpBuff - 100));
             }
+            deck = formatDeck(deck);
+            deck = formatDeckZB(deck);
+            deck = formatDeckQY(deck);
             PlayerInfo player = PlayerBuilder.build(true, "玩家", deck, heroLv,p2CardBuffs,p2CardHpBuff);
             StructuredRecordGameUI ui = new StructuredRecordGameUI();
             PvdEngine engine = new PvdEngine(ui, this.dungeons);

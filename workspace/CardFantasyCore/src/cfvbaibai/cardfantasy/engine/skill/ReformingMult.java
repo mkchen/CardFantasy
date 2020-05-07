@@ -8,7 +8,7 @@ import cfvbaibai.cardfantasy.engine.*;
 public class ReformingMult {
     public static void apply(SkillResolver resolver, SkillUseInfo skillUseInfo, CardInfo card,Player defender) throws HeroDieSignal{
         if (card == null || card.isDead())  {
-            throw new CardFantasyRuntimeException("card should not be null or dead!ReformingMult"+skillUseInfo.getSkill().getType() + card.getShortDesc());
+            //throw new CardFantasyRuntimeException("card should not be null or dead!ReformingMult"+skillUseInfo.getSkill().getType() + card.getShortDesc());
         }
         int impact = skillUseInfo.getSkill().getImpact();
         int number = skillUseInfo.getSkillNumber();

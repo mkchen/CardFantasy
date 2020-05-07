@@ -53,7 +53,7 @@
                                         <option value="d-110m">地下城110全灭</option>
                                         <option value="d-120">地下城120</option>
                                         <option value="d-11020">地下城110和120层</option>
-                                        <option value="d-130">地下城130</option>
+                                        <option value="d-127">地下城127</option>
                                     </optgroup>
                                     <optgroup label="噩梦1图">
                                         <option value="1-1">1-1 森林入口</option>

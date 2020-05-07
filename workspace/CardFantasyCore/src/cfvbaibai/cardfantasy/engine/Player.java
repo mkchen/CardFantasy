@@ -219,7 +219,7 @@ public class Player extends EntityInfo {
         {
             if(addSkillUserInfo == skillUseInfo)
             {
-                throw new CardFantasyRuntimeException("skillUseInfo is reused，addImpregnableDefenseHero"+ skillUseInfo.getType() +","+ skillUseInfo.getOwner().getShortDesc());
+                throw new CardFantasyRuntimeException("(addImpregnableDefenseHero)skillUseInfo is reused，"+ skillUseInfo.getType() +","+ skillUseInfo.getOwner().getShortDesc());
             }
         }
         this.impregnableDefenseHero.add(skillUseInfo);

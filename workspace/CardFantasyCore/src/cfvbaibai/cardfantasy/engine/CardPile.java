@@ -49,8 +49,7 @@ public class CardPile {
 //        private void checkCardExistence(CardInfo newCard,SkillResolver... resolve) { //debug use
     private void checkCardExistence(CardInfo newCard) {
         if (cards.contains(newCard)) {
-            throw new CardFantasyRuntimeException("Cannot add an existing card to CardPile. "
-                    + newCard.getShortDesc());
+            throw new CardFantasyRuntimeException("Cannot add an existing card to CardPile. "+ newCard.getShortDesc());
         }
     }
     

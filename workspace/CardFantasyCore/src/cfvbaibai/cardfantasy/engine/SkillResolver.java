@@ -202,8 +202,8 @@ public class SkillResolver {
                         GiveSideSkill.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo2().getSkill());
                     } else if (skillUseInfo.getType() == SkillType.袈裟斩) {
                         GiveSideSkill.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo1().getSkill());
-                    } else if (skillUseInfo.getType() == SkillType.寒霜护佑) {
-                        GiveSideSkill.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo1().getSkill());
+                    //} else if (skillUseInfo.getType() == SkillType.寒霜护佑) {
+                    //    GiveSideSkill.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo1().getSkill());
                     } else if (skillUseInfo.getType() == SkillType.厄运枪) {
                         GiveSideSkill.apply(this, skillUseInfo, card, skillUseInfo.getAttachedUseInfo1().getSkill());
                     } else if (skillUseInfo.getType() == SkillType.顽石契约) {
@@ -930,13 +930,6 @@ public class SkillResolver {
                 if (defender.getField().getAliveCards().size() < 5) {
                     ManaErode.apply(skillUseInfo.getAttachedUseInfo2().getSkill(), this, attacker, defender, 1);
                 }
-            } else if (skillUseInfo.getType() == SkillType.觉醒孤胆英雄) {
-                if (defender.getField().getAliveCards().size() >= 3) {
-                    ReturnCardAndDelay.apply(this, skillUseInfo.getAttachedUseInfo2().getSkill(), attacker, defender, 1,1);
-                }
-                if (defender.getField().getAliveCards().size() < 3) {
-                    GreatFireMagic.apply(skillUseInfo.getSkill(), this, attacker, defender, 1, false);
-                }
             } else if (skillUseInfo.getType() == SkillType.觉醒极寒) {
                 if (defender.getField().getAliveCards().size() >= 3) {
                     IceMagic.apply(skillUseInfo.getAttachedUseInfo1(), this, attacker, defender, -1, 50, 45 * defender.getField().getAliveCards().size());
@@ -1458,8 +1451,6 @@ public class SkillResolver {
             } else if (skillUseInfo.getType() == SkillType.自然之力) {
                 Curse.apply(this, skillUseInfo.getSkill(), attacker, defender);
                 Bless.apply(skillUseInfo.getAttachedUseInfo1().getSkill(), this, attacker);
-            } else if (skillUseInfo.getType() == SkillType.寒霜之心) {
-                IceTouch.apply(skillUseInfo, this, attacker, defender, 1);
             } else if (skillUseInfo.getType() == SkillType.棋布星罗 || skillUseInfo.getType() == SkillType.轮换) {
                 ScatterHereAndThere.apply(skillUseInfo, this, attacker);
             } else if (skillUseInfo.getType() == SkillType.星夜之翼) {

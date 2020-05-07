@@ -12,7 +12,7 @@ public class Grave extends CardPile {
 
     public boolean removeCard(CardInfo card) {
         if (!card.isDead()) {
-            throw new CardFantasyRuntimeException("Cannot remove undead card: " + card.getShortDesc());
+            throw new CardFantasyRuntimeException("(Grave)Cannot remove undead card:  " + card.getShortDesc());
         }
         if (!this.getCards().remove(card)) {
             throw new CardFantasyRuntimeException("Cannot find card in grave: " + card.getShortDesc());

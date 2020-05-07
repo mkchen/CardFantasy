@@ -1479,7 +1479,6 @@ public enum SkillType {
     神圣放逐(0,SkillTag.魔王无效,SkillTag.抗免疫),
     天使降临(SkillType.灵魂消散,0,SkillType.神圣放逐,0),
     放逐(1,0,SkillTag.魔王无效,SkillTag.抗免疫),
-    //觉醒孤胆英雄(SkillType.放逐, 0, SkillType.浩劫, 0),
     放逐之刃(SkillType.放逐之雷,0,SkillType.放逐,0),
     觉醒孤胆英雄(0,0,SkillType.放逐,0,SkillType.浩劫,0),
     压迫力(1,0,SkillType.弱者退散,0,null,0),
